@@ -306,7 +306,7 @@ border-radius: 50px;
 .hero-section {
     line-height: 1.6;
     position: relative;
-    min-height: 95vh;
+    min-height: 90vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -323,8 +323,12 @@ border-radius: 50px;
     left: 0;
     width: 100%;
     height: 100%;
+    align-self: center;
+    justify-content: center;
+
+    background-position: center;
     background-image: url('vims/autoaddictsfl.jpg');
-    background-size: cover;
+    background-size:cover;
     background-position: center;
     background-repeat: no-repeat;
     filter: brightness(0.3);
@@ -442,6 +446,12 @@ border-radius: 50px;
 }
 
 @media (max-width: 480px) {
+
+  .hero-section {
+
+    min-height: 70vh;
+}
+
     .hero-section {
         padding: 1rem;
     }
@@ -451,6 +461,9 @@ border-radius: 50px;
         font-size: 0.80rem;
         margin: 10px;
     }
+
+
+
 
  
 }
@@ -769,8 +782,8 @@ border-radius: 50px;
       .body-types::before {
         content: '';
         position: absolute;
-        inset: 0;
-        background: rgba(8,8,8,0.16);
+
+
       }
   
       .bt-inner {
