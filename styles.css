@@ -70,59 +70,18 @@ border-radius: 50px;
 
 
 
-      
-/* --- New Top Bar Styles --- */
-.top-bar {
-    background: linear-gradient(115deg, #ffffff 0%, #d1d1d1 100%); /* Matches your scrolled navbar color */
-    color: white;
-    font-size: 0.60rem;
-    padding: 8px 0;
-    position: fixed; /* Keep it fixed at the top */
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1001; /* Higher than navbar */
 
-}
 
-.top-bar-container {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 1rem;
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem; 
-}
-
-.top-bar-link {
-    color: rgb(31, 61, 50);
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: all 0.3s ease;
-    /* The "Fitting Border" styles */
-    border: 1.9px solid rgba(255, 255, 255, 0.649); /* Subtle white border */
-    padding: 4px 15px;                          /* Space inside the border */
-    border-radius: 50px;                        /* Rounds the edges into a pill shape */
-    background: linear-gradient(115deg, #ffffff 0%, #d1d1d1 100%);
-}
-
-.top-bar-link:hover {
-    color: #facc15;
-    border-color: #facc15;                      /* Border changes color on hover */
-    background: rgba(250, 204, 21, 0.1);        /* Slight yellow glow on hover */
-}
 
 
 /* --- Adjusting your existing .navbar --- */
 .navbar {
     position: fixed;
-    top: 35px; /* Pushes the nav down so it doesn't hide under the top bar */
+    top: 0; /* Pushes the nav down so it doesn't hide under the top bar */
     left: 0;
     right: 0;
     z-index: 1000;
-    background: linear-gradient(115deg, #ffffff 0%, #d1d1d1 100% );
+    background: linear-gradient(115deg, #ffffff 0%, #ffffff 100% );
     backdrop-filter: blur(10px);
     transition: all 0.3s ease;
   
@@ -144,21 +103,22 @@ border-radius: 50px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        height: 60px;
+        height: 0px;
     }
 
     .logo {
         display: flex;
         align-items: center;
         gap: 0.5rem;
+        padding-bottom: 1rem;;
     }
 
     .logo-icon img {
-        padding-top:1rem;
+       
         width: 10rem;
-        height: 3rem;
+        height: 5rem;
      
-        border-radius: 8px;
+
         display: flex;
         align-items: center;
         justify-content: center;

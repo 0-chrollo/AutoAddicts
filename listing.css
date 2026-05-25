@@ -11,7 +11,7 @@
 /* --- Adjusting your existing .navbar --- */
 .navbar {
     position: fixed;
-    top: 35px; /* Pushes the nav down so it doesn't hide under the top bar */
+    top: 0px; /* Pushes the nav down so it doesn't hide under the top bar */
     left: 0;
     right: 0;
     z-index: 1000;
