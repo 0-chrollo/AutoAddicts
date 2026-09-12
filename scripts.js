@@ -166,44 +166,6 @@ goTo(0);
 // New Vehicle arrival Slide Function
 
 
-const track     = document.getElementById('track');
-  const thumb     = document.getElementById('thumb');
-  const count     = document.getElementById('count');
-  const arrowPrev = document.getElementById('arrowPrev');
-  const arrowNext = document.getElementById('arrowNext');
-  const cards     = track.querySelectorAll('.vehicle-card');
-  const total     = cards.length;
-
-  // Scroll exactly one card width + gap per click
-  function scrollByCard(direction) {
-    const cardWidth = cards[0].offsetWidth + 20;
-    track.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
-  }
-
-  arrowPrev.addEventListener('click', () => scrollByCard(-1));
-  arrowNext.addEventListener('click', () => scrollByCard(1));
-
-  function updateUI() {
-    const maxScroll = track.scrollWidth - track.clientWidth;
-    const pct = maxScroll > 0 ? track.scrollLeft / maxScroll : 0;
-    thumb.style.width = Math.max(20, pct * 100) + '%';
-
-    // Disable arrows at the ends
-    arrowPrev.disabled = track.scrollLeft <= 0;
-    arrowNext.disabled = track.scrollLeft >= maxScroll - 1;
-
-    // Card counter
-    let closest = 0, minDist = Infinity;
-    cards.forEach((c, i) => {
-      const dist = Math.abs(c.getBoundingClientRect().left - track.getBoundingClientRect().left);
-      if (dist < minDist) { minDist = dist; closest = i; }
-    });
-    count.textContent = (closest + 1) + ' / ' + total;
-  }
-
-  track.addEventListener('scroll', updateUI);
-  updateUI(); // set initial state
-
 // New Vehicle arrival Slide Function
 // New Vehicle arrival Slide Function
 // New Vehicle arrival Slide Function

@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vehicles | AutoAddicts Admin</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f6f7;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* Sidebar (same shell as dashboard) */
+  .sidebar {
+    width: 240px;
+    background: #0d1b24;
+    color: white;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 50;
+    transition: transform 0.25s ease;
+  }
+
+  .sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 22px 20px;
+    border-bottom: 1px solid #1e3742;
+  }
+
+  .sidebar-logo-icon {
+    width: 38px; height: 38px;
+    border-radius: 8px;
+    background: linear-gradient(114deg, #189b8a 0%, #0c5e52 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; flex-shrink: 0;
+  }
+
+  .sidebar-logo-text strong { display: block; font-size: 15px; font-weight: 800; }
+  .sidebar-logo-text span { font-size: 11px; color: #7a8a94; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .sidebar-nav { flex-grow: 1; padding: 16px 12px; }
+
+  .sidebar-link {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px; border-radius: 8px;
+    color: #b3c1c8; text-decoration: none;
+    font-size: 14px; font-weight: 600; margin-bottom: 4px;
+  }
+
+  .sidebar-link i { width: 18px; text-align: center; }
+  .sidebar-link:hover { background: #142731; color: white; }
+  .sidebar-link.active { background: linear-gradient(114deg, #189b8a 0%, #0c5e52 100%); color: white; }
+
+  .sidebar-bottom { padding: 16px 12px; border-top: 1px solid #1e3742; }
+
+  .sidebar-logout {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px; border-radius: 8px;
+    color: #b3c1c8; background: none; border: none;
+    width: 100%; text-align: left; font-size: 14px; font-weight: 600; cursor: pointer;
+  }
+
+  .sidebar-logout:hover { background: #142731; color: #ff8a8a; }
+
+  .sidebar-toggle { display: none; background: none; border: none; font-size: 20px; color: #112532; cursor: pointer; }
+
+  .main { margin-left: 240px; flex-grow: 1; min-width: 0; }
+
+  .topbar {
+    background: white; border-bottom: 1px solid #e5e5e5;
+    padding: 18px 30px; display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .topbar h1 { font-size: 20px; color: #112532; font-weight: 800; }
+  .topbar p { font-size: 13px; color: #888; margin-top: 2px; }
+
+  .btn-primary {
+    padding: 10px 18px;
+    background: linear-gradient(114deg, #189b8a 0%, #0c5e52 100%);
+    color: white; border: none; border-radius: 7px;
+    font-size: 14px; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .content { padding: 28px 30px; }
+
+  /* Search bar */
+  .toolbar {
+    display: flex; gap: 12px; margin-bottom: 20px;
+  }
+
+  .toolbar input {
+    flex-grow: 1; max-width: 320px;
+    padding: 10px 14px; border: 1px solid #d5d5d5; border-radius: 7px; font-size: 14px;
+  }
+
+  /* Vehicle table */
+  .vehicle-table-wrap {
+    background: white; border: 1px solid #ececec; border-radius: 10px; overflow: hidden;
+  }
+
+  table { width: 100%; border-collapse: collapse; }
+
+  th {
+    text-align: left; font-size: 12px; text-transform: uppercase;
+    letter-spacing: 0.5px; color: #888; padding: 14px 16px;
+    background: #fafafa; border-bottom: 1px solid #ececec;
+  }
+
+  td { padding: 12px 16px; border-bottom: 1px solid #f2f2f2; font-size: 14px; color: #112532; vertical-align: middle; }
+
+  tr:last-child td { border-bottom: none; }
+
+  .table-thumb {
+    width: 54px; height: 54px; border-radius: 6px;
+    background-size: cover; background-position: center; flex-shrink: 0;
+  }
+
+  .table-name { font-weight: 700; }
+  .table-sub { color: #888; font-size: 12px; }
+
+  .table-actions { display: flex; gap: 8px; }
+
+  .icon-btn {
+    width: 32px; height: 32px; border-radius: 6px;
+    border: 1px solid #d5d5d5; background: white;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 13px; color: #112532;
+  }
+
+  .icon-btn:hover { border-color: #189b8a; color: #189b8a; }
+  .icon-btn.danger:hover { border-color: #b00020; color: #b00020; }
+
+  /* Modal / form panel */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0; background: rgba(13,27,36,0.6);
+    z-index: 100; align-items: flex-start; justify-content: center;
+    padding: 30px 16px; overflow-y: auto;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal-box {
+    background: white; border-radius: 12px; width: 100%; max-width: 720px;
+    max-height: 100%; overflow-y: auto;
+  }
+
+  .modal-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 24px; border-bottom: 1px solid #ececec; position: sticky; top: 0; background: white; z-index: 2;
+  }
+
+  .modal-header h2 { font-size: 17px; color: #112532; font-weight: 800; }
+
+  .modal-close { background: none; border: none; font-size: 18px; color: #888; cursor: pointer; }
+
+  .modal-body { padding: 24px; }
+
+  .form-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;
+  }
+
+  .form-field label {
+    display: block; font-size: 12px; font-weight: 700; color: #666; margin-bottom: 6px;
+  }
+
+  .form-field input, .form-field select, .form-field textarea {
+    width: 100%; padding: 10px 12px; border: 1px solid #d5d5d5; border-radius: 6px; font-size: 14px; font-family: inherit;
+  }
+
+  .form-field.full { grid-column: 1 / -1; }
+
+  .form-section-title {
+    font-size: 13px; font-weight: 800; color: #189b8a; text-transform: uppercase;
+    letter-spacing: 0.5px; margin: 22px 0 10px; padding-top: 14px; border-top: 1px solid #f0f0f0;
+  }
+
+  .form-section-title:first-of-type { margin-top: 0; border-top: none; padding-top: 0; }
+
+  /* Feature checkboxes */
+  .feature-checks {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+
+  .feature-check {
+    display: flex; align-items: center; gap: 6px;
+    padding: 7px 12px; background: #f4f6f7; border-radius: 20px;
+    font-size: 13px; cursor: pointer; user-select: none;
+  }
+
+  .feature-check input { width: auto; }
+
+  .feature-check.checked { background: #189b8a; color: white; }
+
+  /* Image management */
+  .image-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; margin-bottom: 14px;
+  }
+
+  .image-tile {
+    position: relative; padding-bottom: 100%; border-radius: 8px; overflow: hidden;
+    background: #ececec; border: 2px solid transparent;
+  }
+
+  .image-tile.is-main { border-color: #189b8a; }
+
+  .image-tile img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  }
+
+  .image-tile-badge {
+    position: absolute; top: 6px; left: 6px;
+    background: #189b8a; color: white; font-size: 10px; font-weight: 700;
+    padding: 3px 8px; border-radius: 10px;
+  }
+
+  .image-tile-actions {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    display: flex; gap: 4px; padding: 6px;
+    background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+  }
+
+  .image-tile-btn {
+    flex: 1; border: none; border-radius: 4px; font-size: 11px; font-weight: 700;
+    padding: 5px; cursor: pointer;
+  }
+
+  .image-tile-btn.main-btn { background: white; color: #112532; }
+  .image-tile-btn.remove-btn { background: #b00020; color: white; }
+
+  .image-upload-zone {
+    border: 2px dashed #d5d5d5; border-radius: 8px; padding: 20px;
+    text-align: center; color: #888; font-size: 13px; cursor: pointer;
+  }
+
+  .image-upload-zone:hover { border-color: #189b8a; color: #189b8a; }
+  .image-upload-zone input { display: none; }
+
+  .modal-footer {
+    display: flex; justify-content: flex-end; gap: 10px;
+    padding: 18px 24px; border-top: 1px solid #ececec; position: sticky; bottom: 0; background: white;
+  }
+
+  .btn-secondary {
+    padding: 10px 18px; background: white; border: 1px solid #d5d5d5; border-radius: 7px;
+    font-size: 14px; font-weight: 700; color: #112532; cursor: pointer;
+  }
+
+  .empty-state { text-align: center; padding: 50px 20px; color: #888; }
+
+  @media (max-width: 800px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; }
+    .sidebar-toggle { display: block; }
+    .content { padding: 18px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .vehicle-table-wrap { overflow-x: auto; }
+    table { min-width: 640px; }
+  }
+</style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon"><i class="fas fa-car"></i></div>
+    <div class="sidebar-logo-text"><strong>AutoAddicts</strong><span>Admin</span></div>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="admin-dashboard.html" class="sidebar-link"><i class="fas fa-gauge"></i> Dashboard</a>
+    <a href="admin-vehicles.html" class="sidebar-link active"><i class="fas fa-car-side"></i> Vehicles</a>
+    <a href="admin-leads.html" class="sidebar-link"><i class="fas fa-inbox"></i> Leads</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <button class="sidebar-logout" id="logoutBtn"><i class="fas fa-right-from-bracket"></i> Log Out</button>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <button class="sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+      <div>
+        <h1>Vehicles</h1>
+        <p>Manage your current stock</p>
+      </div>
+    </div>
+    <div style="display:flex; gap:10px;">
+      <button class="btn-secondary" id="bulkImportBtn"><i class="fas fa-file-csv"></i> Bulk Import</button>
+      <button class="btn-primary" id="addVehicleBtn"><i class="fas fa-plus"></i> Add Vehicle</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="toolbar">
+      <input type="text" id="searchInput" placeholder="Search by make or model...">
+    </div>
+
+    <div class="vehicle-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Vehicle</th>
+            <th>Price</th>
+            <th>Mileage</th>
+            <th>Year</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="vehicleTableBody">
+          <tr><td colspan="6" style="text-align:center; padding:30px; color:#888;">Loading vehicles...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit Vehicle Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 id="modalTitle">Add Vehicle</h2>
+      <button class="modal-close" id="modalCloseBtn"><i class="fas fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <form id="vehicleForm">
+        <div class="form-section-title">Basic Details</div>
+        <div class="form-grid">
+          <div class="form-field"><label>Make</label><input type="text" id="fMake" required></div>
+          <div class="form-field"><label>Model</label><input type="text" id="fModel" required></div>
+          <div class="form-field"><label>Year</label><input type="number" id="fYear" required></div>
+          <div class="form-field"><label>Price (R)</label><input type="text" id="fPrice" placeholder="e.g. 235,000" inputmode="numeric" required></div>
+          <div class="form-field"><label>Mileage (KM)</label><input type="text" id="fMileage" placeholder="e.g. 62,000" inputmode="numeric" required></div>
+          <div class="form-field"><label>Colour</label><input type="text" id="fColour"></div>
+        </div>
+
+        <div class="form-section-title">Specifications</div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Transmission</label>
+            <select id="fTransmission">
+              <option value="">Select</option>
+              <option value="Manual">Manual</option>
+              <option value="Automatic">Automatic</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Fuel Type</label>
+            <select id="fFuelType">
+              <option value="">Select</option>
+              <option value="Petrol">Petrol</option>
+              <option value="Diesel">Diesel</option>
+              <option value="Hybrid">Hybrid</option>
+              <option value="Electric">Electric</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Body Type</label>
+            <select id="fBodyType">
+              <option value="">Select</option>
+              <option value="Sedan">Sedan</option>
+              <option value="Hatchback">Hatchback</option>
+              <option value="SUV">SUV</option>
+              <option value="Bakkie">Bakkie</option>
+              <option value="Coupe">Coupe</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Service History</label>
+            <select id="fServiceHistory">
+              <option value="">Select</option>
+              <option value="Full">Full</option>
+              <option value="Partial">Partial</option>
+              <option value="None">None</option>
+            </select>
+          </div>
+          <div class="form-field"><label>Previous Owners</label><input type="number" id="fPreviousOwners"></div>
+          <div class="form-field"><label>YouTube Link (optional)</label><input type="url" id="fYoutubeLink"></div>
+        </div>
+
+        <div class="form-field full" style="margin-bottom:14px;">
+          <label>Description</label>
+          <textarea id="fDescription" rows="4"></textarea>
+        </div>
+
+        <div class="form-section-title">Features</div>
+        <div class="feature-checks" id="featureChecks">
+          <!-- populated by JS -->
+        </div>
+
+        <div class="form-section-title">Photos</div>
+        <div class="image-grid" id="imageGrid"></div>
+        <label class="image-upload-zone">
+          <i class="fas fa-cloud-arrow-up"></i> Click to add photos (you can select multiple)
+          <input type="file" id="fImages" accept="image/*" multiple>
+        </label>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="cancelBtn">Cancel</button>
+      <button class="btn-primary" id="saveBtn"><i class="fas fa-check"></i> Save Vehicle</button>
+    </div>
+  </div>
+</div>
+
+<!-- Bulk Import Modal -->
+<div class="modal-overlay" id="importOverlay">
+  <div class="modal-box" style="max-width: 560px;">
+    <div class="modal-header">
+      <h2>Bulk Import Vehicles</h2>
+      <button class="modal-close" id="importCloseBtn"><i class="fas fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px; color:#666; margin-bottom:16px; line-height:1.6;">
+        Upload a CSV file to add several vehicles at once. This covers text details only, photos still need to be added per vehicle afterwards in the edit screen. Not sure of the format?
+        <a href="#" id="downloadTemplateBtn" style="color:#189b8a; font-weight:700;">Download a template</a>.
+      </p>
+
+      <label class="image-upload-zone" style="margin-bottom:16px;">
+        <i class="fas fa-file-csv"></i> Click to choose a CSV file
+        <input type="file" id="csvFileInput" accept=".csv">
+      </label>
+
+      <div id="importPreview"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="importCancelBtn">Cancel</button>
+      <button class="btn-primary" id="importConfirmBtn" style="display:none;"><i class="fas fa-check"></i> Import Vehicles</button>
+    </div>
+  </div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/pocketbase@0.21.3/dist/pocketbase.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script>
+  const pb = new PocketBase('https://zca4uvbsikp5qq2.ba7w.pocketbasecloud.com');
+
+if (!pb.authStore.isValid) {
+  window.location.href = 'admin-login.html';
+}
+
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  pb.authStore.clear();
+  window.location.href = 'admin-login.html';
+});
+
+document.getElementById('sidebarToggle').addEventListener('click', () => {
+  document.getElementById('sidebar').classList.toggle('open');
+});
+
+const FEATURE_OPTIONS = [
+  'Bluetooth', 'Navigation', 'Reverse Camera', 'Cruise Control',
+  'Air Conditioning', 'Electric Windows', 'Alarm/Immobiliser',
+  'Leather Seats', 'Sunroof', 'Parking Sensors', 'ABS', 'Airbags',
+  'Alloy Wheels', 'Tow Bar'
+];
+
+let allVehicles = [];
+let editingVehicle = null;
+let existingImages = [];
+let removedImages = [];
+let newImageFiles = [];
+let mainImageFilename = '';
+
+// Restrict price and mileage inputs to numbers and commas only
+function restrictToNumbersAndCommas(id) {
+  const input = document.getElementById(id);
+  if (input) {
+    input.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/[^0-9,]/g, '');
+    });
+  }
+}
+
+restrictToNumbersAndCommas('fPrice');
+restrictToNumbersAndCommas('fMileage');
+
+function renderTable(vehicles) {
+  const body = document.getElementById('vehicleTableBody');
+
+  if (vehicles.length === 0) {
+    body.innerHTML = `<tr><td colspan="6"><div class="empty-state">No vehicles yet. Click "Add Vehicle" to get started.</div></td></tr>`;
+    return;
+  }
+
+  body.innerHTML = vehicles.map(v => {
+    const thumbUrl = v.main_image
+      ? pb.files.getUrl(v, v.main_image)
+      : (v.images && v.images.length ? pb.files.getUrl(v, v.images[0]) : 'cars/maincar.jpeg');
+
+    return `
+      <tr>
+        <td><div class="table-thumb" style="background-image:url('${thumbUrl}')"></div></td>
+        <td>
+          <div class="table-name">${v.make} ${v.model}</div>
+          <div class="table-sub">${v.body_type || ''} ${v.body_type && v.transmission ? '&middot;' : ''} ${v.transmission || ''}</div>
+        </td>
+        <td>R${Number(v.price || 0).toLocaleString('en-US')}</td>
+        <td>${Number(v.mileage || 0).toLocaleString('en-US')} KM</td>
+        <td>${v.year || ''}</td>
+        <td>
+          <div class="table-actions">
+            <button class="icon-btn" onclick="openEditModal('${v.id}')" aria-label="Edit"><i class="fas fa-pen"></i></button>
+            <button class="icon-btn danger" onclick="deleteVehicle('${v.id}')" aria-label="Delete"><i class="fas fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+async function loadVehicles() {
+  try {
+    allVehicles = await pb.collection('vehicles').getFullList({ sort: '-created' });
+    renderTable(allVehicles);
+  } catch (err) {
+    console.error('Failed to load vehicles:', err);
+    document.getElementById('vehicleTableBody').innerHTML =
+      `<tr><td colspan="6"><div class="empty-state">Could not load vehicles.</div></td></tr>`;
+  }
+}
+
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  const q = e.target.value.toLowerCase();
+  const filtered = allVehicles.filter(v =>
+    `${v.make} ${v.model}`.toLowerCase().includes(q)
+  );
+  renderTable(filtered);
+});
+
+function renderFeatureChecks(selected = []) {
+  const container = document.getElementById('featureChecks');
+  container.innerHTML = FEATURE_OPTIONS.map(f => {
+    const isChecked = selected.includes(f);
+    return `
+      <label class="feature-check ${isChecked ? 'checked' : ''}">
+        <input type="checkbox" value="${f}" ${isChecked ? 'checked' : ''} onchange="this.parentElement.classList.toggle('checked', this.checked)">
+        ${f}
+      </label>
+    `;
+  }).join('');
+}
+
+function renderImageGrid() {
+  const grid = document.getElementById('imageGrid');
+  let html = '';
+
+  existingImages.forEach(filename => {
+    const url = editingVehicle ? pb.files.getUrl(editingVehicle, filename) : '';
+    const isMain = mainImageFilename === filename;
+    html += `
+      <div class="image-tile ${isMain ? 'is-main' : ''}">
+        <img src="${url}" alt="Vehicle photo">
+        ${isMain ? '<div class="image-tile-badge">Main</div>' : ''}
+        <div class="image-tile-actions">
+          ${!isMain ? `<button type="button" class="image-tile-btn main-btn" onclick="setMainImage('${filename}')">Set Main</button>` : ''}
+          <button type="button" class="image-tile-btn remove-btn" onclick="removeExistingImage('${filename}')"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    `;
+  });
+
+  newImageFiles.forEach((file, index) => {
+    const tempUrl = URL.createObjectURL(file);
+    const tempKey = `NEW:${index}`;
+    const isMain = mainImageFilename === tempKey;
+    html += `
+      <div class="image-tile ${isMain ? 'is-main' : ''}">
+        <img src="${tempUrl}" alt="New photo">
+        ${isMain ? '<div class="image-tile-badge">Main</div>' : '<div class="image-tile-badge" style="background:#5583c4;">New</div>'}
+        <div class="image-tile-actions">
+          ${!isMain ? `<button type="button" class="image-tile-btn main-btn" onclick="setMainImage('${tempKey}')">Set Main</button>` : ''}
+          <button type="button" class="image-tile-btn remove-btn" onclick="removeNewImage(${index})"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    `;
+  });
+
+  grid.innerHTML = html || '<p style="color:#888; font-size:13px;">No photos added yet.</p>';
+}
+
+function setMainImage(key) {
+  mainImageFilename = key;
+  renderImageGrid();
+}
+
+function removeExistingImage(filename) {
+  existingImages = existingImages.filter(f => f !== filename);
+  removedImages.push(filename);
+  if (mainImageFilename === filename) mainImageFilename = existingImages[0] || (newImageFiles.length ? 'NEW:0' : '');
+  renderImageGrid();
+}
+
+function removeNewImage(index) {
+  newImageFiles.splice(index, 1);
+  if (mainImageFilename === `NEW:${index}`) mainImageFilename = existingImages[0] || (newImageFiles.length ? 'NEW:0' : '');
+  renderImageGrid();
+}
+
+function compressImageFile(file, maxWidth = 1200, maxHeight = 1200, quality = 0.8) {
+  return new Promise((resolve) => {
+    if (!file || !file.type.startsWith('image/')) {
+      return resolve(file);
+    }
+
+    const reader = new FileReader();
+    reader.onerror = () => resolve(file);
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onerror = () => resolve(file);
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > maxWidth) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = Math.round((width * maxHeight) / height);
+            height = maxHeight;
+          }
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          return resolve(file);
+        }
+
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) {
+              return resolve(file);
+            }
+            const compressedFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", {
+              type: 'image/jpeg',
+              lastModified: Date.now()
+            });
+            resolve(compressedFile);
+          },
+          'image/jpeg',
+          quality
+        );
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+document.getElementById('fImages').addEventListener('change', async (e) => {
+  const rawFiles = Array.from(e.target.files);
+  if (rawFiles.length === 0) return;
+
+  const uploadZone = document.querySelector('.image-upload-zone');
+  const originalHTML = uploadZone.innerHTML;
+  uploadZone.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Optimizing images...';
+
+  for (const file of rawFiles) {
+    try {
+      const optimizedFile = await compressImageFile(file);
+      newImageFiles.push(optimizedFile);
+    } catch (err) {
+      console.warn('Compression failed, using original file:', err);
+      newImageFiles.push(file);
+    }
+  }
+
+  uploadZone.innerHTML = originalHTML;
+
+  if (!mainImageFilename && newImageFiles.length) mainImageFilename = 'NEW:0';
+  renderImageGrid();
+  e.target.value = '';
+});
+
+function resetForm() {
+  document.getElementById('vehicleForm').reset();
+  existingImages = [];
+  removedImages = [];
+  newImageFiles = [];
+  mainImageFilename = '';
+  renderFeatureChecks([]);
+  renderImageGrid();
+}
+
+function openAddModal() {
+  editingVehicle = null;
+  resetForm();
+  document.getElementById('modalTitle').textContent = 'Add Vehicle';
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+window.openEditModal = function(id) {
+  const v = allVehicles.find(v => v.id === id);
+  if (!v) return;
+
+  editingVehicle = v;
+  resetForm();
+
+  document.getElementById('modalTitle').textContent = `Edit ${v.make} ${v.model}`;
+  document.getElementById('fMake').value = v.make || '';
+  document.getElementById('fModel').value = v.model || '';
+  document.getElementById('fYear').value = v.year || '';
+  document.getElementById('fPrice').value = v.price || '';
+  document.getElementById('fMileage').value = v.mileage || '';
+  document.getElementById('fColour').value = v.colour || '';
+  document.getElementById('fTransmission').value = v.transmission || '';
+  document.getElementById('fFuelType').value = v.fuel_type || '';
+  document.getElementById('fBodyType').value = v.body_type || '';
+  document.getElementById('fServiceHistory').value = v.service_history || '';
+  document.getElementById('fPreviousOwners').value = v.previous_owners || '';
+  document.getElementById('fYoutubeLink').value = v.youtube_link || '';
+  document.getElementById('fDescription').value = v.description || '';
+
+  renderFeatureChecks(v.features || []);
+
+  existingImages = v.images ? [...v.images] : [];
+  mainImageFilename = v.main_image && existingImages.includes(v.main_image)
+    ? v.main_image
+    : (existingImages[0] || '');
+  renderImageGrid();
+
+  document.getElementById('modalOverlay').classList.add('open');
+};
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+document.getElementById('addVehicleBtn').addEventListener('click', openAddModal);
+document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+document.getElementById('cancelBtn').addEventListener('click', closeModal);
+
+document.getElementById('saveBtn').addEventListener('click', async () => {
+  const form = document.getElementById('vehicleForm');
+  if (!form.reportValidity()) return;
+
+  const saveBtn = document.getElementById('saveBtn');
+  saveBtn.disabled = true;
+  saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+  const selectedFeatures = Array.from(document.querySelectorAll('#featureChecks input:checked')).map(cb => cb.value);
+
+  // Clean out commas from price and mileage strings so PocketBase accepts them cleanly as numbers
+  const cleanPrice = document.getElementById('fPrice').value.replace(/,/g, '');
+  const cleanMileage = document.getElementById('fMileage').value.replace(/,/g, '');
+
+  const fd = new FormData();
+  fd.append('make', document.getElementById('fMake').value);
+  fd.append('model', document.getElementById('fModel').value);
+  fd.append('year', document.getElementById('fYear').value);
+  fd.append('price', cleanPrice);
+  fd.append('mileage', cleanMileage);
+  fd.append('colour', document.getElementById('fColour').value);
+  fd.append('transmission', document.getElementById('fTransmission').value);
+  fd.append('fuel_type', document.getElementById('fFuelType').value);
+  fd.append('body_type', document.getElementById('fBodyType').value);
+  fd.append('service_history', document.getElementById('fServiceHistory').value);
+  fd.append('previous_owners', document.getElementById('fPreviousOwners').value);
+  fd.append('youtube_link', document.getElementById('fYoutubeLink').value);
+  fd.append('description', document.getElementById('fDescription').value);
+  selectedFeatures.forEach(f => fd.append('features', f));
+
+  newImageFiles.forEach(file => fd.append('images', file));
+  removedImages.forEach(filename => fd.append('images-', filename));
+
+  try {
+    let savedVehicle;
+    if (editingVehicle) {
+      savedVehicle = await pb.collection('vehicles').update(editingVehicle.id, fd);
+    } else {
+      savedVehicle = await pb.collection('vehicles').create(fd);
+    }
+
+    let resolvedMain = '';
+    if (mainImageFilename.startsWith('NEW:')) {
+      const newIndex = parseInt(mainImageFilename.split(':')[1], 10);
+      const uploadedCount = newImageFiles.length;
+      const startOfNew = savedVehicle.images.length - uploadedCount;
+      resolvedMain = savedVehicle.images[startOfNew + newIndex] || savedVehicle.images[0] || '';
+    } else {
+      resolvedMain = mainImageFilename || savedVehicle.images[0] || '';
+    }
+
+    if (resolvedMain && resolvedMain !== savedVehicle.main_image) {
+      await pb.collection('vehicles').update(savedVehicle.id, { main_image: resolvedMain });
+    }
+
+    closeModal();
+    loadVehicles();
+  } catch (err) {
+    console.error('Failed to save vehicle:', err);
+    alert('Something went wrong saving this vehicle. Check the console for details.');
+  } finally {
+    saveBtn.disabled = false;
+    saveBtn.innerHTML = '<i class="fas fa-check"></i> Save Vehicle';
+  }
+});
+
+window.deleteVehicle = async function(id) {
+  const v = allVehicles.find(v => v.id === id);
+  if (!v) return;
+  if (!confirm(`Delete ${v.make} ${v.model} ${v.year}? This cannot be undone.`)) return;
+
+  try {
+    await pb.collection('vehicles').delete(id);
+    loadVehicles();
+  } catch (err) {
+    console.error('Failed to delete vehicle:', err);
+    alert('Could not delete this vehicle. Check the console for details.');
+  }
+};
+
+const CSV_TEMPLATE_HEADERS = [
+  'make', 'model', 'year', 'price', 'mileage', 'colour',
+  'transmission', 'fuel_type', 'body_type', 'service_history',
+  'previous_owners', 'description', 'youtube_link', 'features'
+];
+
+let parsedRows = [];
+
+document.getElementById('bulkImportBtn').addEventListener('click', () => {
+  parsedRows = [];
+  document.getElementById('csvFileInput').value = '';
+  document.getElementById('importPreview').innerHTML = '';
+  document.getElementById('importConfirmBtn').style.display = 'none';
+  document.getElementById('importOverlay').classList.add('open');
+});
+
+document.getElementById('importCloseBtn').addEventListener('click', () => {
+  document.getElementById('importOverlay').classList.remove('open');
+});
+document.getElementById('importCancelBtn').addEventListener('click', () => {
+  document.getElementById('importOverlay').classList.remove('open');
+});
+
+document.getElementById('downloadTemplateBtn').addEventListener('click', (e) => {
+  e.preventDefault();
+  const sampleRow = [
+    'Toyota', 'Corolla', '2019', '185000', '62000', 'White',
+    'Automatic', 'Petrol', 'Sedan', 'Full', '1',
+    'Well maintained, single owner.', '',
+    'Bluetooth;Air Conditioning;ABS'
+  ];
+  const csvContent = CSV_TEMPLATE_HEADERS.join(',') + '\n' + sampleRow.join(',');
+  const blob = new Blob([csvContent], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'autoaddicts-vehicle-template.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('csvFileInput').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  Papa.parse(file, {
+    header: true,
+    skipEmptyLines: true,
+    complete: (results) => {
+      parsedRows = results.data.filter(row => row.make && row.model);
+      renderImportPreview();
+    },
+    error: (err) => {
+      console.error('CSV parse error:', err);
+      document.getElementById('importPreview').innerHTML =
+        '<p style="color:#b00020; font-size:13px;">Could not read that CSV file. Please check the format and try again.</p>';
+    }
+  });
+});
+
+function renderImportPreview() {
+  const preview = document.getElementById('importPreview');
+  const confirmBtn = document.getElementById('importConfirmBtn');
+
+  if (parsedRows.length === 0) {
+    preview.innerHTML = '<p style="color:#b00020; font-size:13px;">No valid rows found. Make sure your CSV has at least "make" and "model" columns filled in.</p>';
+    confirmBtn.style.display = 'none';
+    return;
+  }
+
+  const rowsHtml = parsedRows.slice(0, 5).map(r =>
+    `<div style="padding:8px 0; border-bottom:1px solid #f2f2f2; font-size:13px;">${r.make} ${r.model} ${r.year || ''} &middot; R${r.price || '0'}</div>`
+  ).join('');
+
+  preview.innerHTML = `
+    <div style="background:#f4f6f7; border-radius:8px; padding:14px; margin-bottom:10px;">
+      <strong style="font-size:14px; color:#112532;">${parsedRows.length} vehicle${parsedRows.length === 1 ? '' : 's'} found</strong>
+      <div style="margin-top:8px;">${rowsHtml}</div>
+      ${parsedRows.length > 5 ? `<div style="font-size:12px; color:#888; padding-top:8px;">+ ${parsedRows.length - 5} more</div>` : ''}
+    </div>
+  `;
+  confirmBtn.style.display = 'flex';
+}
+
+document.getElementById('importConfirmBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('importConfirmBtn');
+  btn.disabled = true;
+
+  let successCount = 0;
+  let failCount = 0;
+
+  for (let i = 0; i < parsedRows.length; i++) {
+    const row = parsedRows[i];
+    btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Importing ${i + 1} / ${parsedRows.length}...`;
+
+    const cleanRowPrice = String(row.price || '').replace(/,/g, '');
+    const cleanRowMileage = String(row.mileage || '').replace(/,/g, '');
+
+    const payload = {
+      make: row.make || '',
+      model: row.model || '',
+      year: Number(row.year) || null,
+      price: Number(cleanRowPrice) || null,
+      mileage: Number(cleanRowMileage) || null,
+      colour: row.colour || '',
+      transmission: row.transmission || '',
+      fuel_type: row.fuel_type || '',
+      body_type: row.body_type || '',
+      service_history: row.service_history || '',
+      previous_owners: Number(row.previous_owners) || null,
+      description: row.description || '',
+      youtube_link: row.youtube_link || '',
+      features: row.features ? row.features.split(';').map(f => f.trim()).filter(Boolean) : []
+    };
+
+    try {
+      await pb.collection('vehicles').create(payload);
+      successCount++;
+    } catch (err) {
+      console.error(`Failed to import row ${i + 1}:`, err);
+      failCount++;
+    }
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fas fa-check"></i> Import Vehicles';
+
+  alert(`Import complete: ${successCount} added${failCount ? `, ${failCount} failed (check console)` : ''}.`);
+  document.getElementById('importOverlay').classList.remove('open');
+  loadVehicles();
+});
+
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('action') === 'add') {
+  openAddModal();
+}
+
+loadVehicles();
+</script>
+</body>
+</html>

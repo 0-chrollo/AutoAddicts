@@ -29,9 +29,9 @@
                 <ul class="nav-menu">
                     <li><a href="index.html" id="current">Home</a></li>
                     <li><a href="vehicle-listing.html">Showroom</a></li>
-                    <li><a href="#sell">Sell A Vehicle</a></li>
+                    <li><a href="sell-vehicle.html">Sell A Vehicle</a></li>
                     <li><a href="#Events">Events</a></li>
-                    <li><a href="#Finance">Finance</a></li>
+                
                 </ul>
     
                 <button class="burger" id="burgerBtn">
@@ -47,9 +47,9 @@
             <div class="mobile-menu" id="mobileMenu">
                 <a href="index.html" id="current">Home</a>
                 <a href="vehicle-listing.html">Showroom</a>
-                <a href="#sell">Sell A Vehicle</a>
+                <a href="sell-vehicle.html">Sell A Vehicle</a>
                 <a href="#Events">Events</a>
-                <a href="#Finance">Finance</a>
+              
             </div>
         </nav>
 
@@ -82,7 +82,7 @@
                  
                   </style>
               <a href="vehicle-listing.html" class="hero-button">Buy A Vehicle</a>
-              <a href="#sell" class="hero-button">Sell A Vehicle</a>
+              <a href="sell-vehicle.html" class="hero-button">Sell A Vehicle</a>
             </div>
 
 
@@ -173,202 +173,518 @@
 
 
 
-
-
-
-
-
-
-      <section class="just-in">
-
-        <div class="section-header">
-          <div class="section-header-text">
-            <span class="section-label">Fresh Arrivals</span>
-            <h2 class="section-title">Just In <span style="color:#11a28f"> Vehicles </span></h2>
-            <p class="section-desc">Brand new stock added directly to our showroom floor, be the first to grab a deal. &#8594; &#8594;</p>
+      <section class="home-just-in-section">
+        <div class="home-ji-header">
+          <div class="home-ji-header-text">
+            <span class="home-ji-label">Fresh Arrivals</span>
+            <h2 class="home-ji-title">Just In <span style="color:#11a28f">Vehicles</span></h2>
+            <p class="home-ji-desc">Brand new stock added directly to our showroom floor, be the first to grab a deal.</p>
           </div>
-        
-          <!-- Desktop-only arrows, top-right of the header -->
-          <div class="nav-arrows">
-            <button class="nav-arrow" id="arrowPrev" aria-label="Previous">&#8592;</button>
-            <button class="nav-arrow" id="arrowNext" aria-label="Next">&#8594;</button>
+       
+          <div class="home-ji-arrows">
+            <button class="home-ji-arrow-btn" id="arrowPrev" aria-label="Previous">&#8592;</button>
+            <button class="home-ji-arrow-btn" id="arrowNext" aria-label="Next">&#8594;</button>
           </div>
         </div>
-        
-        <div class="scroll-wrapper">
-          <div class="vehicles-track" id="track">
-            <div class="track-spacer"></div>
-        
-            <!-- ═══════════════════════════════════════
-                 VEHICLE CARDS
-                 Add your own content inside each card.
-                 Card colours: blue | dark | accent
-                 Copy/paste a block to add more cards.
-            ════════════════════════════════════════ -->
-        
-            <div class="vehicle-card blue">
-        
-              <div class="card">
-                <div class="card-image" style="background-image: url('cars/maincar.jpeg')">
-           
-                    
-                    <div class="card-banner">
-                        <span>Clear. Simple.</span> <strong>Vehicle Purchase</strong>
-                    </div>
-                </div>
-                <div class="card-content">
-                    <h3 class="card-title">Renault Clio 4 1.2 Authentique 2014</h3>
-                    <div>
-                        <span class="card-price">R59,000</span>
-                        <span class="card-mileage">| 195,012 KM</span>
-                    </div>
-                    <div class="card-location">
-                     
-                        <span>Fair Condition</span>
-                    </div>
-                    <div class="card-stock">Available</div>
-                </div>
-                <button class="card-button"> <a href="vehicle-details.html">
-                    
-                    View Vehicle <i class="fas fa-search"></i></a>
-                </button>
-            </div>
-        
-        
-            </div>
-        
-            <div class="vehicle-card dark">
-        
-              <div class="card">
-                <div class="card-image" style="background-image: url('cars/toyota.jpeg');">
-             
-                    
-                    <div class="card-banner">
-                        <span>Clear. Simple.</span> <strong>Vehicle Purchase</strong>
-                    </div>
-                </div>
-                <div class="card-content">
-                    <h3 class="card-title">Toyota Corolla 1.6 Professional 2010</h3>
-                    <div>
-                        <span class="card-price">R69,000</span>
-                        <span class="card-mileage">| 562,674 KM</span>
-                    </div>
-                    <div class="card-location">
-                        
-                       
-                        <span>Good Condition</span>
-                    </div>
-                    <div class="card-stock">Available</div>
-                </div>
-                <button class="card-button">
-                    
-                    View Vehicle<i class="fas fa-search"></i>
-                </button>
-            </div>
-        
-            </div>
-        
-        
-        
-            <div class="vehicle-card accent">
-        
-        
-        
-              <div class="card">
-                <div class="card-image" style="background-image: url('cars/opel.jpeg')">
-          
-                    
-                    <div class="card-banner">
-                        <span>Clear. Simple.</span> <strong>Vehicle Purchase</strong>
-                    </div>
-                </div>
-                <div class="card-content">
-                    <h3 class="card-title">Opel Corsa 1.0T Ecoflex Enjoy 2016</h3>
-                    <div>
-                        <span class="card-price">R69,000</span>
-                        <span class="card-mileage">| 172,336 KM</span>
-                    </div>
-                    <div class="card-location">
-               
-                        <span>Fair Condition</span>
-                    </div>
-                    <div class="card-stock">Available</div>
-                </div>
-                <button class="card-button">
-                    
-                    View Vehicle<i class="fas fa-search"></i>
-                </button>
-            </div>
-        
-        
-              
-            </div>
-        
-            <div class="vehicle-card blue">
-             
-        
-              <div class="card">
-                <div class="card-image" style="background-image: url('cars/polo.jpeg')">
-          
-                    
-                    <div class="card-banner">
-                        <span>Clear. Simple.</span> <strong>Vehicle Purchase</strong>
-                    </div>
-                </div>
-                <div class="card-content">
-                    <h3 class="card-title">Volkswagen Polo Vivo GP 1.4 Trendline 2016</h3>
-                    <div>
-                        <span class="card-price">R89,000</span>
-                        <span class="card-mileage">| 246,555 KM</span>
-                    </div>
-                    <div class="card-location">
-               
-                        <span>Good Condition</span>
-                    </div>
-                    <div class="card-stock">Available</div>
-                </div>
-                <button class="card-button">
-                    
-                    View Vehicle<i class="fas fa-search"></i>
-                </button>
-            </div>
-              
-        
-            </div>
-        
-        
-             <!--
-            <div class="vehicl5555555555555555555555 e-card blue">
-        
-         
-              my card content here 
-            </div>
-            -->
-        
-        
-        
-          </div><!-- /vehicles-track -->
-          
-          <div class="scroll-bar-wrap">
-            <div class="scroll-bar-track">
-              
-              <div class="scroll-bar-thumb" id="thumb"></div>
-            </div>
-            <span class="scroll-count" id="count">1 / 4</span>
+       
+        <div class="home-ji-scroll-wrapper">
+          <div class="home-ji-track" id="track">
+            <!-- Skeleton Loading Placeholders (Initially injected via HTML or JS) -->
+            <div class="home-ji-item"><div class="card skeleton-card"></div></div>
+            <div class="home-ji-item"><div class="card skeleton-card"></div></div>
+            <div class="home-ji-item"><div class="card skeleton-card"></div></div>
+            <div class="home-ji-item"><div class="card skeleton-card"></div></div>
           </div>
-
-          
-          
         </div>
-        
-
-
        
-        
-        
-        </section>
-
+        <div class="home-ji-footer-row">
+          <div class="home-ji-bar-wrap">
+            <div class="home-ji-bar-track">
+              <div class="home-ji-bar-thumb" id="thumb"></div>
+            </div>
+            <span class="home-ji-count" id="count"></span>
+          </div>
        
+          <a href="vehicle-listing.html" class="home-ji-view-all" id="viewMoreBtn">
+            View More Vehicles <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </section>
+       
+      <!-- PocketBase SDK -->
+      <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.21.3/dist/pocketbase.umd.js"></script>
+      <script>
+        const pb = new PocketBase('http://127.0.0.1:8090');
+       
+        function escapeHtml(str) {
+          return String(str || '').replace(/[&<>'"]/g, tag => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+          }[tag] || tag));
+        }
+       
+        function renderSkeletonCard() {
+          return `
+            <div class="card skeleton-card" style="height: 100%;">
+              <div class="card-image skeleton-bg" style="padding-top: 58%;"></div>
+              <div class="card-content">
+                <div class="skeleton-line" style="width: 80%; height: 14px; margin-bottom: 10px;"></div>
+                <div class="skeleton-line" style="width: 50%; height: 17px; margin-bottom: 6px;"></div>
+                <div class="skeleton-line" style="width: 70%; height: 12px; margin-top: 15px;"></div>
+              </div>
+              <div class="card-button skeleton-bg" style="height: 35px;"></div>
+            </div>
+          `;
+        }
+       
+        function renderCard(vehicle) {
+          const imageUrl = vehicle.images && vehicle.images.length
+            ? pb.files.getUrl(vehicle, vehicle.images[0])
+            : 'cars/maincar.jpeg';
+       
+          const titleText = `${vehicle.make || ''} ${vehicle.model || ''} ${vehicle.year || ''}`.trim();
+          const price = vehicle.price ? Number(vehicle.price).toLocaleString('en-US') : '0';
+          const mileage = vehicle.mileage ? Number(vehicle.mileage).toLocaleString('en-US') + ' KM' : '';
+       
+          return `
+            <a class="card" href="vehicle-details.html?id=${vehicle.id}">
+              <div class="card-image" style="background-image: url('${imageUrl}')">
+                <div class="card-banner">
+                  <span>Clear. Simple.</span> <strong>Vehicle Purchase</strong>
+                </div>
+              </div>
+              <div class="card-content">
+                <h3 class="card-title">${escapeHtml(titleText)}</h3>
+                <div>
+                  <span class="card-price">R${price}</span>
+                  <span class="card-mileage">${mileage ? '| ' + mileage : ''}</span>
+                </div>
+                <div class="card-specs">
+                  <span class="card-body-type">${escapeHtml(vehicle.body_type || '')}</span>
+                  <span class="card-transmission">${escapeHtml(vehicle.transmission || '')}</span>
+                  <span class="card-fuel">${escapeHtml(vehicle.fuel_type || '')}</span>
+                </div>
+              </div>
+              <div class="card-button">
+                View Vehicle <i class="fas fa-search"></i>
+              </div>
+            </a>
+          `;
+        }
+       
+        async function loadRecentVehicles() {
+          const track = document.getElementById('track');
+          
+          // Show skeleton loaders immediately
+          track.innerHTML = Array(4).fill(0).map(() => `<div class="home-ji-item">${renderSkeletonCard()}</div>`).join('');
+       
+          try {
+            // Limit to 7 vehicles max
+            const records = await pb.collection('vehicles').getList(1, 7, {
+              sort: '-created',
+            });
+            const vehicles = records.items || [];
+       
+            if (vehicles.length === 0) {
+              track.innerHTML = '<p style="padding: 20px;">No vehicles found.</p>';
+              return;
+            }
+       
+            track.innerHTML = vehicles.map(car => `<div class="home-ji-item">${renderCard(car)}</div>`).join('');
+            initCarousel();
+          } catch (error) {
+            console.error('Error fetching vehicles from PocketBase:', error);
+            track.innerHTML = '<p style="padding: 20px;">Unable to load vehicles at this time.</p>';
+          }
+        }
+       
+        function initCarousel() {
+          const track = document.getElementById('track');
+          const thumb = document.getElementById('thumb');
+          const count = document.getElementById('count');
+          const arrowPrev = document.getElementById('arrowPrev');
+          const arrowNext = document.getElementById('arrowNext');
+          const cards = track.querySelectorAll('.home-ji-item');
+          const total = cards.length;
+       
+          if (total === 0) return;
+       
+          function scrollByCard(direction) {
+            const cardWidth = cards[0].offsetWidth + 18;
+            track.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+          }
+       
+          arrowPrev.addEventListener('click', () => scrollByCard(-1));
+          arrowNext.addEventListener('click', () => scrollByCard(1));
+       
+          function updateUI() {
+            const maxScroll = track.scrollWidth - track.clientWidth;
+            const pct = maxScroll > 0 ? track.scrollLeft / maxScroll : 0;
+            thumb.style.width = Math.max(20, pct * 100) + '%';
+       
+            arrowPrev.disabled = track.scrollLeft <= 0;
+            arrowNext.disabled = track.scrollLeft >= maxScroll - 1;
+       
+            let closest = 0, minDist = Infinity;
+            cards.forEach((c, i) => {
+              const dist = Math.abs(c.getBoundingClientRect().left - track.getBoundingClientRect().left);
+              if (dist < minDist) { minDist = dist; closest = i; }
+            });
+            count.textContent = (closest + 1) + ' / ' + total;
+          }
+       
+          track.addEventListener('scroll', updateUI);
+          window.addEventListener('resize', updateUI);
+          updateUI();
+        }
+       
+        document.addEventListener('DOMContentLoaded', loadRecentVehicles);
+      </script>
+       
+      <style>
+      .home-just-in-section {
+        padding: 80px 0;
+        background-color: #f8f9fa;
+        overflow: hidden;
+        box-sizing: border-box;
+      }
+       
+      .home-just-in-section * {
+        box-sizing: border-box;
+      }
+       
+      .home-just-in-section .home-ji-header {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 20px;
+      }
+       
+      .home-just-in-section .home-ji-label {
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #11a28f;
+        margin-bottom: 8px;
+        display: block;
+      }
+       
+      .home-just-in-section .home-ji-title {
+        font-size: 36px;
+        font-weight: 800;
+        color: #1a1a1a;
+        margin: 0 0 10px 0;
+      }
+       
+      .home-just-in-section .home-ji-desc {
+        font-size: 15px;
+        color: #666;
+        margin: 0;
+      }
+       
+      .home-just-in-section .home-ji-arrows {
+        display: flex;
+        gap: 10px;
+        flex-shrink: 0;
+      }
+       
+      .home-just-in-section .home-ji-arrow-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 1px solid #ddd;
+        background: #fff;
+        color: #333;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+      }
+       
+      .home-just-in-section .home-ji-arrow-btn:hover:not(:disabled) {
+        background: #11a28f;
+        border-color: #11a28f;
+        color: #fff;
+      }
+       
+      .home-just-in-section .home-ji-arrow-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+       
+      .home-just-in-section .home-ji-scroll-wrapper {
+        max-width: 1400px;
+        margin: 30px auto 0;
+        padding: 0 40px;
+        position: relative;
+      }
+       
+      .home-just-in-section .home-ji-track {
+        display: flex;
+        gap: 18px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-padding-left: 0;
+        scrollbar-width: none;
+        padding: 10px 0 20px 0;
+        margin: 0;
+        width: 100%;
+      }
+       
+      .home-just-in-section .home-ji-track::-webkit-scrollbar {
+        display: none;
+      }
+       
+      .home-just-in-section .home-ji-item {
+        flex: 0 0 275px;
+        width: 275px;
+        scroll-snap-align: start;
+      }
+       
+      .home-just-in-section .card {
+        background: white;
+        border-radius: 2px;
+        overflow: hidden;
+        box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+        height: 100%;
+      }
+       
+      .home-just-in-section .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      }
+       
+      .home-just-in-section .card-image {
+        position: relative;
+        width: 100%;
+        padding-top: 58%;
+        background-size: cover;
+        background-position: center;
+        padding-bottom: 40px;
+      }
+       
+      .home-just-in-section .card-banner {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(114deg, #189b8a 0%, #0c5e52 100%);
+        color: white;
+        padding: 5px 8px;
+        font-size: 10px;
+        text-align: center;
+      }
+       
+      .home-just-in-section .card-banner span {
+        font-weight: 300;
+      }
+       
+      .home-just-in-section .card-banner strong {
+        font-weight: 600;
+      }
+       
+      .home-just-in-section .card-content {
+        padding: 15px;
+        background: #ececec;
+        flex-grow: 1;
+      }
+       
+      .home-just-in-section .card-title {
+        font-size: 14px;
+        font-weight: 700;
+        margin: 0 0 10px 0;
+        color: #112532;
+      }
+       
+      .home-just-in-section .card-price {
+        font-size: 17px;
+        font-weight: 700;
+        color: #1b786c;
+        margin-bottom: 6px;
+      }
+       
+      .home-just-in-section .card-mileage {
+        font-size: 12px;
+        color: #888;
+        font-weight: 400;
+        margin-left: 6px;
+      }
+       
+      .home-just-in-section .card-specs {
+        padding-top: 0.8rem;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1px;
+        font-weight: 800;
+        color: #112532;
+        font-size: 0.75rem;
+      }
+       
+      .home-just-in-section .card-specs span:empty {
+        display: none;
+      }
+       
+      .home-just-in-section .card-specs span:not(:empty) ~ span:not(:empty)::before {
+        content: '';
+        display: inline-block;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: #416151;
+        margin: 0 8px;
+        vertical-align: middle;
+      }
+       
+      .home-just-in-section .card-transmission {
+        font-weight: 700;
+        color: #112532;
+      }
+       
+      .home-just-in-section .card-fuel,
+      .home-just-in-section .card-body-type {
+        font-weight: 700;
+        color: #112532;
+        position: relative;
+      }
+       
+      .home-just-in-section .card-button {
+        width: 100%;
+        padding: 8px 15px;
+        background: linear-gradient(114deg, #189b8a 0%, #0c5e52 100%);
+        color: white;
+        border: none;
+        font-size: 13px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: auto;
+      }
+       
+      .home-just-in-section .card:hover .card-button {
+        background: linear-gradient(115deg, #295674 0%, #0e5584 100%);
+      }
+       
+      .home-just-in-section .home-ji-footer-row {
+        max-width: 1400px;
+        margin: 20px auto 0;
+        padding: 0 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        box-sizing: border-box;
+      }
+       
+      .home-just-in-section .home-ji-bar-wrap {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+       
+      .home-just-in-section .home-ji-bar-track {
+        flex: 1;
+        height: 4px;
+        background: #e0e0e0;
+        border-radius: 2px;
+        overflow: hidden;
+        position: relative;
+      }
+       
+      .home-just-in-section .home-ji-bar-thumb {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        background: #11a28f;
+        border-radius: 2px;
+        width: 20%;
+      }
+       
+      .home-just-in-section .home-ji-count {
+        font-size: 13px;
+        font-weight: 600;
+        color: #666;
+        min-width: 45px;
+      }
+       
+      .home-just-in-section .home-ji-view-all {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        color: #0b534a;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+        transition: color 0.2s ease;
+      }
+       
+      .home-just-in-section .home-ji-view-all:hover {
+        color: #11a28f;
+      }
+       
+      /* Skeleton Shimmer Animation & Styles */
+      @keyframes shimmer {
+        0% { background-position: -200px 0; }
+        100% { background-position: calc(200px + 100%) 0; }
+      }
+       
+      .skeleton-bg {
+        background: #e0e0e0;
+        background-image: linear-gradient(90deg, #e0e0e0 0px, #f5f5f5 40px, #e0e0e0 80px);
+        background-size: 600px;
+        animation: shimmer 1.6s infinite linear;
+      }
+       
+      .skeleton-line {
+        background: #e0e0e0;
+        background-image: linear-gradient(90deg, #e0e0e0 0px, #f5f5f5 40px, #e0e0e0 80px);
+        background-size: 600px;
+        animation: shimmer 1.6s infinite linear;
+        border-radius: 4px;
+      }
+       
+      @media (max-width: 768px) {
+        .home-just-in-section {
+          padding: 50px 0;
+        }
+        .home-just-in-section .home-ji-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 15px;
+          padding: 0 20px;
+        }
+        .home-just-in-section .home-ji-arrows {
+          display: none;
+        }
+        .home-just-in-section .home-ji-scroll-wrapper {
+          padding: 0 20px;
+        }
+        .home-just-in-section .home-ji-footer-row {
+          padding: 0 20px;
+        }
+        .home-just-in-section .home-ji-item {
+          flex: 0 0 260px;
+          width: 260px;
+        }
+      }
+
+      </style>
 
 
 
@@ -626,7 +942,7 @@
         </p>
         <div style="display: flex; gap:15px;">
           <a href="vehicle-listing.html" class="faw-btn-dark">Showroom</a>
-          <a href="#sellvehicle" class="faw-btn-dark" id="sell">Sell Your Car</a>
+          <a href="sell-vehicle.html" class="faw-btn-dark" id="sell">Sell Your Car</a>
         </div>
     </div>
   
@@ -972,7 +1288,7 @@
 <style>
 
 
-    .floating-widgets {
+    .fl-widgets {
       position: fixed;
       right: 15px;
       top: 85%;
@@ -983,7 +1299,7 @@
       z-index: 1000;
     }
 
-    .widget {
+    .f-widget {
       width: 35px;
       height: 35px;
       background-color:#0b8777;
@@ -1009,19 +1325,19 @@
     }
   </style>
 
-<div class="floating-widgets">
+<div class="fl-widgets">
   <!-- Phone Widget -->
-  <a href="tel:+27827226183" class="widget" title="Call Us">
+  <a href="tel:+27827226183" class="f-widget" title="Call Us">
     <i class="fas fa-phone-alt"></i>
   </a>
 
   <!-- Email Widget -->
-  <a href="mailto:info@autoaddicts.co.za" class="widget" title="Email Us">
+  <a href="mailto:info@autoaddicts.co.za" class="f-widget" title="Email Us">
     <i class="fas fa-envelope"></i>
   </a>
 
   <!-- WhatsApp Widget -->
-  <a href="https://wa.me/27827226183" class="widget" title="Chat on WhatsApp" target="_blank">
+  <a href="https://wa.me/27827226183" class="f-widget" title="Chat on WhatsApp" target="_blank">
     <i class="fab fa-whatsapp"></i>
   </a>
 </div>

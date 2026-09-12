@@ -39,7 +39,7 @@
                       <li><a href="vehicle-listing.html">showroom</a></li>
                       <li><a href="#sell">Sell A Vehicle</a></li>
                       <li><a href="#Events">Events</a></li>
-                      <li><a href="#Finance">Finance</a></li>
+                     
                   </ul>
       
                   <button class="burger" id="burgerBtn">
@@ -57,7 +57,7 @@
                   <a href="vehicle-listing.html">showroom</a>
                   <a href="#sell">Sell Vehicle</a>
                   <a href="#Events">Events</a>
-                  <a href="#Finance">Finance</a>
+            
               </div>
           </nav>
 
@@ -66,12 +66,6 @@
         <!-- ===== NAVIGATION ===== -->
 
 <br>
-<br>
-
-<br>
-<br>
-
-<br>
 
 
 
@@ -81,354 +75,1009 @@
 
 
 
+<style>
+  :root {
+    --primary: #112532;
+    --accent: #189b8a;
+    --accent-dark: #0c5e52;
+    --bg-light: #f8f9fa;
+    --border-color: #e2e2e2;
+  }
 
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    background-color: #fff;
+  }
 
-                <style>
-                   
-                </style>
-          
-                <!-- Two Column Layout -->
-                <div class="layout-wrapper">
-                    <!-- Left Column: Truck Gallery -->
-                    <section class="trucks-container">
-                        <div class="main-image-container">
-                            <div class="main-image-wrapper">
-                                <img src="cars/maincar.jpeg" 
-                                     alt="Truck Image" 
-                                     class="main-image" 
-                                     id="mainImage">
-                                
-                                <button class="nav-button prev-button" id="prevBtn" aria-label="Previous image">
-                                    &#8249;
-                                </button>
-                                
-                                <button class="nav-button next-button" id="nextBtn" aria-label="Next image">
-                                    &#8250;
-                                </button>
-                                
-                                <div class="image-counter" id="imageCounter">1 / 9</div>
-                            </div>
-                        </div>
-            
-                        <div class="thumbnail-grid" id="thumbnailGrid">
-                            <!-- Replace these image URLs with your own truck images -->
-                            <div class="thumbnail-item active" data-index="0">
-                                <img src="cars/mfront.jpeg" 
-                                     alt="Truck 1" 
-                                     class="thumbnail-image">
-                            </div>
-                            <div class="thumbnail-item" data-index="1">
-                                <img src="cars/mside.jpeg" 
-                                     alt="Truck 2" 
-                                     class="thumbnail-image">
-                            </div>
-            
-                 
-                           
-                    
-                            <div class="thumbnail-item" data-index="7">
-                                <img src="cars/mback.jpeg" 
-                                     alt="Truck 8" 
-                                     class="thumbnail-image">
-                            </div>
-                            <div class="thumbnail-item active" data-index="0">
-                                <img src="cars/min.jpeg" 
-                                     alt="Truck 1" 
-                                     class="thumbnail-image">
-                            </div>
+  .vd-wrapper {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 32px 16px 0;
+  }
 
-                            <div class="thumbnail-item active" data-index="0">
-                                <img src="cars/mdriv.jpeg" 
-                                     alt="Truck 1" 
-                                     class="thumbnail-image">
-                            </div>
+  /* Title block */
+  .vd-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+  }
 
-                            <div class="thumbnail-item active" data-index="0">
-                                <img src="cars/maincar.jpeg" 
-                                     alt="Truck 1" 
-                                     class="thumbnail-image">
-                            </div>
-                        </div>
-                    </section>
-            
-                    <!-- Right Column: Vehicle Specs -->
-                    <aside class="specs-container">
-                        <div class="specs-card">
-                            <h2 class="specs-title">Vehicle Specifications</h2>
-                            
-                            <div class="specs-section">
-                                <h3 class="specs-section-title">General Information</h3>
-                                <table class="specs-table">
-                                    <tr>
-                                        <td class="spec-label">Make</td>
-                                        <td class="spec-value">Renault</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="spec-label">Model</td>
-                                        <td class="spec-value">Clio 4 1.2 Authentique</td>
-                                    </tr>
+  .vd-title h1 {
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--primary);
+    margin: 0 0 6px 0;
+    line-height: 1.15;
+  }
 
-                                 
-                                    <tr>
-                                        <td class="spec-label">Year</td>
-                                        <td class="spec-value">2014</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="spec-label">seats</td>
-                                        <td class="spec-value">5</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="spec-label">Mileage</td>
-                                        <td class="spec-value">195,012 KM</td>
-                                    </tr>
+  .vd-subtitle {
+    font-size: 15px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 
-                                    <tr>
-                                        <td class="spec-label">Condition</td>
-                                        <td class="spec-value">Used</td>
-                                    </tr>
+  .vd-price {
+    font-size: 32px;
+    font-weight: 800;
+    background: linear-gradient(114deg, var(--accent) 0%, var(--accent-dark) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    white-space: nowrap;
+  }
 
-                                    <tr>
-                                        <td class="spec-label">Transmission</td>
-                                        <td class="spec-value">Manual</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="spec-label">Fuel Type</td>
-                                        <td class="spec-value">petrol</td>
-                                    </tr>
+  /* Main layout */
+  .vd-layout {
+    display: block;
+    margin-bottom: 32px;
+  }
 
-                                    <tr>
-                                        <td class="spec-label">Service History</td>
-                                        <td class="spec-value">N/A</td>
-                                    </tr>
-                                </table>
-                            </div>
-            
-                          
-            
-                       
-            
-                 
-                        </div>
-                    </aside>
-                </div>
-            
-                <script>
-                    let currentIndex = 0;
-            
-                    // Elements
-                    const mainImage = document.getElementById('mainImage');
-                    const prevBtn = document.getElementById('prevBtn');
-                    const nextBtn = document.getElementById('nextBtn');
-                    const imageCounter = document.getElementById('imageCounter');
-                    const thumbnails = document.querySelectorAll('.thumbnail-item');
-            
-                    // Get all images from HTML
-                    const thumbnailImages = document.querySelectorAll('.thumbnail-image');
-                    const totalImages = thumbnailImages.length;
-            
-                    // Initialize counter
-                    imageCounter.textContent = `1 / ${totalImages}`;
-            
-                    // Add click handlers to thumbnails
-                    thumbnails.forEach((thumbnail, index) => {
-                        thumbnail.addEventListener('click', () => showImage(index));
-                    });
-            
-                    // Show image at specific index
-                    function showImage(index) {
-                        currentIndex = index;
-                        const selectedThumbnail = thumbnailImages[currentIndex];
-                        mainImage.src = selectedThumbnail.src;
-                        imageCounter.textContent = `${currentIndex + 1} / ${totalImages}`;
-                        
-                        // Update active thumbnail
-                        thumbnails.forEach((thumb, i) => {
-                            thumb.classList.toggle('active', i === currentIndex);
-                        });
-                    }
-            
-                    // Navigate to previous image
-                    function previousImage() {
-                        currentIndex = (currentIndex - 1 + totalImages) % totalImages;
-                        showImage(currentIndex);
-                    }
-            
-                    // Navigate to next image
-                    function nextImage() {
-                        currentIndex = (currentIndex + 1) % totalImages;
-                        showImage(currentIndex);
-                    }
-            
-                    // Event listeners
-                    prevBtn.addEventListener('click', previousImage);
-                    nextBtn.addEventListener('click', nextImage);
-            
-                    // Keyboard navigation
-                    document.addEventListener('keydown', (e) => {
-                        if (e.key === 'ArrowLeft') {
-                            previousImage();
-                        } else if (e.key === 'ArrowRight') {
-                            nextImage();
-                        }
-                    });
-            
-                    // Touch swipe support for mobile
-                    let touchStartX = 0;
-                    let touchEndX = 0;
-            
-                    mainImage.addEventListener('touchstart', (e) => {
-                        touchStartX = e.changedTouches[0].screenX;
-                    });
-            
-                    mainImage.addEventListener('touchend', (e) => {
-                        touchEndX = e.changedTouches[0].screenX;
-                        handleSwipe();
-                    });
-            
-                    function handleSwipe() {
-                        if (touchEndX < touchStartX - 50) {
-                            nextImage();
-                        }
-                        if (touchEndX > touchStartX + 50) {
-                            previousImage();
-                        }
-                    }
-                </script>
+  .vd-details-col {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div style="text-align:center; padding:0 1rem;margin-top:4vh;" >
-    <h2 style="font-size: 1rem; font-weight: 600;color:rgb(19, 93, 63);">Want to purchase this Vehicle ?</h2> 
-  </div>
-  <main class="tm-form">
-  
-
-  
-  
-  <div class="containerd">
-    <!-- Column 1: Form -->
-  <div class="column-1">
-  <form action="https://formsubmit.co/email" method="POST">
-  <input type="hidden" name="_next" value="https:///page?submitted=true">
-  <input type="hidden" name="_subject" value="New Service Inquiry - Phiribathong Consulting">
-  <input type="hidden" name="_template" value="table">
-  <input type="hidden" name="_captcha" value="false">
-  
-  <div class="form-group name-group">
-    <input type="text" name="firstName" placeholder="First Name" required>
-    <input type="text" name="surname" placeholder="Surname" required>
-  </div>
-  
-  <div class="form-group">
-    <input type="email" name="email" placeholder="Email Address" required>
-  </div>
-  
-  <div class="form-group">
-    <input type="tel" name="phone" placeholder="Phone Number" required>
-  </div>
-  
-  <div class="form-group">
-    <input type="text" name="businessName" placeholder="Business/Company Name (Optional)">
-  </div>
-  
-
-  
-
-  
-  <button type="submit" class="btn-submit">
-    <i class="fas fa-paper-plane"></i> Submit 
-  </button>
-  <br>
-  <br>
-  <button class="btn-submit" style="background: rgb(21, 181, 21);">
-    <a href="https://wa.me/27827226183">
-    <i class="fa-brands fa-whatsapp"></i> Whatsapp Us
-    </a>
-  </button>
-  </form>
-  
-  <!-- Success Popup -->
-  <div id="successPopup" class="popup-overlay">
-  <div class="popup-box">
-    <i class="fas fa-check-circle fa-3x" style="color: rgb(223, 223, 223);"></i>
-    <p>Thank you! We've received your inquiry and our team will contact you shortly to discuss your project.</p>
-    <button onclick="closePopup()">Close</button>
-  </div>
-  </div>
-  </div>
-    
-    
-  <!-- Column 2: How to enquire vehicle -->
-  <div class="column-2">
-    <div class="how-to-apply">
-      <h2>How to Purchase a Vehicle from us</h2>
-
-      <div class="step">
-        <div class="step-icon">1</div>
-        <div class="step-text">Browse our Vehicle inventory and find a vehicle you're interested in, then fill out the enquiry form with your name and contact details.</div>
-      </div>
-
-      <div class="step">
-        <div class="step-icon">2</div>
-        <div class="step-text">Our team will review your enquiry and get back to you within 24 hours to discuss the vehicle, pricing, and availability.</div>
-      </div>
-
-      <div class="step">
-        <div class="step-icon">3</div>
-        <div class="step-text">We'll walk you through the vehicle's details, arrange a viewing if needed, and help you finalise the deal  hassle free.</div>
-      </div>
-
-      <div class="step">
-        <div class="step-icon">4</div>
-        <div class="step-text">Prefer a quicker response? Skip the form and reach us directly on <strong>0827226183</strong> via call or WhatsApp, we're ready to assist.</div>
-      </div>
-  
- 
-  
-    
-  </div>
-  </div>
-  </div>
-  
-  <script>
-    window.onload = function () {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get("submitted") === "true") {
-        document.getElementById("successPopup").style.display = "flex";
-      }
-    };
-  
-    function closePopup() {
-      document.getElementById("successPopup").style.display = "none";
-      window.location.href = "contact.html";
+  @media (min-width: 900px) {
+    .vd-layout {
+      display: grid;
+      grid-template-columns: 1.1fr 1.15fr;
+      gap: 36px;
+      align-items: start;
     }
-  </script>
-  </main>
+
+    .vd-details-col {
+      margin-top: 0;
+    }
+
+    .vd-info-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* Gallery */
+  .vd-gallery {
+    margin-bottom: 24px;
+  }
+
+  .vd-main-image-wrap {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56%;
+    background: #ececec;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .vd-main-image, .vd-main-iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: none;
+  }
+
+  .vd-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(17, 37, 50, 0.65);
+    color: white;
+    border: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+    z-index: 10;
+  }
+
+  .vd-nav-btn:hover {
+    background: rgba(17, 37, 50, 0.9);
+  }
+
+  .vd-prev { left: 14px; }
+  .vd-next { right: 14px; }
+
+  .vd-counter {
+    position: absolute;
+    bottom: 14px;
+    right: 14px;
+    background: rgba(17, 37, 50, 0.65);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    z-index: 10;
+  }
+
+  .vd-thumbs {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .vd-thumb {
+    position: relative;
+    padding-bottom: 70%;
+    background: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+  }
+
+  .vd-thumb.active {
+    border-color: var(--accent);
+  }
+
+  .vd-thumb img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .vd-thumb-video-badge {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.4);
+    color: white;
+    font-size: 16px;
+  }
+
+  /* Key info grid */
+  .vd-info-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .vd-info-item {
+    background: white;
+    padding: 16px;
+  }
+
+  .vd-info-label {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 4px;
+  }
+
+  .vd-info-value {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  /* Accordions */
+  .vd-accordion {
+    border-top: 1px solid var(--border-color);
+    margin-top: 24px;
+  }
+
+  .vd-accordion details {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .vd-accordion summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 18px 4px;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--primary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .vd-accordion summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .vd-chevron {
+    color: var(--accent);
+    font-size: 14px;
+    transition: transform 0.2s ease;
+  }
+
+  .vd-accordion details[open] .vd-chevron {
+    transform: rotate(90deg);
+  }
+
+  .vd-accordion-body {
+    padding: 0 4px 20px;
+    color: #444;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .vd-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 4px 20px;
+  }
+
+  .vd-feature-tag {
+    background: #ececec;
+    color: var(--primary);
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+  }
+
+  @media (max-width: 700px) {
+    .vd-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .vd-info-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .vd-thumbs {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .vd-title h1 {
+      font-size: 24px;
+    }
+    .vd-price {
+      font-size: 26px;
+    }
+  }
+
+  /* Sticky bottom CTA bar */
+  .vd-sticky-cta {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    z-index: 100;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.12);
+  }
+
+  .vd-sticky-cta a {
+    flex: 1;
+    text-align: center;
+    padding: 16px 12px;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .vd-cta-enquire {
+    background: var(--primary);
+    color: white;
+  }
+
+  .vd-cta-whatsapp {
+    background: linear-gradient(114deg, var(--accent) 0%, var(--accent-dark) 100%);
+    color: white;
+  }
+
+  /* Enquiry Section Card */
+  .vd-enquiry-section {
+    background: var(--bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 24px;
+  }
+
+  .vd-enquiry-heading {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 14px;
+  }
+
+  .vd-form-vehicle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: white;
+    border: 1px solid #d5d5d5;
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+  }
+
+  .vd-form-vehicle-image {
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+  }
+
+  .vd-form-vehicle-text {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.3;
+  }
+
+  .vd-form-vehicle-text strong {
+    display: block;
+    font-size: 13px;
+    color: var(--primary);
+  }
+
+  .vd-form-vehicle-price {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .vd-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .vd-enquiry-section input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid #d5d5d5;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    background: white;
+  }
+
+  .vd-form-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    box-sizing: border-box;
+  }
+
+  .vd-btn-submit {
+    background: var(--primary);
+    margin-bottom: 10px;
+  }
+
+  .vd-btn-whatsapp {
+    background: linear-gradient(114deg, var(--accent) 0%, var(--accent-dark) 100%);
+  }
+
+  /* Redesigned Clean Grid for "More Vehicles You Might Like" */
+  .vd-similar-section {
+    max-width: 1240px;
+    margin: 56px auto 40px;
+    padding: 0 16px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 40px;
+  }
+
+  .vd-similar-heading {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 24px;
+  }
+
+  .vd-similar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  .vd-sim-card {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .vd-sim-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  .vd-sim-image {
+    width: 100%;
+    padding-top: 60%;
+    background-size: cover;
+    background-position: center;
+    background-color: #f0f0f0;
+  }
+
+  .vd-sim-content {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-grow: 1;
+    background: #fff;
+  }
+
+  .vd-sim-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1.3;
+  }
+
+  .vd-sim-meta {
+    font-size: 13px;
+    color: #666;
+  }
+
+  .vd-sim-price {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--accent);
+    margin-top: auto;
+  }
+
+  /* Skeleton Loading Styles */
+  @keyframes vdSkeletonPulse {
+    0% { background-color: #e2e8f0; }
+    50% { background-color: #cbd5e1; }
+    100% { background-color: #e2e8f0; }
+  }
+
+  .skeleton {
+    animation: vdSkeletonPulse 1.5s infinite ease-in-out;
+    border-radius: 4px;
+  }
+
+  .skeleton-title {
+    height: 36px;
+    width: 70%;
+    margin-bottom: 8px;
+  }
+
+  .skeleton-subtitle {
+    height: 18px;
+    width: 40%;
+  }
+
+  .skeleton-price {
+    height: 38px;
+    width: 150px;
+  }
+
+  .skeleton-main-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .skeleton-thumb {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .skeleton-info-box {
+    height: 64px;
+    background: #fff;
+    padding: 16px;
+    border-radius: 6px;
+  }
+
+  .skeleton-line {
+    height: 14px;
+    width: 60%;
+    margin-bottom: 6px;
+  }
+
+  .skeleton-line-short {
+    height: 16px;
+    width: 40%;
+  }
+
+  .skeleton-card {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .skeleton-card-img {
+    width: 100%;
+    padding-top: 60%;
+  }
+
+  .skeleton-card-body {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+</style>
+
+<div class="vd-wrapper" id="vdWrapper">
+<!-- Skeleton Loader State -->
+<div class="vd-header">
+  <div class="vd-title" style="width: 100%; max-width: 600px;">
+    <div class="skeleton skeleton-title"></div>
+    <div class="skeleton skeleton-subtitle"></div>
+  </div>
+  <div class="skeleton skeleton-price"></div>
+</div>
+
+<div class="vd-layout">
+  <div>
+    <div class="vd-gallery">
+      <div class="vd-main-image-wrap">
+        <div class="skeleton skeleton-main-img"></div>
+      </div>
+      <div class="vd-thumbs">
+        <div class="vd-thumb"><div class="skeleton skeleton-thumb"></div></div>
+        <div class="vd-thumb"><div class="skeleton skeleton-thumb"></div></div>
+        <div class="vd-thumb"><div class="skeleton skeleton-thumb"></div></div>
+        <div class="vd-thumb"><div class="skeleton skeleton-thumb"></div></div>
+        <div class="vd-thumb"><div class="skeleton skeleton-thumb"></div></div>
+        <div class="vd-thumb"><div class="skeleton skeleton-thumb"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="vd-details-col">
+    <div class="vd-info-grid">
+      <div class="skeleton skeleton-info-box"><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line-short"></div></div>
+      <div class="skeleton skeleton-info-box"><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line-short"></div></div>
+      <div class="skeleton skeleton-info-box"><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line-short"></div></div>
+      <div class="skeleton skeleton-info-box"><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line-short"></div></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<section class="vd-similar-section">
+<h2 class="vd-similar-heading">More Vehicles You Might Like</h2>
+<div class="vd-similar-grid" id="similarGrid">
+  <div class="skeleton-card">
+    <div class="skeleton skeleton-card-img"></div>
+    <div class="skeleton-card-body">
+      <div class="skeleton" style="height: 18px; width: 80%;"></div>
+      <div class="skeleton" style="height: 14px; width: 50%;"></div>
+      <div class="skeleton" style="height: 20px; width: 40%; margin-top: 8px;"></div>
+    </div>
+  </div>
+  <div class="skeleton-card">
+    <div class="skeleton skeleton-card-img"></div>
+    <div class="skeleton-card-body">
+      <div class="skeleton" style="height: 18px; width: 80%;"></div>
+      <div class="skeleton" style="height: 14px; width: 50%;"></div>
+      <div class="skeleton" style="height: 20px; width: 40%; margin-top: 8px;"></div>
+    </div>
+  </div>
+  <div class="skeleton-card">
+    <div class="skeleton skeleton-card-img"></div>
+    <div class="skeleton-card-body">
+      <div class="skeleton" style="height: 18px; width: 80%;"></div>
+      <div class="skeleton" style="height: 14px; width: 50%;"></div>
+      <div class="skeleton" style="height: 20px; width: 40%; margin-top: 8px;"></div>
+    </div>
+  </div>
+  <div class="skeleton-card">
+    <div class="skeleton skeleton-card-img"></div>
+    <div class="skeleton-card-body">
+      <div class="skeleton" style="height: 18px; width: 80%;"></div>
+      <div class="skeleton" style="height: 14px; width: 50%;"></div>
+      <div class="skeleton" style="height: 20px; width: 40%; margin-top: 8px;"></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="vd-sticky-cta">
+<a href="#enquirySection" class="vd-cta-enquire"><i class="fas fa-paper-plane"></i> Enquire Now</a>
+<a href="https://wa.me/27827226183" class="vd-cta-whatsapp"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/pocketbase@0.21.3/dist/pocketbase.umd.js"></script>
+<script>
+const pb = new PocketBase('http://127.0.0.1:8090');
+
+let mediaItems = [];
+let currentIndex = 0;
+
+function getVehicleId() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('id');
+}
+
+function getYouTubeEmbedUrl(url) {
+  if (!url) return '';
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : '';
+}
+
+function infoItem(label, value) {
+  if (!value) return '';
+  return `
+    <div class="vd-info-item">
+      <div class="vd-info-label">${label}</div>
+      <div class="vd-info-value">${value}</div>
+    </div>
+  `;
+}
+
+function setMetaTags(vehicle) {
+  const title = `${vehicle.make} ${vehicle.model} ${vehicle.year} - R${Number(vehicle.price).toLocaleString('en-US')} | AutoAddicts`;
+  const description = (vehicle.description || `${vehicle.make} ${vehicle.model} ${vehicle.year}, ${Number(vehicle.mileage).toLocaleString('en-US')} KM, available at AutoAddicts.`).slice(0, 160);
+  const image = vehicle.images && vehicle.images.length ? pb.files.getUrl(vehicle, vehicle.images[0]) : '';
+
+  document.title = title;
+
+  updateMetaTag('description', description);
+  updateMetaTag('og:title', title, 'property');
+  updateMetaTag('og:description', description, 'property');
+  if (image) updateMetaTag('og:image', image, 'property');
+  updateMetaTag('og:type', 'product', 'property');
+}
+
+function updateMetaTag(name, content, attr = 'name') {
+  let tag = document.querySelector(`meta[${attr}="${name}"]`);
+  if (!tag) {
+    tag = document.createElement('meta');
+    tag.setAttribute(attr, name);
+    document.head.appendChild(tag);
+  }
+  tag.setAttribute('content', content);
+}
+
+function updateEnquiryForm(vehicle) {
+  const priceFormatted = `R${Number(vehicle.price).toLocaleString('en-US')}`;
+  const vehicleLabel = `${vehicle.make} ${vehicle.model} ${vehicle.year} (${priceFormatted})`;
+  const imageUrl = vehicle.images && vehicle.images.length
+    ? pb.files.getUrl(vehicle, vehicle.images[0])
+    : 'cars/maincar.jpeg';
+
+  const field = document.getElementById('vdFormVehicleField');
+  const summary = document.getElementById('vdFormVehicleSummary');
+
+  if (field) field.value = vehicleLabel;
+  if (summary) {
+    summary.innerHTML = `
+      <div class="vd-form-vehicle-image" style="background-image: url('${imageUrl}')"></div>
+      <div class="vd-form-vehicle-text">
+        <strong>${vehicle.make} ${vehicle.model} ${vehicle.year}</strong>
+        <span class="vd-form-vehicle-price">${priceFormatted}</span>
+      </div>
+    `;
+  }
+}
+
+// Saves the enquiry into PocketBase, then continues on to FormSubmit for the email notification
+function setupEnquiryForm(vehicle) {
+  const form = document.getElementById('vdEnquiryForm');
+  const statusBox = document.getElementById('vdFormStatus');
+  const submitBtn = document.getElementById('vdSubmitBtn');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    statusBox.style.display = 'none';
+
+    const fullName = `${document.getElementById('vdFirstName').value} ${document.getElementById('vdSurname').value}`.trim();
+
+    try {
+      await pb.collection('enquiries').create({
+        name: fullName,
+        phone: document.getElementById('vdPhone').value,
+        email: document.getElementById('vdEmail').value,
+        message: document.getElementById('vdMessage').value,
+        vehicle: vehicle.id
+      });
+
+      statusBox.style.display = 'block';
+      statusBox.style.color = '#0c5e52';
+      statusBox.textContent = 'Enquiry received! Redirecting...';
+
+      form.submit();
+    } catch (err) {
+      console.error('Failed to save enquiry:', err);
+      statusBox.style.display = 'block';
+      statusBox.style.color = '#b00020';
+      statusBox.textContent = 'Something went wrong saving your enquiry. Please try WhatsApp instead.';
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Enquiry';
+    }
+  });
+}
+
+function renderVehicle(vehicle) {
+  setMetaTags(vehicle);
+
+  // Build media array: Images first, then YouTube video link if available
+  mediaItems = vehicle.images && vehicle.images.length
+    ? vehicle.images.map(img => ({ type: 'image', url: pb.files.getUrl(vehicle, img) }))
+    : [{ type: 'image', url: 'cars/maincar.jpeg' }];
+
+  const ytEmbed = getYouTubeEmbedUrl(vehicle.youtube_link);
+  if (ytEmbed) {
+    mediaItems.push({ type: 'video', url: ytEmbed });
+  }
+
+  const thumbsHtml = mediaItems.map((item, i) => {
+    const isVid = item.type === 'video';
+    const thumbSrc = isVid ? (vehicle.images && vehicle.images.length ? pb.files.getUrl(vehicle, vehicle.images[0]) : 'cars/maincar.jpeg') : item.url;
+    return `
+      <div class="vd-thumb ${i === 0 ? 'active' : ''}" data-index="${i}">
+        <img src="${thumbSrc}" alt="${vehicle.make} ${vehicle.model} media ${i + 1}">
+        ${isVid ? '<div class="vd-thumb-video-badge"><i class="fa-brands fa-youtube"></i></div>' : ''}
+      </div>
+    `;
+  }).join('');
+
+  const featuresHtml = (vehicle.features || [])
+    .map(f => `<span class="vd-feature-tag">${f}</span>`)
+    .join('');
+
+  const firstDisplay = mediaItems[0].type === 'video'
+    ? `<iframe src="${mediaItems[0].url}" class="vd-main-iframe" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+    : `<img src="${mediaItems[0].url}" class="vd-main-image" id="vdMainImage" alt="${vehicle.make} ${vehicle.model}">`;
+
+  document.getElementById('vdWrapper').innerHTML = `
+    <div class="vd-header">
+      <div class="vd-title">
+        <h1>${vehicle.make} ${vehicle.model}</h1>
+        <div class="vd-subtitle">${vehicle.year} &middot; ${vehicle.body_type || ''}</div>
+      </div>
+      <div class="vd-price">R${Number(vehicle.price).toLocaleString('en-US')}</div>
+    </div>
+
+    <div class="vd-layout">
+      <!-- Left Column: Gallery & Accordions -->
+      <div>
+        <div class="vd-gallery">
+          <div class="vd-main-image-wrap" id="vdMainWrap">
+            ${firstDisplay}
+            <button class="vd-nav-btn vd-prev" id="vdPrev" aria-label="Previous media">&#8249;</button>
+            <button class="vd-nav-btn vd-next" id="vdNext" aria-label="Next media">&#8250;</button>
+            <div class="vd-counter" id="vdCounter">1 / ${mediaItems.length}</div>
+          </div>
+          <div class="vd-thumbs" id="vdThumbs">${thumbsHtml}</div>
+        </div>
+
+        <div class="vd-accordion">
+          <details open>
+            <summary>Description <i class="fas fa-chevron-right vd-chevron"></i></summary>
+            <div class="vd-accordion-body">${vehicle.description || 'No description available.'}</div>
+          </details>
+          <details>
+            <summary>Features <i class="fas fa-chevron-right vd-chevron"></i></summary>
+            <div class="vd-features">${featuresHtml || '<span style="color:#888;">No listed features.</span>'}</div>
+          </details>
+        </div>
+      </div>
+
+      <!-- Right Column: Specs Grid & Enquiry Box -->
+      <div class="vd-details-col">
+        <div class="vd-info-grid">
+          ${infoItem('Mileage', vehicle.mileage ? Number(vehicle.mileage).toLocaleString('en-US') + ' KM' : '')}
+          ${infoItem('Year', vehicle.year)}
+          ${infoItem('Fuel Type', vehicle.fuel_type)}
+          ${infoItem('Transmission', vehicle.transmission)}
+          ${infoItem('Body Type', vehicle.body_type)}
+          ${infoItem('Colour', vehicle.colour)}
+          ${infoItem('Service History', vehicle.service_history)}
+          ${infoItem('Previous Owners', vehicle.previous_owners)}
+        </div>
+
+        <div class="vd-enquiry-section" id="enquirySection">
+          <h2 class="vd-enquiry-heading">Want to purchase this vehicle?</h2>
+          <form id="vdEnquiryForm" action="https://formsubmit.co/sales@unitwebs.co.za" method="POST">
+            <input type="hidden" name="_next" value="vehicle-details.html?submitted=true">
+            <input type="hidden" name="_subject" value="New Vehicle Enquiry - AutoAddicts">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="Vehicle" id="vdFormVehicleField" value="">
+
+            <div class="vd-form-vehicle" id="vdFormVehicleSummary"></div>
+
+            <div class="vd-form-row">
+              <input type="text" name="firstName" id="vdFirstName" placeholder="First Name" required>
+              <input type="text" name="surname" id="vdSurname" placeholder="Surname" required>
+            </div>
+            <input type="email" name="email" id="vdEmail" placeholder="Email Address" required>
+            <input type="tel" name="phone" id="vdPhone" placeholder="Phone Number" required>
+            <textarea name="message" id="vdMessage" placeholder="Message (optional)" rows="3" style="width:100%; padding:12px 14px; border:1px solid #d5d5d5; border-radius:6px; font-size:14px; margin-bottom:10px; box-sizing:border-box; font-family:inherit; resize:vertical;"></textarea>
+
+            <div id="vdFormStatus" style="font-size:13px; margin-bottom:8px; display:none;"></div>
+
+            <button type="submit" class="vd-form-btn vd-btn-submit" id="vdSubmitBtn">
+              <i class="fas fa-paper-plane"></i> Submit Enquiry
+            </button>
+          </form>
+          <a href="https://wa.me/27827226183" class="vd-form-btn vd-btn-whatsapp">
+            <i class="fa-brands fa-whatsapp"></i> WhatsApp Us
+          </a>
+        </div>
+      </div>
+    </div>
+  `;
+
+  updateEnquiryForm(vehicle);
+  setupGallery();
+  setupEnquiryForm(vehicle);
+}
+
+function setupGallery() {
+  const mainWrap = document.getElementById('vdMainWrap');
+  const counter = document.getElementById('vdCounter');
+  const thumbs = document.querySelectorAll('.vd-thumb');
+
+  function showMedia(index) {
+    currentIndex = index;
+    const item = mediaItems[currentIndex];
+
+    if (item.type === 'video') {
+      mainWrap.innerHTML = `
+        <iframe src="${item.url}" class="vd-main-iframe" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <button class="vd-nav-btn vd-prev" id="vdPrev" aria-label="Previous media">&#8249;</button>
+        <button class="vd-nav-btn vd-next" id="vdNext" aria-label="Next media">&#8250;</button>
+        <div class="vd-counter" id="vdCounter">${currentIndex + 1} / ${mediaItems.length}</div>
+      `;
+    } else {
+      mainWrap.innerHTML = `
+        <img src="${item.url}" class="vd-main-image" id="vdMainImage" alt="Vehicle photo">
+        <button class="vd-nav-btn vd-prev" id="vdPrev" aria-label="Previous media">&#8249;</button>
+        <button class="vd-nav-btn vd-next" id="vdNext" aria-label="Next media">&#8250;</button>
+        <div class="vd-counter" id="vdCounter">${currentIndex + 1} / ${mediaItems.length}</div>
+      `;
+    }
+
+    document.getElementById('vdPrev').addEventListener('click', () => {
+      showMedia((currentIndex - 1 + mediaItems.length) % mediaItems.length);
+    });
+    document.getElementById('vdNext').addEventListener('click', () => {
+      showMedia((currentIndex + 1) % mediaItems.length);
+    });
+
+    thumbs.forEach((t, i) => t.classList.toggle('active', i === currentIndex));
+  }
+
+  thumbs.forEach((thumb, i) => thumb.addEventListener('click', () => showMedia(i)));
+
+  document.getElementById('vdPrev').addEventListener('click', () => {
+    showMedia((currentIndex - 1 + mediaItems.length) % mediaItems.length);
+  });
+
+  document.getElementById('vdNext').addEventListener('click', () => {
+    showMedia((currentIndex + 1) % mediaItems.length);
+  });
+}
+
+function renderSimCard(vehicle) {
+  const imageUrl = vehicle.images && vehicle.images.length
+    ? pb.files.getUrl(vehicle, vehicle.images[0])
+    : 'cars/maincar.jpeg';
+
+  const mileageText = vehicle.mileage ? `${Number(vehicle.mileage).toLocaleString('en-US')} KM` : '';
+  const yearText = vehicle.year || '';
+  const metaDetails = [yearText, mileageText].filter(Boolean).join(' &middot; ');
+
+  return `
+    <a class="vd-sim-card" href="vehicle-details.html?id=${vehicle.id}">
+      <div class="vd-sim-image" style="background-image: url('${imageUrl}')"></div>
+      <div class="vd-sim-content">
+        <div class="vd-sim-title">${vehicle.make} ${vehicle.model}</div>
+        <div class="vd-sim-meta">${metaDetails}</div>
+        <div class="vd-sim-price">R${Number(vehicle.price).toLocaleString('en-US')}</div>
+      </div>
+    </a>
+  `;
+}
+
+async function loadSimilarVehicles(currentVehicle) {
+  const grid = document.getElementById('similarGrid');
+  try {
+    const records = await pb.collection('vehicles').getFullList({
+      filter: `id != "${currentVehicle.id}"`,
+      sort: '-created',
+      limit: 4
+    });
+
+    if (records.length === 0) {
+      grid.innerHTML = '<p style="color:#888; grid-column: 1 / -1;">No other vehicles available right now.</p>';
+      return;
+    }
+
+    grid.innerHTML = records.map(renderSimCard).join('');
+  } catch (err) {
+    console.error('Failed to load similar vehicles:', err);
+    grid.innerHTML = '<p style="color:#888; grid-column: 1 / -1;">Could not load similar vehicles.</p>';
+  }
+}
+
+async function loadVehicle() {
+  const id = getVehicleId();
+  if (!id) {
+    document.getElementById('vdWrapper').innerHTML = '<p style="text-align:center; padding:60px 0;">No vehicle selected.</p>';
+    return;
+  }
+  try {
+    const vehicle = await pb.collection('vehicles').getOne(id);
+    renderVehicle(vehicle);
+    loadSimilarVehicles(vehicle);
+  } catch (err) {
+    console.error('Failed to load vehicle:', err);
+    document.getElementById('vdWrapper').innerHTML = '<p style="text-align:center; padding:60px 0;">Could not load this vehicle. It may no longer be available.</p>';
+  }
+}
+
+loadVehicle();
+</script>
   
-
-
-
-
-
-
-
-
-
 
 
 

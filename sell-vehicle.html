@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="listing.css">
+    <link rel="stylesheet" href="vehicle.css">
+    <title> SEll Your Vehicle | Autoaddicts| Quality Vehicles in Eastern Cape</title>
+
+</head>
+<body>
+        <!-- ===== NAVIGATION ===== -->
+        <!-- ===== NAVIGATION ===== -->
+        <!-- ===== NAVIGATION ===== -->
+        <div class="top-bar">
+            <div class="top-bar-container">
+            
+                <a href="https://wa.me/27827226183" class="top-bar-link">
+                    <span><i class="fa-brands fa-whatsapp"></i></span> whatsapp
+                </a>
+                <a href="mailto:media@autoaddicts.co.za" class="top-bar-link">
+                    <span><i class="fa fa-envelope"></i></span> media@autoaddicts.co.za </a>
+            </div>
+        </div>
+          
+  
+          <nav class="navbar" id="navbar">
+              <div class="nav-container">
+                  <div class="logo">
+                      <div class="logo-icon"><img src="autoaddicts.png"></div> 
+                      <div class="logo-main"></div>
+                  </div>
+      
+                  <ul class="nav-menu">
+                      <li><a href="index.html">Home</a></li>
+                      <li><a href="vehicle-listing.html">showroom</a></li>
+                      <li><a href="sell-vehicle.html"  id="current">Sell A Vehicle</a></li>
+                      <li><a href="#Events">Events</a></li>
+                      <li><a href="#Finance">Finance</a></li>
+                  </ul>
+      
+                  <button class="burger" id="burgerBtn">
+                      <svg id="menuIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                      </svg>
+                      <svg id="closeIcon" style="display: none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                  </button>
+              </div>
+      
+              <div class="mobile-menu" id="mobileMenu">
+                  <a href="index.html">Home</a>
+                  <a href="vehicle-listing.html">showroom</a>
+                  <a href="sell-vehicle.html" id="current">Sell Vehicle</a>
+                  <a href="#Events">Events</a>
+                  <a href="#Finance">Finance</a>
+              </div>
+          </nav>
+
+        <!-- ===== NAVIGATION ===== -->
+        <!-- ===== NAVIGATION ===== -->
+        <!-- ===== NAVIGATION ===== -->
+
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <style>
+
+    body {
+      background-color: #f4f6f8;
+      color: #1a1a1a;
+      line-height: 1.5;
+    }
+
+    .sell-hero {
+      background: linear-gradient(135deg, #0b534a 0%, #11a28f 100%);
+      color: #fff;
+      text-align: center;
+      padding: 50px 20px 30px 20px;
+    }
+
+    .sell-hero h1 {
+      font-size: 30px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .sell-hero p {
+      font-size: 15px;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto 25px auto;
+    }
+
+    .video-container-wrapper {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .video-responsive {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      background: #000;
+      margin-bottom: 20px;
+    }
+
+    .video-responsive iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .sell-container {
+      max-width: 960px;
+      margin: -20px auto 60px auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .sell-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+      padding: 40px;
+    }
+
+    .form-section-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #0b534a;
+      margin: 30px 0 15px 0;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #e0f2f1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-section-title:first-of-type {
+      margin-top: 0;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 5px;
+    }
+
+    .form-group.full-width {
+      grid-column: span 2;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 6px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #333;
+      background: #fafafa;
+      transition: all 0.2s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #11a28f;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(17, 162, 143, 0.15);
+    }
+
+    .radio-group-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .radio-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #fafafa;
+      border: 1px solid #cbd5e1;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .radio-pill:hover {
+      border-color: #11a28f;
+      background: #f0fdf4;
+    }
+
+    .radio-pill input {
+      accent-color: #11a28f;
+    }
+
+    .file-upload-box {
+      border: 2px dashed #cbd5e1;
+      border-radius: 6px;
+      padding: 25px;
+      text-align: center;
+      background: #fafafa;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      display: block;
+    }
+
+    .file-upload-box:hover {
+      border-color: #11a28f;
+      background: #f4fbfb;
+    }
+
+    .file-upload-box i {
+      font-size: 26px;
+      color: #11a28f;
+      margin-bottom: 8px;
+    }
+
+    .file-upload-box p {
+      font-size: 13px;
+      color: #666;
+    }
+
+    .file-upload-box input {
+      display: none;
+    }
+
+    #fileListDisplay {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #0b534a;
+      font-weight: 600;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(114deg, #189b8a 0%, #0c5e52 100%);
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      margin-top: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .submit-btn:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+
+    #formResponseMsg {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .form-group.full-width {
+        grid-column: span 1;
+      }
+      .sell-card {
+        padding: 20px;
+      }
+      .sell-hero {
+        padding: 40px 15px 20px 15px;
+      }
+    }
+  </style>
+
+
+  <header class="sell-hero">
+    <h1>Time to Sell Your Vehicle?</h1>
+    <p>We buy running vehicles in the Eastern Cape region only. Fill out the form below and we’ll get back to you fast.</p>
+    
+    <div class="video-container-wrapper">
+      <div class="video-responsive">
+        <iframe src="https://www.youtube.com/embed/jvht1_Zh24A" title="Auto Addicts Vehicle Inspection" allowfullscreen></iframe>
+      </div>
+    </div>
+  </header>
+
+  <div class="sell-container">
+    <div class="sell-card">
+      <form id="sellVehicleForm">
+        
+        <!-- Section 1: Personal Details -->
+        <div class="form-section-title"><i class="fas fa-user"></i> Personal Information</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" name="first_name" placeholder="e.g. John" required>
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="last_name" placeholder="e.g. Doe" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="e.g. john@example.com" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="e.g. 071 234 5678" required>
+          </div>
+        </div>
+
+        <!-- Section 2: Vehicle Details -->
+        <div class="form-section-title"><i class="fas fa-car"></i> Vehicle Details</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="vehicleMake">Vehicle Make</label>
+            <input type="text" id="vehicleMake" name="make" placeholder="e.g. Ford, Toyota, VW" required>
+          </div>
+          <div class="form-group">
+            <label for="vehicleModel">Vehicle Model</label>
+            <input type="text" id="vehicleModel" name="model" placeholder="e.g. Ranger, Hilux, Polo" required>
+          </div>
+          <div class="form-group">
+            <label for="vehicleYear">Year of First Registration</label>
+            <input type="number" id="vehicleYear" name="year" placeholder="e.g. 2019" required>
+          </div>
+          <div class="form-group">
+            <label for="bodyType">Body Type</label>
+            <select id="bodyType" name="body_type" required>
+              <option value="">Select Body Type...</option>
+              <option value="SUV">SUV</option>
+              <option value="Hatchback">Hatchback</option>
+              <option value="Sedan">Sedan</option>
+              <option value="Bakkie">Bakkie</option>
+              <option value="Coupe">Coupe</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Fuel Type</label>
+            <div class="radio-group-container">
+              <label class="radio-pill"><input type="radio" name="fuel_type" value="Petrol" required> Petrol</label>
+              <label class="radio-pill"><input type="radio" name="fuel_type" value="Diesel"> Diesel</label>
+              <label class="radio-pill"><input type="radio" name="fuel_type" value="Electric"> Electric</label>
+              <label class="radio-pill"><input type="radio" name="fuel_type" value="Hybrid"> Hybrid</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Transmission</label>
+            <div class="radio-group-container">
+              <label class="radio-pill"><input type="radio" name="transmission" value="Manual" required> Manual</label>
+              <label class="radio-pill"><input type="radio" name="transmission" value="Automatic"> Automatic</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Financed with a bank?</label>
+            <div class="radio-group-container">
+              <label class="radio-pill"><input type="radio" name="is_financed" value="Yes" required> Yes</label>
+              <label class="radio-pill"><input type="radio" name="is_financed" value="No"> No</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Vehicle Service History</label>
+            <div class="radio-group-container">
+              <label class="radio-pill"><input type="radio" name="service_history" value="Full Service History" required> Full</label>
+              <label class="radio-pill"><input type="radio" name="service_history" value="Partial Service History"> Partial</label>
+              <label class="radio-pill"><input type="radio" name="service_history" value="None"> None</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="mileage">Approx. Kilometres (KM)</label>
+            <input type="number" id="mileage" name="mileage" placeholder="e.g. 120000" required>
+          </div>
+
+          <div class="form-group">
+            <label for="desiredPrice">Expected Price (ZAR)</label>
+            <input type="number" id="desiredPrice" name="desired_price" placeholder="e.g. 250000" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="conditionNotes">Condition & Any Faults/Dents/Mechanical Work Needed</label>
+            <textarea id="conditionNotes" name="condition_notes" rows="3" placeholder="Describe any scratches, dents, or mechanical issues..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Condition Rating</label>
+            <div class="radio-group-container">
+              <label class="radio-pill"><input type="radio" name="condition_rating" value="Excellent" required> Excellent</label>
+              <label class="radio-pill"><input type="radio" name="condition_rating" value="Good"> Good</label>
+              <label class="radio-pill"><input type="radio" name="condition_rating" value="Average"> Average</label>
+              <label class="radio-pill"><input type="radio" name="condition_rating" value="Poor"> Poor</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="location">Where can the vehicle be viewed?</label>
+            <input type="text" id="location" name="location" placeholder="e.g. Summerstrand, Gqeberha" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Is the vehicle registered in your name?</label>
+            <div class="radio-group-container">
+              <label class="radio-pill"><input type="radio" name="registered_owner" value="Yes" required> Yes</label>
+              <label class="radio-pill"><input type="radio" name="registered_owner" value="No, business/spouse's name"> No</label>
+              <label class="radio-pill"><input type="radio" name="registered_owner" value="Papers missing"> Papers missing</label>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="extras">Notable Extras / Features</label>
+            <input type="text" id="extras" name="extras" placeholder="e.g. Leather seats, tow bar, mags">
+          </div>
+
+          <div class="form-group full-width">
+            <label>Upload Photos of Your Vehicle</label>
+            <label class="file-upload-box" for="vehiclePhotos">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <p><strong>Click to choose files</strong> or drag images here</p>
+              <input type="file" id="vehiclePhotos" name="images" multiple accept="image/*">
+            </label>
+            <div id="fileListDisplay"></div>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn">
+          Submit Sell Request <i class="fas fa-paper-plane"></i>
+        </button>
+        <div id="formResponseMsg"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- PocketBase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.21.3/dist/pocketbase.umd.js"></script>
+  <script>
+    const pb = new PocketBase('http://127.0.0.1:8090');
+
+    const fileInput = document.getElementById('vehiclePhotos');
+    const fileListDisplay = document.getElementById('fileListDisplay');
+
+    fileInput.addEventListener('change', function() {
+      if (this.files.length > 0) {
+        const fileNames = Array.from(this.files).map(f => f.name).join(', ');
+        fileListDisplay.textContent = `${this.files.length} file(s) selected: ${fileNames}`;
+      } else {
+        fileListDisplay.textContent = '';
+      }
+    });
+
+    document.getElementById('sellVehicleForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const submitBtn = this.querySelector('.submit-btn');
+      const msgDiv = document.getElementById('formResponseMsg');
+      
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting Request...';
+      msgDiv.textContent = '';
+
+      try {
+        const formData = new FormData(this);
+
+        // Submitting to PocketBase 'sell_request' collection
+        await pb.collection('sell_request').create(formData);
+
+        msgDiv.style.color = '#0b534a';
+        msgDiv.textContent = 'Success! Your vehicle submission has been received. We will contact you soon.';
+        this.reset();
+        fileListDisplay.textContent = '';
+      } catch (error) {
+        console.error('Error submitting sell request:', error);
+        msgDiv.style.color = '#d9534f';
+        // Displays exact error info in console, user-friendly message on screen
+        msgDiv.textContent = 'Failed to submit request. Check if all required fields are filled or inspect PocketBase schema rules.';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Submit Sell Request <i class="fas fa-paper-plane"></i>';
+      }
+    });
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<footer class="footer">
+    <div class="footer-container">
+        <!-- Company Info -->
+        <div class="footer-section">
+          <div class="foo">
+            <div class="foo-icon"><img src="autoaddicts.png"></div> 
+          </div>
+          <style>
+             .foo {
+              display: flex;
+              align-items: center;
+            }
+            .foo-icon img {
+                width: 9rem;
+                padding: 10px;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                font-weight: bold;
+                color: #1a1a2e;
+            }
+          </style>
+            <p>
+                Auto Addicts is Gqeberha's trusted used car dealership — 
+                founded in 2017 and built on honest service, quality vehicles, 
+                and a team that genuinely cares about getting you the right deal.
+            </p>
+            
+            <h3 style="margin-top: 1.5rem;">Follow Us</h3>
+            <div class="social-links">
+                <a href="#" target="_blank" class="social-icon" aria-label="Facebook">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+            </div>
+        </div>
+  
+        <!-- Quick Links -->
+        <div class="footer-section-lu">
+            <h5>Quick Links</h5>
+            <br>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="vehicle-listing.html">All Vehicles</a>
+            </div>
+        </div>
+  
+        <!-- Contact Info -->
+        <div class="footer-section">
+            <h3>Contact Us</h3>
+            <div class="contact-info">
+  
+                <div class="contact-item">
+                    <span><i class="fa-solid fa-phone"></i></span>
+                    <a href="tel:+27827226183">+27 82 722 6183</a>
+                </div>
+  
+                <div class="contact-item">
+                    <span><i class="fa-brands fa-whatsapp"></i></span>
+                    <a href="https://wa.me/27827226183">+27 82 722 6183</a>
+                </div>
+  
+                <div class="contact-item">
+                    <span><i class="fa-solid fa-envelope"></i></span>
+                    <a href="mailto:media@autoaddicts.co.za">media@autoaddicts.co.za</a>
+                </div>
+  
+                <div class="contact-item">
+                    <span><i class="fa-solid fa-location-dot"></i></span>
+                    <span>Gqeberha, Eastern Cape</span>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    <div class="footer-bottom">
+        <p>&copy; 2026 Auto Addicts. All rights reserved.</p>
+    </div>
+  </footer>
+  
+  
+  
+  
+
+
+
+
+
+  <script src="scripts.js"> </script> 
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

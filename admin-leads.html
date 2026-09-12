@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leads | AutoAddicts Admin</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f6f7;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 240px;
+    background: #0d1b24;
+    color: white;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 50;
+    transition: transform 0.25s ease;
+  }
+
+  .sidebar-logo {
+    display: flex; align-items: center; gap: 12px;
+    padding: 22px 20px; border-bottom: 1px solid #1e3742;
+  }
+
+  .sidebar-logo-icon {
+    width: 38px; height: 38px; border-radius: 8px;
+    background: linear-gradient(114deg, #189b8a 0%, #0c5e52 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; flex-shrink: 0;
+  }
+
+  .sidebar-logo-text strong { display: block; font-size: 15px; font-weight: 800; }
+  .sidebar-logo-text span { font-size: 11px; color: #7a8a94; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .sidebar-nav { flex-grow: 1; padding: 16px 12px; }
+
+  .sidebar-link {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px; border-radius: 8px;
+    color: #b3c1c8; text-decoration: none;
+    font-size: 14px; font-weight: 600; margin-bottom: 4px;
+  }
+
+  .sidebar-link i { width: 18px; text-align: center; }
+  .sidebar-link:hover { background: #142731; color: white; }
+  .sidebar-link.active { background: linear-gradient(114deg, #189b8a 0%, #0c5e52 100%); color: white; }
+
+  .sidebar-bottom { padding: 16px 12px; border-top: 1px solid #1e3742; }
+
+  .sidebar-logout {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px; border-radius: 8px;
+    color: #b3c1c8; background: none; border: none;
+    width: 100%; text-align: left; font-size: 14px; font-weight: 600; cursor: pointer;
+  }
+
+  .sidebar-logout:hover { background: #142731; color: #ff8a8a; }
+
+  .sidebar-toggle { display: none; background: none; border: none; font-size: 20px; color: #112532; cursor: pointer; }
+
+  .main { margin-left: 240px; flex-grow: 1; min-width: 0; }
+
+  .topbar {
+    background: white; border-bottom: 1px solid #e5e5e5;
+    padding: 18px 30px; display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .topbar h1 { font-size: 20px; color: #112532; font-weight: 800; }
+  .topbar p { font-size: 13px; color: #888; margin-top: 2px; }
+
+  .content { padding: 28px 30px; }
+
+  /* Tabs */
+  .tabs {
+    display: flex; gap: 6px; margin-bottom: 20px;
+    background: white; border: 1px solid #ececec; border-radius: 10px; padding: 6px; width: fit-content;
+  }
+
+  .tab-btn {
+    padding: 10px 20px; border: none; background: none; border-radius: 7px;
+    font-size: 14px; font-weight: 700; color: #888; cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .tab-btn.active {
+    background: linear-gradient(114deg, #189b8a 0%, #0c5e52 100%);
+    color: white;
+  }
+
+  .tab-count {
+    background: rgba(0,0,0,0.1); padding: 1px 8px; border-radius: 10px; font-size: 12px;
+  }
+
+  .tab-btn.active .tab-count { background: rgba(255,255,255,0.25); }
+
+  /* Table */
+  .leads-table-wrap {
+    background: white; border: 1px solid #ececec; border-radius: 10px; overflow: hidden;
+  }
+
+  table { width: 100%; border-collapse: collapse; }
+
+  th {
+    text-align: left; font-size: 12px; text-transform: uppercase;
+    letter-spacing: 0.5px; color: #888; padding: 14px 16px;
+    background: #fafafa; border-bottom: 1px solid #ececec;
+  }
+
+  td { padding: 12px 16px; border-bottom: 1px solid #f2f2f2; font-size: 14px; color: #112532; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+
+  .lead-name { font-weight: 700; }
+  .lead-sub { color: #888; font-size: 12px; }
+  .lead-time { color: #aaa; font-size: 12px; white-space: nowrap; }
+
+  .table-actions { display: flex; gap: 8px; }
+
+  .icon-btn {
+    width: 32px; height: 32px; border-radius: 6px;
+    border: 1px solid #d5d5d5; background: white;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 13px; color: #112532;
+  }
+
+  .icon-btn:hover { border-color: #189b8a; color: #189b8a; }
+  .icon-btn.danger:hover { border-color: #b00020; color: #b00020; }
+
+  .empty-state { text-align: center; padding: 50px 20px; color: #888; }
+
+  /* Detail modal */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(13,27,36,0.6);
+    z-index: 100; align-items: flex-start; justify-content: center;
+    padding: 30px 16px; overflow-y: auto;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal-box {
+    background: white; border-radius: 12px; width: 100%; max-width: 560px;
+    max-height: 100%; overflow-y: auto;
+  }
+
+  .modal-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 24px; border-bottom: 1px solid #ececec; position: sticky; top: 0; background: white;
+  }
+
+  .modal-header h2 { font-size: 17px; color: #112532; font-weight: 800; }
+  .modal-close { background: none; border: none; font-size: 18px; color: #888; cursor: pointer; }
+  .modal-body { padding: 24px; }
+
+  .detail-row {
+    display: flex; justify-content: space-between; gap: 16px;
+    padding: 10px 0; border-bottom: 1px solid #f2f2f2; font-size: 14px;
+  }
+
+  .detail-row:last-child { border-bottom: none; }
+  .detail-label { color: #888; flex-shrink: 0; }
+  .detail-value { color: #112532; font-weight: 600; text-align: right; }
+
+  .detail-message {
+    background: #f4f6f7; border-radius: 8px; padding: 14px; margin-top: 14px; font-size: 14px; color: #444; line-height: 1.5;
+  }
+
+  .detail-section-title {
+    font-size: 12px; font-weight: 800; color: #189b8a; text-transform: uppercase;
+    letter-spacing: 0.5px; margin: 18px 0 4px;
+  }
+
+  .detail-section-title:first-child { margin-top: 0; }
+
+  .detail-photos {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px;
+  }
+
+  .detail-photos img {
+    width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 6px;
+  }
+
+  .modal-footer {
+    display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    padding: 18px 24px; border-top: 1px solid #ececec; background: #fafafa;
+  }
+
+  .modal-actions {
+    display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  }
+
+  .btn-danger {
+    padding: 10px 18px; background: #b00020; color: white; border: none; border-radius: 7px;
+    font-size: 14px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+  }
+
+  .btn-email {
+    padding: 10px 16px; background: #0d1b24; color: white; border: none; border-radius: 7px;
+    font-size: 14px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-email:hover { background: #142731; }
+
+  .btn-whatsapp {
+    padding: 10px 16px; background: linear-gradient(114deg, #189b8a 0%, #0c5e52 100%);
+    color: white; border: none; border-radius: 7px; font-size: 14px; font-weight: 700;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+  }
+
+  @media (max-width: 800px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; }
+    .sidebar-toggle { display: block; }
+    .content { padding: 18px; }
+    .leads-table-wrap { overflow-x: auto; }
+    table { min-width: 560px; }
+  }
+</style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon"><i class="fas fa-car"></i></div>
+    <div class="sidebar-logo-text"><strong>AutoAddicts</strong><span>Admin</span></div>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="admin-dashboard.html" class="sidebar-link"><i class="fas fa-gauge"></i> Dashboard</a>
+    <a href="admin-vehicles.html" class="sidebar-link"><i class="fas fa-car-side"></i> Vehicles</a>
+    <a href="admin-leads.html" class="sidebar-link active"><i class="fas fa-inbox"></i> Leads</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <button class="sidebar-logout" id="logoutBtn"><i class="fas fa-right-from-bracket"></i> Log Out</button>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <button class="sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+      <div>
+        <h1>Leads</h1>
+        <p>Enquiries and vehicles people want to sell</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="tabs">
+      <button class="tab-btn active" id="tabEnquiries" onclick="switchTab('enquiries')">
+        <i class="fas fa-envelope"></i> Enquiries <span class="tab-count" id="countEnquiries">0</span>
+      </button>
+      <button class="tab-btn" id="tabSell" onclick="switchTab('sell')">
+        <i class="fas fa-hand-holding-dollar"></i> Sell Requests <span class="tab-count" id="countSell">0</span>
+      </button>
+    </div>
+
+    <div class="leads-table-wrap">
+      <table>
+        <thead id="tableHead"></thead>
+        <tbody id="tableBody">
+          <tr><td colspan="5" style="text-align:center; padding:30px; color:#888;">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Detail Modal -->
+<div class="modal-overlay" id="detailOverlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 id="detailTitle">Lead Details</h2>
+      <button class="modal-close" id="detailCloseBtn"><i class="fas fa-xmark"></i></button>
+    </div>
+    <div class="modal-body" id="detailBody"></div>
+    <div class="modal-footer">
+      <button class="btn-danger" id="detailDeleteBtn"><i class="fas fa-trash"></i> Delete</button>
+      <div class="modal-actions">
+        <a href="#" id="detailEmailBtn" class="btn-email" target="_blank"><i class="fas fa-envelope"></i> Email</a>
+        <a href="#" id="detailWhatsappBtn" class="btn-whatsapp" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/pocketbase@0.21.3/dist/pocketbase.umd.js"></script>
+<script>
+  const pb = new PocketBase('https://zca4uvbsikp5qq2.ba7w.pocketbasecloud.com');
+
+  if (!pb.authStore.isValid) {
+    window.location.href = 'admin-login.html';
+  }
+
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    pb.authStore.clear();
+    window.location.href = 'admin-login.html';
+  });
+
+  document.getElementById('sidebarToggle').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('open');
+  });
+
+  const urlParams = new URLSearchParams(window.location.search);
+  let currentTab = urlParams.get('tab') === 'sell' ? 'sell' : 'enquiries';
+
+  let enquiries = [];
+  let sellRequests = [];
+
+  function timeAgo(dateStr) {
+    const diffMs = Date.now() - new Date(dateStr).getTime();
+    const mins = Math.floor(diffMs / 60000);
+    if (mins < 1) return 'Just now';
+    if (mins < 60) return `${mins}m ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return `${hrs}h ago`;
+    const days = Math.floor(hrs / 24);
+    return `${days}d ago`;
+  }
+
+  function cleanPhoneForWhatsapp(phone) {
+    let digits = (phone || '').replace(/[^\d]/g, '');
+    if (digits.startsWith('0')) digits = '27' + digits.slice(1);
+    return digits;
+  }
+
+  window.switchTab = function(tab) {
+    currentTab = tab;
+    document.getElementById('tabEnquiries').classList.toggle('active', tab === 'enquiries');
+    document.getElementById('tabSell').classList.toggle('active', tab === 'sell');
+    renderTable();
+  };
+
+  function renderTable() {
+    const head = document.getElementById('tableHead');
+    const body = document.getElementById('tableBody');
+
+    if (currentTab === 'enquiries') {
+      head.innerHTML = `<tr><th>Name</th><th>Contact</th><th>Vehicle Enquired & Price</th><th>Received</th><th></th></tr>`;
+
+      if (enquiries.length === 0) {
+        body.innerHTML = `<tr><td colspan="5"><div class="empty-state">No enquiries yet.</div></td></tr>`;
+        return;
+      }
+
+      body.innerHTML = enquiries.map(e => {
+        const v = e.expand && e.expand.vehicle;
+        const vehicleLabel = v ? `${v.make} ${v.model} ${v.year}` : '—';
+        const vehiclePrice = v && v.price ? `<div class="lead-sub" style="color:#189b8a; font-weight:700;">R${Number(v.price).toLocaleString('en-US')}</div>` : '';
+        return `
+          <tr>
+            <td class="lead-name">${e.name || 'Unnamed'}</td>
+            <td>${e.phone || '—'}<div class="lead-sub">${e.email || ''}</div></td>
+            <td>${vehicleLabel} ${vehiclePrice}</td>
+            <td class="lead-time">${timeAgo(e.created)}</td>
+            <td>
+              <div class="table-actions">
+                <button class="icon-btn" onclick="openDetail('enquiries', '${e.id}')" aria-label="View"><i class="fas fa-eye"></i></button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+    } else {
+      head.innerHTML = `<tr><th>Seller</th><th>Contact</th><th>Vehicle</th><th>Asking Price</th><th>Received</th><th></th></tr>`;
+
+      if (sellRequests.length === 0) {
+        body.innerHTML = `<tr><td colspan="6"><div class="empty-state">No sell requests yet.</div></td></tr>`;
+        return;
+      }
+
+      body.innerHTML = sellRequests.map(s => {
+        const fullName = `${s.first_name || ''} ${s.last_name || ''}`.trim() || 'Unnamed';
+        const askingPrice = s.desired_price !== undefined && s.desired_price !== null && s.desired_price !== '' 
+          ? 'R' + Number(s.desired_price).toLocaleString('en-US') 
+          : '—';
+
+        return `
+          <tr>
+            <td class="lead-name">${fullName}</td>
+            <td>${s.phone || '—'}<div class="lead-sub">${s.email || ''}</div></td>
+            <td>${s.vehicle_make || ''} ${s.vehicle_model || ''} ${s.vehicle_year || ''}</td>
+            <td>${askingPrice}</td>
+            <td class="lead-time">${timeAgo(s.created)}</td>
+            <td>
+              <div class="table-actions">
+                <button class="icon-btn" onclick="openDetail('sell', '${s.id}')" aria-label="View"><i class="fas fa-eye"></i></button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+  }
+
+  function detailRow(label, value) {
+    if (!value && value !== 0) return '';
+    return `<div class="detail-row"><span class="detail-label">${label}</span><span class="detail-value">${value}</span></div>`;
+  }
+
+  window.openDetail = function(type, id) {
+    const overlay = document.getElementById('detailOverlay');
+    const title = document.getElementById('detailTitle');
+    const body = document.getElementById('detailBody');
+    const deleteBtn = document.getElementById('detailDeleteBtn');
+    const whatsappBtn = document.getElementById('detailWhatsappBtn');
+    const emailBtn = document.getElementById('detailEmailBtn');
+
+    if (type === 'enquiries') {
+      const e = enquiries.find(x => x.id === id);
+      if (!e) return;
+
+      title.textContent = e.name || 'Enquiry Details';
+      const v = e.expand && e.expand.vehicle;
+      const vehicleLabel = v ? `${v.make} ${v.model} ${v.year}` : 'Not linked to a vehicle';
+      const vehiclePriceLabel = v && v.price ? `R${Number(v.price).toLocaleString('en-US')}` : '—';
+
+      body.innerHTML = `
+        <div class="detail-section-title">Buyer Information</div>
+        ${detailRow('Name', e.name)}
+        ${detailRow('Phone', e.phone)}
+        ${detailRow('Email', e.email)}
+        ${detailRow('Received', new Date(e.created).toLocaleString())}
+
+        <div class="detail-section-title">Vehicle Enquired</div>
+        ${detailRow('Vehicle', vehicleLabel)}
+        ${detailRow('Listing Price', vehiclePriceLabel)}
+
+        ${e.message ? `<div class="detail-section-title">Message</div><div class="detail-message">${e.message}</div>` : ''}
+      `;
+
+      whatsappBtn.href = e.phone ? `https://wa.me/${cleanPhoneForWhatsapp(e.phone)}` : '#';
+      emailBtn.href = e.email ? `mailto:${e.email}?subject=Regarding your AutoAddicts Enquiry` : '#';
+      deleteBtn.onclick = () => deleteLead('enquiries', e.id);
+
+    } else {
+      const s = sellRequests.find(x => x.id === id);
+      if (!s) return;
+
+      const fullName = `${s.first_name || ''} ${s.last_name || ''}`.trim() || 'Sell Request Details';
+      title.textContent = fullName;
+
+      const formattedPrice = s.desired_price !== undefined && s.desired_price !== null && s.desired_price !== '' 
+        ? 'R' + Number(s.desired_price).toLocaleString('en-US') 
+        : '';
+
+      const photosHtml = s.images && s.images.length
+        ? `<div class="detail-section-title">Photos</div><div class="detail-photos">${s.images.map(img => `<img src="${pb.files.getUrl(s, img)}" alt="Vehicle photo">`).join('')}</div>`
+        : '';
+
+      body.innerHTML = `
+        <div class="detail-section-title">Seller Information</div>
+        ${detailRow('Name', fullName)}
+        ${detailRow('Phone', s.phone)}
+        ${detailRow('Email', s.email)}
+
+        <div class="detail-section-title">Vehicle Specifications</div>
+        ${detailRow('Make & Model', `${s.vehicle_make || ''} ${s.vehicle_model || ''}`)}
+        ${detailRow('Year', s.vehicle_year)}
+        ${detailRow('Body Type', s.body_type)}
+        ${detailRow('Transmission', s.transmission)}
+        ${detailRow('Mileage', s.mileage ? Number(s.mileage).toLocaleString('en-US') + ' KM' : '')}
+        ${detailRow('Service History', s.service_history)}
+        ${detailRow('Condition Rating', s.condition_rating)}
+        ${detailRow('Registered Owner', s.registered_owner)}
+        ${detailRow('Financed?', s._is_financed ? 'Yes' : 'No')}
+        ${detailRow('Extras', s.extras)}
+
+        <div class="detail-section-title">Asking Price & Location</div>
+        ${detailRow('Desired Price', formattedPrice)}
+        ${detailRow('Location', s.locationn)}
+        ${s.condition_notes ? `<div class="detail-section-title">Condition Notes</div><div class="detail-message">${s.condition_notes}</div>` : ''}
+        ${photosHtml}
+      `;
+
+      whatsappBtn.href = s.phone ? `https://wa.me/${cleanPhoneForWhatsapp(s.phone)}` : '#';
+      emailBtn.href = s.email ? `mailto:${s.email}?subject=Regarding your AutoAddicts Sell Request` : '#';
+      deleteBtn.onclick = () => deleteLead('sell', s.id);
+    }
+
+    overlay.classList.add('open');
+  };
+
+  document.getElementById('detailCloseBtn').addEventListener('click', () => {
+    document.getElementById('detailOverlay').classList.remove('open');
+  });
+
+  async function deleteLead(type, id) {
+    if (!confirm('Delete this lead? This cannot be undone.')) return;
+
+    const collection = type === 'enquiries' ? 'enquiries' : 'sell_request';
+    try {
+      await pb.collection(collection).delete(id, { '$autoCancel': false });
+      document.getElementById('detailOverlay').classList.remove('open');
+      loadLeads();
+    } catch (err) {
+      console.error('Failed to delete lead:', err);
+      alert('Could not delete this lead. Check console for details.');
+    }
+  }
+
+  async function loadLeads() {
+    try {
+      const [enquiryResults, sellResults] = await Promise.all([
+        pb.collection('enquiries').getFullList({ sort: '-created', expand: 'vehicle', '$autoCancel': false }),
+        pb.collection('sell_request').getFullList({ sort: '-created', '$autoCancel': false })
+      ]);
+
+      enquiries = enquiryResults;
+      sellRequests = sellResults;
+
+      document.getElementById('countEnquiries').textContent = enquiries.length;
+      document.getElementById('countSell').textContent = sellRequests.length;
+
+      renderTable();
+    } catch (err) {
+      console.error('Failed to load leads:', err);
+      document.getElementById('tableBody').innerHTML =
+        `<tr><td colspan="5"><div class="empty-state">Could not load leads. Check API rules.</div></td></tr>`;
+    }
+  }
+
+  loadLeads().then(() => {
+    switchTab(currentTab);
+  });
+</script>
+</body>
+</html>

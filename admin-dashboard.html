@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard | AutoAddicts Admin</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f6f7;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 240px;
+    background: #0d1b24;
+    color: white;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 50;
+    transition: transform 0.25s ease;
+  }
+
+  .sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 22px 20px;
+    border-bottom: 1px solid #1e3742;
+  }
+
+  .sidebar-logo-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    background: linear-gradient(114deg, #189b8a 0%, #0c5e52 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+  }
+
+  .sidebar-logo-text strong {
+    display: block;
+    font-size: 15px;
+    font-weight: 800;
+  }
+
+  .sidebar-logo-text span {
+    font-size: 11px;
+    color: #7a8a94;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .sidebar-nav {
+    flex-grow: 1;
+    padding: 16px 12px;
+  }
+
+  .sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    color: #b3c1c8;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .sidebar-link i {
+    width: 18px;
+    text-align: center;
+  }
+
+  .sidebar-link:hover {
+    background: #142731;
+    color: white;
+  }
+
+  .sidebar-link.active {
+    background: linear-gradient(114deg, #189b8a 0%, #0c5e52 100%);
+    color: white;
+  }
+
+  .sidebar-bottom {
+    padding: 16px 12px;
+    border-top: 1px solid #1e3742;
+  }
+
+  .sidebar-logout {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    color: #b3c1c8;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .sidebar-logout:hover {
+    background: #142731;
+    color: #ff8a8a;
+  }
+
+  /* Mobile sidebar toggle */
+  .sidebar-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #112532;
+    cursor: pointer;
+  }
+
+  /* Main content */
+  .main {
+    margin-left: 240px;
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  .topbar {
+    background: white;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 18px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .topbar h1 {
+    font-size: 20px;
+    color: #112532;
+    font-weight: 800;
+  }
+
+  .topbar p {
+    font-size: 13px;
+    color: #888;
+    margin-top: 2px;
+  }
+
+  .topbar-view-site {
+    padding: 9px 16px;
+    border: 1px solid #d5d5d5;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #112532;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .content {
+    padding: 28px 30px;
+  }
+
+  /* Stat cards */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 30px;
+  }
+
+  .stat-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid #ececec;
+  }
+
+  .stat-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: white;
+    margin-bottom: 14px;
+  }
+
+  .stat-number {
+    font-size: 30px;
+    font-weight: 800;
+    color: #112532;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    color: #888;
+  }
+
+  /* Quick actions */
+  .section-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: #112532;
+    margin-bottom: 14px;
+  }
+
+  .quick-actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 30px;
+  }
+
+  .quick-action {
+    background: white;
+    border: 1px solid #ececec;
+    border-radius: 10px;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #112532;
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .quick-action:hover {
+    border-color: #189b8a;
+  }
+
+  .quick-action i {
+    color: #189b8a;
+    font-size: 16px;
+  }
+
+  .quick-action.primary {
+    background: linear-gradient(114deg, #189b8a 0%, #0c5e52 100%);
+    color: white;
+  }
+
+  .quick-action.primary i {
+    color: white;
+  }
+
+  /* Recent activity */
+  .panel {
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #ececec;
+    padding: 20px;
+  }
+
+  .activity-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f2f2f2;
+    font-size: 14px;
+  }
+
+  .activity-row:last-child {
+    border-bottom: none;
+  }
+
+  .activity-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #ececec;
+    color: #189b8a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .activity-text strong {
+    color: #112532;
+  }
+
+  .activity-time {
+    color: #aaa;
+    font-size: 12px;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 1000px) {
+    .stat-grid, .quick-actions {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 800px) {
+    .sidebar {
+      transform: translateX(-100%);
+    }
+    .sidebar.open {
+      transform: translateX(0);
+    }
+    .main {
+      margin-left: 0;
+    }
+    .sidebar-toggle {
+      display: block;
+    }
+    .content {
+      padding: 20px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon"><i class="fas fa-car"></i></div>
+    <div class="sidebar-logo-text">
+      <strong>AutoAddicts</strong>
+      <span>Admin</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="admin-dashboard.html" class="sidebar-link active"><i class="fas fa-gauge"></i> Dashboard</a>
+    <a href="admin-vehicles.html" class="sidebar-link"><i class="fas fa-car-side"></i> Vehicles</a>
+    <a href="admin-leads.html" class="sidebar-link"><i class="fas fa-inbox"></i> Leads</a>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <button class="sidebar-logout" id="logoutBtn"><i class="fas fa-right-from-bracket"></i> Log Out</button>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <button class="sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+      <div>
+        <h1>Dashboard</h1>
+        <p>A snapshot of your website activity</p>
+      </div>
+    </div>
+    <a href="index.html" target="_blank" class="topbar-view-site"><i class="fas fa-arrow-up-right-from-square"></i> View Site</a>
+  </div>
+
+  <div class="content">
+    <div class="stat-grid" id="statGrid">
+      <div class="stat-card">
+        <div class="stat-icon" style="background:linear-gradient(114deg, #189b8a 0%, #0c5e52 100%);"><i class="fas fa-car"></i></div>
+        <div class="stat-number" id="statVehicles">-</div>
+        <div class="stat-label">Total Vehicles</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#e0a03a;"><i class="fas fa-envelope"></i></div>
+        <div class="stat-number" id="statEnquiries">-</div>
+        <div class="stat-label">Total Enquiries</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#5583c4;"><i class="fas fa-hand-holding-dollar"></i></div>
+        <div class="stat-number" id="statSellRequests">-</div>
+        <div class="stat-label">Sell Requests</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#b0517a;"><i class="fas fa-calendar-plus"></i></div>
+        <div class="stat-number" id="statThisWeek">-</div>
+        <div class="stat-label">Vehicles Added This Week</div>
+      </div>
+    </div>
+
+    <div class="section-title">Quick Actions</div>
+    <div class="quick-actions">
+      <a href="admin-vehicles.html?action=add" class="quick-action primary"><i class="fas fa-plus"></i> Add Vehicle</a>
+      <a href="admin-vehicles.html" class="quick-action"><i class="fas fa-car-side"></i> Manage Vehicles</a>
+      <a href="admin-leads.html?tab=enquiries" class="quick-action"><i class="fas fa-envelope"></i> View Enquiries</a>
+      <a href="admin-leads.html?tab=sell" class="quick-action"><i class="fas fa-hand-holding-dollar"></i> Sell Requests</a>
+    </div>
+
+    <div class="section-title">Recent Activity</div>
+    <div class="panel" id="activityPanel">
+      <p style="color:#888; font-size:14px;">Loading recent activity...</p>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/pocketbase@0.21.3/dist/pocketbase.umd.js"></script>
+<script>
+  const pb = new PocketBase('https://zca4uvbsikp5qq2.ba7w.pocketbasecloud.com');
+
+  // Auth guard: bounce to login if not authenticated
+  if (!pb.authStore.isValid) {
+    window.location.href = 'admin-login.html';
+  }
+
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    pb.authStore.clear();
+    window.location.href = 'admin-login.html';
+  });
+
+  const sidebarToggle = document.getElementById('sidebarToggle');
+  if (sidebarToggle) {
+    sidebarToggle.addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('open');
+    });
+  }
+
+  function timeAgo(dateStr) {
+    const diffMs = Date.now() - new Date(dateStr).getTime();
+    const mins = Math.floor(diffMs / 60000);
+    if (mins < 1) return 'Just now';
+    if (mins < 60) return `${mins}m ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return `${hrs}h ago`;
+    const days = Math.floor(hrs / 24);
+    return `${days}d ago`;
+  }
+
+  async function loadStats() {
+    try {
+      // Adding { '$autoCancel': false } stops the SDK from autocancelling concurrent queries
+      const [vehicles, enquiries, sellRequests] = await Promise.all([
+        pb.collection('vehicles').getList(1, 1, { '$autoCancel': false }),
+        pb.collection('enquiries').getList(1, 1, { '$autoCancel': false }),
+        pb.collection('sell_request').getList(1, 1, { '$autoCancel': false })
+      ]);
+
+      document.getElementById('statVehicles').textContent = vehicles.totalItems;
+      document.getElementById('statEnquiries').textContent = enquiries.totalItems;
+      document.getElementById('statSellRequests').textContent = sellRequests.totalItems;
+
+      const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().replace('T', ' ');
+      const recentVehicles = await pb.collection('vehicles').getList(1, 1, {
+        filter: `created >= "${weekAgo}"`,
+        '$autoCancel': false
+      });
+      document.getElementById('statThisWeek').textContent = recentVehicles.totalItems;
+    } catch (err) {
+      console.error('Failed to load stats:', err);
+    }
+  }
+
+  async function loadRecentActivity() {
+    const panel = document.getElementById('activityPanel');
+    if (!panel) return;
+    try {
+      const [recentEnquiries, recentSell] = await Promise.all([
+        pb.collection('enquiries').getList(1, 3, { sort: '-created', '$autoCancel': false }),
+        pb.collection('sell_request').getList(1, 3, { sort: '-created', '$autoCancel': false })
+      ]);
+
+      const items = [
+        ...recentEnquiries.items.map(e => ({
+          icon: 'fa-envelope',
+          text: `<strong>${e.name || 'Someone'}</strong> submitted an enquiry`,
+          time: e.created
+        })),
+        ...recentSell.items.map(s => ({
+          icon: 'fa-hand-holding-dollar',
+          text: `<strong>${s.first_name || 'Someone'}</strong> submitted a vehicle to sell`,
+          time: s.created
+        }))
+      ].sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 6);
+
+      if (items.length === 0) {
+        panel.innerHTML = '<p style="color:#888; font-size:14px;">No recent activity yet.</p>';
+        return;
+      }
+
+      panel.innerHTML = items.map(item => `
+        <div class="activity-row" style="display:flex; align-items:center; padding:10px 0; border-bottom:1px solid #eee; gap:12px;">
+          <div class="activity-icon"><i class="fas ${item.icon}"></i></div>
+          <div class="activity-text" style="flex-grow:1; font-size:14px;">${item.text}</div>
+          <div class="activity-time" style="font-size:12px; color:#888;">${timeAgo(item.time)}</div>
+        </div>
+      `).join('');
+    } catch (err) {
+      console.error('Failed to load recent activity:', err);
+      panel.innerHTML = `<p style="color:#dc2626; font-size:14px;">Error loading activity. Check API rules in PocketBase.</p>`;
+    }
+  }
+
+  loadStats();
+  loadRecentActivity();
+</script>
+
+</body>
+</html>
