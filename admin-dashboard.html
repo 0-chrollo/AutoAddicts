@@ -302,7 +302,6 @@
     color: #112532;
   }
 
-  
   .activity-time {
     color: #aaa;
     font-size: 12px;
@@ -412,7 +411,7 @@
 <script>
   const pb = new PocketBase('https://zca4uvbsikp5qq2.ba7w.pocketbasecloud.com');
 
-  // Auth guard: bounce to login if not authenticated
+  // Auth guard: check against local storage or general auth store validity
   if (!pb.authStore.isValid) {
     window.location.href = 'admin-login.html';
   }
@@ -442,7 +441,6 @@
 
   async function loadStats() {
     try {
-      // Adding { '$autoCancel': false } stops the SDK from autocancelling concurrent queries
       const [vehicles, enquiries, sellRequests] = await Promise.all([
         pb.collection('vehicles').getList(1, 1, { '$autoCancel': false }),
         pb.collection('enquiries').getList(1, 1, { '$autoCancel': false }),

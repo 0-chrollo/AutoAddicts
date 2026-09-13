@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Staff Login | AutoAddicts</title>
+<title>Admin Login | AutoAddicts</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -11,98 +11,136 @@
   body {
     font-family: 'Segoe UI', Arial, sans-serif;
     background: #0d1b24;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     padding: 20px;
-  }
-
-  .login-wrap {
-    width: 100%;
-    max-width: 380px;
-  }
-
-  .login-logo {
-    text-align: center;
-    margin-bottom: 28px;
-  }
-
-  .login-logo-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 10px;
-    background: linear-gradient(114deg, #189b8a 0%, #0c5e52 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 14px;
-    font-size: 26px;
-    color: white;
-  }
-
-  .login-logo h1 {
-    color: white;
-    font-size: 20px;
-    font-weight: 800;
-  }
-
-  .login-logo p {
-    color: #7a8a94;
-    font-size: 13px;
-    margin-top: 4px;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
   }
 
   .login-card {
     background: #142731;
     border: 1px solid #1e3742;
     border-radius: 12px;
-    padding: 32px 28px;
+    width: 100%;
+    max-width: 420px;
+    padding: 36px 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   }
 
-  .login-field {
+  .login-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .login-logo-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 9px;
+    background: linear-gradient(114deg, #189b8a 0%, #0c5e52 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    color: white;
+  }
+
+  .login-logo-text strong {
+    display: block;
+    font-size: 18px;
+    font-weight: 800;
+  }
+
+  .login-logo-text span {
+    font-size: 12px;
+    color: #7a8a94;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  h1 {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    color: #fff;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: #7a8a94;
+    margin-bottom: 26px;
+  }
+
+  .form-group {
     margin-bottom: 18px;
   }
 
-  .login-field label {
+  label {
     display: block;
     font-size: 13px;
+    font-weight: 600;
     color: #9aabb3;
     margin-bottom: 8px;
-    font-weight: 600;
   }
 
-  .login-field input {
+  .input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .input-wrap i {
+    position: absolute;
+    left: 14px;
+    color: #7a8a94;
+    font-size: 15px;
+  }
+
+  input {
     width: 100%;
-    padding: 13px 14px;
     background: #0d1b24;
-    border: 1px solid #263c47;
-    border-radius: 7px;
-    color: white;
+    border: 1px solid #1e3742;
+    border-radius: 8px;
+    padding: 12px 14px 12px 42px;
+    color: #fff;
     font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
   }
 
-  .login-field input:focus {
-    outline: none;
+  input:focus {
     border-color: #189b8a;
   }
 
-  .login-field input::placeholder {
-    color: #55666f;
+  .error-msg {
+    background: rgba(176, 0, 32, 0.15);
+    border: 1px solid rgba(176, 0, 32, 0.3);
+    color: #ff8a8a;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 18px;
+    display: none;
+  }
+
+  .error-msg.show {
+    display: block;
   }
 
   .login-btn {
     width: 100%;
-    padding: 14px;
     background: linear-gradient(114deg, #189b8a 0%, #0c5e52 100%);
-    border: none;
-    border-radius: 7px;
     color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 13px;
     font-size: 15px;
     font-weight: 700;
     cursor: pointer;
+    transition: opacity 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -110,114 +148,105 @@
     margin-top: 6px;
   }
 
+  .login-btn:hover {
+    opacity: 0.9;
+  }
+
   .login-btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
   }
 
-  .login-error {
-    background: rgba(176, 0, 32, 0.15);
-    border: 1px solid rgba(176, 0, 32, 0.4);
-    color: #ff8a8a;
-    padding: 10px 12px;
-    border-radius: 6px;
+  .back-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #7a8a94;
     font-size: 13px;
-    margin-bottom: 16px;
-    display: none;
+    text-decoration: none;
   }
 
-  .login-footer {
-    text-align: center;
-    color: #55666f;
-    font-size: 12px;
-    margin-top: 20px;
+  .back-link:hover {
+    color: #fff;
   }
 </style>
 </head>
 <body>
 
-  <div class="login-wrap">
-    <div class="login-logo">
-      <div class="login-logo-icon" style="background:none; box-shadow:none; width:auto; height:auto;">
-        <img src="autoaddicts.png" alt="AutoAddicts Logo" style="max-height: 50px; width: auto; object-fit: contain;">
-      </div>
-      <h1>AutoAddicts</h1>
-      <p>Staff Admin</p>
-    </div>
-  
-    <div class="login-card">
-      <div class="login-error" id="loginError"></div>
-      <form id="loginForm">
-        <div class="login-field">
-          <label for="loginEmail">Email</label>
-          <input type="email" id="loginEmail" placeholder="email" required autocomplete="username">
-        </div>
-        <div class="login-field">
-          <label for="loginPassword">Password</label>
-          <div style="position:relative;">
-            <input type="password" id="loginPassword" placeholder="••••••••" required autocomplete="current-password" style="padding-right: 40px; width:100%;">
-            <button type="button" id="togglePassword" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:#ffffff; cursor:pointer; font-size:16px;" aria-label="Toggle password visibility">
-              <i class="fas fa-eye" id="eyeIcon"></i>
-            </button>
-          </div>
-        </div>
-        <button type="submit" class="login-btn" id="loginBtn">
-          <i class="fas fa-right-to-bracket"></i> Log In
-        </button>
-      </form>
-    </div>
-  
-    <div class="login-footer">
-      AutoAddicts &middot; Staff access only<br>
-      <span style="font-size: 11px; opacity: 0.8; display: inline-block; margin-top: 4px;">Designed by ApexWebs</span>
+<div class="login-card">
+  <div class="login-logo">
+    <div class="login-logo-icon"><i class="fas fa-car"></i></div>
+    <div class="login-logo-text">
+      <strong>AutoAddicts</strong>
+      <span>Admin Portal</span>
     </div>
   </div>
-  
-  <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.21.3/dist/pocketbase.umd.js"></script>
+
+  <h1>Welcome Back</h1>
+  <p class="subtitle">Log in to manage your vehicle inventory and leads.</p>
+
+  <div class="error-msg" id="errorMsg"></div>
+
+  <form id="loginForm">
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <div class="input-wrap">
+        <i class="fas fa-envelope"></i>
+        <input type="email" id="email" required placeholder="admin@autoaddicts.co.za" autocomplete="email">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <div class="input-wrap">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="password" required placeholder="••••••••" autocomplete="current-password">
+      </div>
+    </div>
+
+    <button type="submit" class="login-btn" id="submitBtn">
+      <span>Log In</span> <i class="fas fa-arrow-right"></i>
+    </button>
+  </form>
+
+  <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to website</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/pocketbase@0.21.3/dist/pocketbase.umd.js"></script>
 <script>
   const pb = new PocketBase('https://zca4uvbsikp5qq2.ba7w.pocketbasecloud.com');
 
-  // If already logged in, skip straight to the dashboard
+  // If already logged in, redirect straight to dashboard
   if (pb.authStore.isValid) {
     window.location.href = 'admin-dashboard.html';
   }
 
-  // Toggle password visibility
-  const passwordInput = document.getElementById('loginPassword');
-  const togglePasswordBtn = document.getElementById('togglePassword');
-  const eyeIcon = document.getElementById('eyeIcon');
+  const loginForm = document.getElementById('loginForm');
+  const errorMsg = document.getElementById('errorMsg');
+  const submitBtn = document.getElementById('submitBtn');
 
-  togglePasswordBtn.addEventListener('click', () => {
-    const isPassword = passwordInput.type === 'password';
-    passwordInput.type = isPassword ? 'text' : 'password';
-    eyeIcon.className = isPassword ? 'fas fa-eye-slash' : 'fas fa-eye';
-  });
-
-  const form = document.getElementById('loginForm');
-  const errorBox = document.getElementById('loginError');
-  const btn = document.getElementById('loginBtn');
-
-  form.addEventListener('submit', async (e) => {
+  loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    errorBox.style.display = 'none';
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+    errorMsg.classList.remove('show');
+    submitBtn.disabled = true;
+    submitBtn.querySelector('span').textContent = 'Logging in...';
 
-    const email = document.getElementById('loginEmail').value;
-    const password = passwordInput.value;
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
 
     try {
-      // Correct admin authentication method for PocketBase SDK v0.21.x
-      await pb.admins.authWithPassword(email, password);
+      // Authenticating against your custom staff collection
+      await pb.collection('staff').authWithPassword(email, password);
       window.location.href = 'admin-dashboard.html';
     } catch (err) {
       console.error('Login failed:', err);
-      errorBox.textContent = 'Incorrect email or password. Please try again.';
-      errorBox.style.display = 'block';
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fas fa-right-to-bracket"></i> Log In';
+      errorMsg.textContent = err.data?.message || 'Failed to authenticate. Please check your email and password.';
+      errorMsg.classList.add('show');
+      submitBtn.disabled = false;
+      submitBtn.querySelector('span').textContent = 'Log In';
     }
   });
 </script>
+
 </body>
 </html>
