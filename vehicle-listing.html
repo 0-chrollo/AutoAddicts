@@ -321,9 +321,16 @@ function buildFilter() {
 }
 
 function renderCard(vehicle) {
-    const imageUrl = vehicle.images && vehicle.images.length
-        ? pb.files.getUrl(vehicle, vehicle.images[0])
-        : 'cars/maincar.jpeg';
+    let imageUrl = 'cars/maincar.jpeg';
+    
+    // Prioritize main_image first, then fall back to images array
+    if (vehicle.main_image) {
+      imageUrl = pb.files.getUrl(vehicle, vehicle.main_image);
+    } else if (vehicle.images && vehicle.images.length > 0) {
+      imageUrl = pb.files.getUrl(vehicle, vehicle.images[0]);
+    }
+
+    // Rest of your card rendering logic...
 
     return `
         <a class="card" href="vehicle-details.html?id=${vehicle.id}">

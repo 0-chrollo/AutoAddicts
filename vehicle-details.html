@@ -889,9 +889,22 @@
   function renderVehicle(vehicle) {
     setMetaTags(vehicle);
   
-    mediaItems = vehicle.images && vehicle.images.length
-      ? vehicle.images.map(img => ({ type: 'image', url: pb.files.getUrl(vehicle, img) }))
-      : [{ type: 'image', url: 'cars/maincar.jpeg' }];
+ // Build media items prioritizing main_image first
+ let imageFiles = [];
+  if (vehicle.main_image) {
+    imageFiles.push(vehicle.main_image);
+  }
+  if (vehicle.images && vehicle.images.length) {
+    vehicle.images.forEach(img => {
+      if (img !== vehicle.main_image) {
+        imageFiles.push(img);
+      }
+    });
+  }
+
+  mediaItems = imageFiles.length > 0
+    ? imageFiles.map(img => ({ type: 'image', url: pb.files.getUrl(vehicle, img) }))
+    : [{ type: 'image', url: 'cars/maincar.jpeg' }];
   
     const ytEmbed = getYouTubeEmbedUrl(vehicle.youtube_link);
     if (ytEmbed) {
