@@ -10,17 +10,16 @@
 
   body {
     font-family: 'Segoe UI', Arial, sans-serif;
-    background: #0d1b24;
-    color: #fff;
+    background: #f4f6f7;
     display: flex;
     min-height: 100vh;
   }
 
   /* Sidebar */
   .sidebar {
-    width: 260px;
-    background: #142731;
-    border-right: 1px solid #1e3742;
+    width: 240px;
+    background: #0d1b24;
+    color: white;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
@@ -30,84 +29,68 @@
     transition: transform 0.25s ease;
   }
 
-  .sidebar-header {
-    padding: 20px;
-    font-size: 18px;
-    font-weight: 800;
-    border-bottom: 1px solid #1e3742;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  .sidebar-logo {
+    display: flex; align-items: center; gap: 12px;
+    padding: 22px 20px; border-bottom: 1px solid #1e3742;
   }
 
-  .sidebar-menu {
-    list-style: none;
-    padding: 20px 0;
-    flex: 1;
+  .sidebar-logo-icon {
+    width: 38px; height: 38px; border-radius: 8px;
+    background: linear-gradient(114deg, #189b8a 0%, #0c5e52 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; flex-shrink: 0;
   }
 
-  .sidebar-menu li a {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 20px;
-    color: #9aabb3;
-    text-decoration: none;
-    font-weight: 600;
-    transition: background 0.2s, color 0.2s;
+  .sidebar-logo-text strong { display: block; font-size: 15px; font-weight: 800; }
+  .sidebar-logo-text span { font-size: 11px; color: #7a8a94; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .sidebar-nav { flex-grow: 1; padding: 16px 12px; }
+
+  .sidebar-link {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px; border-radius: 8px;
+    color: #b3c1c8; text-decoration: none;
+    font-size: 14px; font-weight: 600; margin-bottom: 4px;
   }
 
-  .sidebar-menu li.active a, .sidebar-menu li a:hover {
-    background: rgba(24, 155, 138, 0.15);
-    color: #189b8a;
+  .sidebar-link i { width: 18px; text-align: center; }
+  .sidebar-link:hover { background: #142731; color: white; }
+  .sidebar-link.active { background: linear-gradient(114deg, #189b8a 0%, #0c5e52 100%); color: white; }
+
+  .sidebar-bottom { padding: 16px 12px; border-top: 1px solid #1e3742; }
+
+  .sidebar-logout {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px; border-radius: 8px;
+    color: #b3c1c8; background: none; border: none;
+    width: 100%; text-align: left; font-size: 14px; font-weight: 600; cursor: pointer;
   }
 
-  .sidebar-footer {
-    padding: 20px;
-    border-top: 1px solid #1e3742;
-  }
+  .sidebar-logout:hover { background: #142731; color: #ff8a8a; }
 
-  .logout-btn {
-    background: none;
-    border: none;
-    color: #ff8a8a;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    width: 100%;
-    padding: 10px;
-    border-radius: 6px;
-  }
+  .sidebar-toggle { display: none; background: none; border: none; font-size: 20px; color: #112532; cursor: pointer; }
 
-  .logout-btn:hover {
-    background: rgba(176, 0, 32, 0.1);
-  }
-
-  .sidebar-toggle { display: none; background: none; border: none; font-size: 20px; color: #fff; cursor: pointer; }
-
-  .main { margin-left: 260px; flex-grow: 1; min-width: 0; }
+  .main { margin-left: 240px; flex-grow: 1; min-width: 0; }
 
   .topbar {
-    background: #142731; border-bottom: 1px solid #1e3742;
-    padding: 20px 30px; display: flex; align-items: center; justify-content: space-between;
+    background: white; border-bottom: 1px solid #e5e5e5;
+    padding: 18px 30px; display: flex; align-items: center; justify-content: space-between;
   }
 
-  .topbar h1 { font-size: 24px; color: #fff; font-weight: 800; }
-  .topbar p { font-size: 13px; color: #7a8a94; margin-top: 2px; }
+  .topbar h1 { font-size: 20px; color: #112532; font-weight: 800; }
+  .topbar p { font-size: 13px; color: #888; margin-top: 2px; }
 
-  .content { padding: 30px; }
+  .content { padding: 28px 30px; }
 
   /* Tabs */
   .tabs {
     display: flex; gap: 6px; margin-bottom: 20px;
-    background: #142731; border: 1px solid #1e3742; border-radius: 10px; padding: 6px; width: fit-content;
+    background: white; border: 1px solid #ececec; border-radius: 10px; padding: 6px; width: fit-content;
   }
 
   .tab-btn {
     padding: 10px 20px; border: none; background: none; border-radius: 7px;
-    font-size: 14px; font-weight: 700; color: #7a8a94; cursor: pointer;
+    font-size: 14px; font-weight: 700; color: #888; cursor: pointer;
     display: flex; align-items: center; gap: 8px;
   }
 
@@ -117,81 +100,79 @@
   }
 
   .tab-count {
-    background: rgba(0,0,0,0.2); padding: 1px 8px; border-radius: 10px; font-size: 12px;
+    background: rgba(0,0,0,0.1); padding: 1px 8px; border-radius: 10px; font-size: 12px;
   }
 
   .tab-btn.active .tab-count { background: rgba(255,255,255,0.25); }
 
   /* Table */
   .leads-table-wrap {
-    background: #142731; border: 1px solid #1e3742; border-radius: 12px; overflow: hidden;
+    background: white; border: 1px solid #ececec; border-radius: 10px; overflow: hidden;
   }
 
-  table { width: 100%; border-collapse: collapse; text-align: left; }
+  table { width: 100%; border-collapse: collapse; }
 
   th {
-    font-size: 12px; text-transform: uppercase;
-    letter-spacing: 0.5px; color: #7a8a94; padding: 14px 18px;
-    background: #0d1b24; border-bottom: 1px solid #1e3742; font-weight: 600;
+    text-align: left; font-size: 12px; text-transform: uppercase;
+    letter-spacing: 0.5px; color: #888; padding: 14px 16px;
+    background: #fafafa; border-bottom: 1px solid #ececec;
   }
 
-  td { padding: 14px 18px; border-bottom: 1px solid #1e3742; font-size: 14px; color: #fff; vertical-align: middle; }
+  td { padding: 12px 16px; border-bottom: 1px solid #f2f2f2; font-size: 14px; color: #112532; vertical-align: middle; }
   tr:last-child td { border-bottom: none; }
 
   .lead-name { font-weight: 700; }
-  .lead-sub { color: #7a8a94; font-size: 12px; margin-top: 2px; }
-  .lead-time { color: #7a8a94; font-size: 12px; white-space: nowrap; }
+  .lead-sub { color: #888; font-size: 12px; }
+  .lead-time { color: #aaa; font-size: 12px; white-space: nowrap; }
 
   .table-actions { display: flex; gap: 8px; }
 
   .icon-btn {
     width: 32px; height: 32px; border-radius: 6px;
-    border: none; background: #1e3742;
+    border: 1px solid #d5d5d5; background: white;
     display: flex; align-items: center; justify-content: center;
-    cursor: pointer; font-size: 13px; color: #fff;
+    cursor: pointer; font-size: 13px; color: #112532;
   }
 
-  .icon-btn:hover { background: #189b8a; color: #fff; }
-  .icon-btn.danger:hover { background: #b00020; color: #fff; }
+  .icon-btn:hover { border-color: #189b8a; color: #189b8a; }
+  .icon-btn.danger:hover { border-color: #b00020; color: #b00020; }
 
-  .empty-state { text-align: center; padding: 50px 20px; color: #7a8a94; }
+  .empty-state { text-align: center; padding: 50px 20px; color: #888; }
 
   /* Detail modal */
   .modal-overlay {
-    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-    z-index: 1000; align-items: center; justify-content: center;
+    display: none; position: fixed; inset: 0; background: rgba(13,27,36,0.6);
+    z-index: 100; align-items: flex-start; justify-content: center;
     padding: 30px 16px; overflow-y: auto;
   }
 
   .modal-overlay.open { display: flex; }
 
   .modal-box {
-    background: #142731; border: 1px solid #1e3742; border-radius: 12px; width: 100%; max-width: 560px;
-    max-height: 90vh; display: flex; flex-direction: column;
+    background: white; border-radius: 12px; width: 100%; max-width: 560px;
+    max-height: 100%; overflow-y: auto;
   }
 
   .modal-header {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 20px; border-bottom: 1px solid #1e3742;
+    padding: 20px 24px; border-bottom: 1px solid #ececec; position: sticky; top: 0; background: white;
   }
 
-  .modal-header h2 { font-size: 18px; color: #fff; font-weight: 700; }
-  .modal-close { background: none; border: none; font-size: 18px; color: #7a8a94; cursor: pointer; }
-  .modal-close:hover { color: #fff; }
-  
-  .modal-body { padding: 20px; overflow-y: auto; flex: 1; }
+  .modal-header h2 { font-size: 17px; color: #112532; font-weight: 800; }
+  .modal-close { background: none; border: none; font-size: 18px; color: #888; cursor: pointer; }
+  .modal-body { padding: 24px; }
 
   .detail-row {
     display: flex; justify-content: space-between; gap: 16px;
-    padding: 10px 0; border-bottom: 1px solid #1e3742; font-size: 14px;
+    padding: 10px 0; border-bottom: 1px solid #f2f2f2; font-size: 14px;
   }
 
   .detail-row:last-child { border-bottom: none; }
-  .detail-label { color: #9aabb3; flex-shrink: 0; }
-  .detail-value { color: #fff; font-weight: 600; text-align: right; }
+  .detail-label { color: #888; flex-shrink: 0; }
+  .detail-value { color: #112532; font-weight: 600; text-align: right; }
 
   .detail-message {
-    background: #0d1b24; border: 1px solid #263c47; border-radius: 8px; padding: 14px; margin-top: 14px; font-size: 14px; color: #fff; line-height: 1.5;
+    background: #f4f6f7; border-radius: 8px; padding: 14px; margin-top: 14px; font-size: 14px; color: #444; line-height: 1.5;
   }
 
   .detail-section-title {
@@ -206,12 +187,12 @@
   }
 
   .detail-photos img {
-    width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 6px; background: #0d1b24; border: 1px solid #263c47;
+    width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 6px;
   }
 
   .modal-footer {
     display: flex; justify-content: space-between; align-items: center; gap: 10px;
-    padding: 15px 20px; border-top: 1px solid #1e3742; background: #142731;
+    padding: 18px 24px; border-top: 1px solid #ececec; background: #fafafa;
   }
 
   .modal-actions {
@@ -222,13 +203,12 @@
     padding: 10px 18px; background: #b00020; color: white; border: none; border-radius: 7px;
     font-size: 14px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
   }
-  .btn-danger:hover { background: #c50b2b; }
 
   .btn-email {
-    padding: 10px 16px; background: #1e3742; color: white; border: none; border-radius: 7px;
+    padding: 10px 16px; background: #0d1b24; color: white; border: none; border-radius: 7px;
     font-size: 14px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
   }
-  .btn-email:hover { background: #263c47; }
+  .btn-email:hover { background: #142731; }
 
   .btn-whatsapp {
     padding: 10px 16px; background: linear-gradient(114deg, #189b8a 0%, #0c5e52 100%);
@@ -250,15 +230,17 @@
 <body>
 
 <aside class="sidebar" id="sidebar">
-  <div class="sidebar-header">
-    <i class="fas fa-car-side" style="color: #189b8a;"></i> AutoAddicts
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon"><i class="fas fa-car"></i></div>
+    <div class="sidebar-logo-text"><strong>AutoAddicts</strong><span>Admin</span></div>
   </div>
-  <ul class="sidebar-menu">
-    <li><a href="admin-vehicles.html"><i class="fas fa-car"></i> Vehicles</a></li>
-    <li class="active"><a href="admin-leads.html"><i class="fas fa-address-book"></i> Leads & Enquiries</a></li>
-  </ul>
-  <div class="sidebar-footer">
-    <button class="logout-btn" id="logoutBtn"><i class="fas fa-right-from-bracket"></i> Log Out</button>
+  <nav class="sidebar-nav">
+    <a href="admin-dashboard.html" class="sidebar-link"><i class="fas fa-gauge"></i> Dashboard</a>
+    <a href="admin-vehicles.html" class="sidebar-link"><i class="fas fa-car-side"></i> Vehicles</a>
+    <a href="admin-leads.html" class="sidebar-link active"><i class="fas fa-inbox"></i> Leads</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <button class="sidebar-logout" id="logoutBtn"><i class="fas fa-right-from-bracket"></i> Log Out</button>
   </div>
 </aside>
 
@@ -267,8 +249,8 @@
     <div style="display:flex; align-items:center; gap:14px;">
       <button class="sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
       <div>
-        <h1>Leads & Enquiries</h1>
-        <p>Customer enquiries and vehicles submitted for sale</p>
+        <h1>Leads</h1>
+        <p>Enquiries and vehicles people want to sell</p>
       </div>
     </div>
   </div>
@@ -287,7 +269,7 @@
       <table>
         <thead id="tableHead"></thead>
         <tbody id="tableBody">
-          <tr><td colspan="5"><div class="empty-state">Loading leads...</div></td></tr>
+          <tr><td colspan="5" style="text-align:center; padding:30px; color:#888;">Loading...</td></tr>
         </tbody>
       </table>
     </div>
@@ -364,7 +346,7 @@
     const body = document.getElementById('tableBody');
 
     if (currentTab === 'enquiries') {
-      head.innerHTML = `<tr><th>Name</th><th>Contact</th><th>Vehicle Enquired & Price</th><th>Received</th><th style="width: 80px;"></th></tr>`;
+      head.innerHTML = `<tr><th>Name</th><th>Contact</th><th>Vehicle Enquired & Price</th><th>Received</th><th></th></tr>`;
 
       if (enquiries.length === 0) {
         body.innerHTML = `<tr><td colspan="5"><div class="empty-state">No enquiries yet.</div></td></tr>`;
@@ -391,7 +373,7 @@
       }).join('');
 
     } else {
-      head.innerHTML = `<tr><th>Seller</th><th>Contact</th><th>Vehicle</th><th>Asking Price</th><th>Received</th><th style="width: 80px;"></th></tr>`;
+      head.innerHTML = `<tr><th>Seller</th><th>Contact</th><th>Vehicle</th><th>Asking Price</th><th>Received</th><th></th></tr>`;
 
       if (sellRequests.length === 0) {
         body.innerHTML = `<tr><td colspan="6"><div class="empty-state">No sell requests yet.</div></td></tr>`;

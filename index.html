@@ -172,7 +172,6 @@
 
 
 
-
       <section class="home-just-in-section">
         <div class="home-ji-header">
           <div class="home-ji-header-text">
@@ -210,7 +209,7 @@
           </a>
         </div>
       </section>
-       
+        
       <!-- PocketBase SDK -->
       <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.21.3/dist/pocketbase.umd.js"></script>
       <script>
@@ -237,9 +236,12 @@
         }
        
         function renderCard(vehicle) {
-          const imageUrl = vehicle.images && vehicle.images.length
-            ? pb.files.getUrl(vehicle, vehicle.images[0])
-            : 'cars/maincar.jpeg';
+          let imageUrl = 'cars/maincar.jpeg';
+          if (vehicle.main_image) {
+            imageUrl = pb.files.getUrl(vehicle, vehicle.main_image);
+          } else if (vehicle.images && vehicle.images.length > 0) {
+            imageUrl = pb.files.getUrl(vehicle, vehicle.images[0]);
+          }
        
           const titleText = `${vehicle.make || ''} ${vehicle.model || ''} ${vehicle.year || ''}`.trim();
           const price = vehicle.price ? Number(vehicle.price).toLocaleString('en-US') : '0';
@@ -273,6 +275,7 @@
        
         async function loadRecentVehicles() {
           const track = document.getElementById('track');
+          if (!track) return;
           
           // Show skeleton loaders immediately
           track.innerHTML = Array(4).fill(0).map(() => `<div class="home-ji-item">${renderSkeletonCard()}</div>`).join('');
@@ -303,6 +306,8 @@
           const count = document.getElementById('count');
           const arrowPrev = document.getElementById('arrowPrev');
           const arrowNext = document.getElementById('arrowNext');
+          if (!track) return;
+          
           const cards = track.querySelectorAll('.home-ji-item');
           const total = cards.length;
        
@@ -313,23 +318,31 @@
             track.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
           }
        
-          arrowPrev.addEventListener('click', () => scrollByCard(-1));
-          arrowNext.addEventListener('click', () => scrollByCard(1));
+          if (arrowPrev && arrowNext) {
+            // Prevent stacking multiple event listeners if initCarousel runs more than once
+            arrowPrev.replaceWith(arrowPrev.cloneNode(true));
+            arrowNext.replaceWith(arrowNext.cloneNode(true));
+            
+            document.getElementById('arrowPrev').addEventListener('click', () => scrollByCard(-1));
+            document.getElementById('arrowNext').addEventListener('click', () => scrollByCard(1));
+          }
        
           function updateUI() {
+            const freshArrowPrev = document.getElementById('arrowPrev');
+            const freshArrowNext = document.getElementById('arrowNext');
             const maxScroll = track.scrollWidth - track.clientWidth;
             const pct = maxScroll > 0 ? track.scrollLeft / maxScroll : 0;
-            thumb.style.width = Math.max(20, pct * 100) + '%';
+            if (thumb) thumb.style.width = Math.max(20, pct * 100) + '%';
        
-            arrowPrev.disabled = track.scrollLeft <= 0;
-            arrowNext.disabled = track.scrollLeft >= maxScroll - 1;
+            if (freshArrowPrev) freshArrowPrev.disabled = track.scrollLeft <= 0;
+            if (freshArrowNext) freshArrowNext.disabled = track.scrollLeft >= maxScroll - 1;
        
             let closest = 0, minDist = Infinity;
             cards.forEach((c, i) => {
               const dist = Math.abs(c.getBoundingClientRect().left - track.getBoundingClientRect().left);
               if (dist < minDist) { minDist = dist; closest = i; }
             });
-            count.textContent = (closest + 1) + ' / ' + total;
+            if (count) count.textContent = (closest + 1) + ' / ' + total;
           }
        
           track.addEventListener('scroll', updateUI);
@@ -339,6 +352,16 @@
        
         document.addEventListener('DOMContentLoaded', loadRecentVehicles);
       </script>
+
+
+
+
+
+
+
+
+
+
        
       <style>
       .home-just-in-section {
