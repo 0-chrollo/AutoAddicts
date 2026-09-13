@@ -213,14 +213,14 @@
       <!-- PocketBase SDK -->
       <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.21.3/dist/pocketbase.umd.js"></script>
       <script>
-        const pb = new PocketBase('http://127.0.0.1:8090');
-       
+        const pb = new PocketBase('https://zca4uvbsikp5qq2.ba7w.pocketbasecloud.com');
+      
         function escapeHtml(str) {
           return String(str || '').replace(/[&<>'"]/g, tag => ({
             '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
           }[tag] || tag));
         }
-       
+      
         function renderSkeletonCard() {
           return `
             <div class="card skeleton-card" style="height: 100%;">
@@ -234,7 +234,7 @@
             </div>
           `;
         }
-       
+      
         function renderCard(vehicle) {
           let imageUrl = 'cars/maincar.jpeg';
           if (vehicle.main_image) {
@@ -242,11 +242,11 @@
           } else if (vehicle.images && vehicle.images.length > 0) {
             imageUrl = pb.files.getUrl(vehicle, vehicle.images[0]);
           }
-       
+      
           const titleText = `${vehicle.make || ''} ${vehicle.model || ''} ${vehicle.year || ''}`.trim();
           const price = vehicle.price ? Number(vehicle.price).toLocaleString('en-US') : '0';
           const mileage = vehicle.mileage ? Number(vehicle.mileage).toLocaleString('en-US') + ' KM' : '';
-       
+      
           return `
             <a class="card" href="vehicle-details.html?id=${vehicle.id}">
               <div class="card-image" style="background-image: url('${imageUrl}')">
@@ -272,26 +272,24 @@
             </a>
           `;
         }
-       
+      
         async function loadRecentVehicles() {
           const track = document.getElementById('track');
           if (!track) return;
           
-          // Show skeleton loaders immediately
           track.innerHTML = Array(4).fill(0).map(() => `<div class="home-ji-item">${renderSkeletonCard()}</div>`).join('');
-       
+      
           try {
-            // Limit to 7 vehicles max
             const records = await pb.collection('vehicles').getList(1, 7, {
               sort: '-created',
             });
             const vehicles = records.items || [];
-       
+      
             if (vehicles.length === 0) {
               track.innerHTML = '<p style="padding: 20px;">No vehicles found.</p>';
               return;
             }
-       
+      
             track.innerHTML = vehicles.map(car => `<div class="home-ji-item">${renderCard(car)}</div>`).join('');
             initCarousel();
           } catch (error) {
@@ -299,7 +297,7 @@
             track.innerHTML = '<p style="padding: 20px;">Unable to load vehicles at this time.</p>';
           }
         }
-       
+      
         function initCarousel() {
           const track = document.getElementById('track');
           const thumb = document.getElementById('thumb');
@@ -310,33 +308,38 @@
           
           const cards = track.querySelectorAll('.home-ji-item');
           const total = cards.length;
-       
+      
           if (total === 0) return;
-       
+      
           function scrollByCard(direction) {
             const cardWidth = cards[0].offsetWidth + 18;
             track.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
           }
-       
+      
           if (arrowPrev && arrowNext) {
-            // Prevent stacking multiple event listeners if initCarousel runs more than once
             arrowPrev.replaceWith(arrowPrev.cloneNode(true));
             arrowNext.replaceWith(arrowNext.cloneNode(true));
             
             document.getElementById('arrowPrev').addEventListener('click', () => scrollByCard(-1));
             document.getElementById('arrowNext').addEventListener('click', () => scrollByCard(1));
           }
-       
+      
           function updateUI() {
             const freshArrowPrev = document.getElementById('arrowPrev');
             const freshArrowNext = document.getElementById('arrowNext');
             const maxScroll = track.scrollWidth - track.clientWidth;
-            const pct = maxScroll > 0 ? track.scrollLeft / maxScroll : 0;
-            if (thumb) thumb.style.width = Math.max(20, pct * 100) + '%';
-       
+            
+            if (thumb) {
+              const visibleRatio = track.clientWidth / track.scrollWidth;
+              const thumbWidth = Math.max(15, visibleRatio * 100);
+              const thumbTranslate = maxScroll > 0 ? (track.scrollLeft / maxScroll) * (100 - thumbWidth) : 0;
+              thumb.style.width = thumbWidth + '%';
+              thumb.style.transform = `translateX(${thumbTranslate}%)`;
+            }
+      
             if (freshArrowPrev) freshArrowPrev.disabled = track.scrollLeft <= 0;
             if (freshArrowNext) freshArrowNext.disabled = track.scrollLeft >= maxScroll - 1;
-       
+      
             let closest = 0, minDist = Infinity;
             cards.forEach((c, i) => {
               const dist = Math.abs(c.getBoundingClientRect().left - track.getBoundingClientRect().left);
@@ -344,16 +347,14 @@
             });
             if (count) count.textContent = (closest + 1) + ' / ' + total;
           }
-       
+      
           track.addEventListener('scroll', updateUI);
           window.addEventListener('resize', updateUI);
           updateUI();
         }
-       
+      
         document.addEventListener('DOMContentLoaded', loadRecentVehicles);
       </script>
-
-
 
 
 

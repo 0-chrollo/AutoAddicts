@@ -342,8 +342,8 @@
           <div class="form-field"><label>Make</label><input type="text" id="fMake" required></div>
           <div class="form-field"><label>Model</label><input type="text" id="fModel" required></div>
           <div class="form-field"><label>Year</label><input type="number" id="fYear" required></div>
-          <div class="form-field"><label>Price (R)</label><input type="text" id="fPrice" placeholder="e.g. 235,000" inputmode="numeric" required></div>
-          <div class="form-field"><label>Mileage (KM)</label><input type="text" id="fMileage" placeholder="e.g. 62,000" inputmode="numeric" required></div>
+          <div class="form-field"><label>Price (R)</label><input type="number" id="fPrice" required></div>
+          <div class="form-field"><label>Mileage (KM)</label><input type="number" id="fMileage" required></div>
           <div class="form-field"><label>Colour</label><input type="text" id="fColour"></div>
         </div>
 
@@ -382,8 +382,8 @@
             <label>Service History</label>
             <select id="fServiceHistory">
               <option value="">Select</option>
-              <option value="Full">Full</option>
-              <option value="Partial">Partial</option>
+              <option value="Full Service History">Full</option>
+              <option value="Partial Service History">Partial</option>
               <option value="None">None</option>
             </select>
           </div>
@@ -443,8 +443,6 @@
   </div>
 </div>
 
-
-
 <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.21.3/dist/pocketbase.umd.js"></script>
 <script>
   const pb = new PocketBase('https://zca4uvbsikp5qq2.ba7w.pocketbasecloud.com');
@@ -453,28 +451,35 @@
     window.location.href = 'admin-login.html';
   }
 
-  document.getElementById('logoutBtn').addEventListener('click', () => {
-    pb.authStore.clear();
-    window.location.href = 'admin-login.html';
-  });
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      pb.authStore.clear();
+      window.location.href = 'admin-login.html';
+    });
+  }
 
-  document.getElementById('sidebarToggle').addEventListener('click', () => {
-    document.getElementById('sidebar').classList.toggle('open');
-  });
+  const sidebarToggle = document.getElementById('sidebarToggle');
+  if (sidebarToggle) {
+    sidebarToggle.addEventListener('click', () => {
+      const sidebar = document.getElementById('sidebar');
+      if (sidebar) sidebar.classList.toggle('open');
+    });
+  }
 
   const FEATURE_OPTIONS = [
     'Bluetooth', 'Navigation', 'Reverse Camera', 'Cruise Control',
     'Air Conditioning', 'Electric Windows', 'Alarm/Immobiliser',
     'Leather Seats', 'Sunroof', 'Parking Sensors', 'ABS', 'Airbags',
-    'Alloy Wheels', 'Tow Bar'
+    'Alloy Wheels', 'Towbar'
   ];
 
   let allVehicles = [];
-  let editingVehicle = null;         // full record being edited, or null when adding
-  let existingImages = [];         // filenames already saved on this vehicle
-  let removedImages = [];          // filenames marked for deletion on save
-  let newImageFiles = [];          // File objects queued to upload on save
-  let mainImageFilename = '';      // chosen main image filename, or 'NEW:<index>' for a pending new upload
+  let editingVehicle = null;            
+  let existingImages = [];            
+  let removedImages = [];             
+  let newImageFiles = [];             
+  let mainImageFilename = '';       
 
   // ---------- Table rendering ----------
 
@@ -482,7 +487,7 @@
     const body = document.getElementById('vehicleTableBody');
 
     if (vehicles.length === 0) {
-      body.innerHTML = `<tr><td colspan="6"><div class="empty-state">No vehicles yet. Click "Add Vehicle" to get started.</div></td></tr>`;
+      body.innerHTML = `<tr><td colspan="6"><div class="empty-state" style="text-align:center; padding:30px; color:#888;">No vehicles yet. Click "Add Vehicle" to get started.</div></td></tr>`;
       return;
     }
 
@@ -493,18 +498,18 @@
 
       return `
         <tr>
-          <td><div class="table-thumb" style="background-image:url('${thumbUrl}')"></div></td>
+          <td><div class="table-thumb" style="width:50px; height:40px; background-size:cover; background-position:center; background-image:url('${thumbUrl}'); border-radius:4px;"></div></td>
           <td>
-            <div class="table-name">${v.make} ${v.model}</div>
-            <div class="table-sub">${v.body_type || ''} ${v.body_type && v.transmission ? '&middot;' : ''} ${v.transmission || ''}</div>
+            <div class="table-name" style="font-weight:600; color:#112532;">${v.make} ${v.model}</div>
+            <div class="table-sub" style="font-size:12px; color:#666;">${v.body_type || ''} ${v.body_type && v.transmission ? '&middot;' : ''} ${v.transmission || ''}</div>
           </td>
           <td>R${Number(v.price || 0).toLocaleString('en-US')}</td>
           <td>${Number(v.mileage || 0).toLocaleString('en-US')} KM</td>
           <td>${v.year || ''}</td>
           <td>
-            <div class="table-actions">
-              <button class="icon-btn" onclick="openEditModal('${v.id}')" aria-label="Edit"><i class="fas fa-pen"></i></button>
-              <button class="icon-btn danger" onclick="deleteVehicle('${v.id}')" aria-label="Delete"><i class="fas fa-trash"></i></button>
+            <div class="table-actions" style="display:flex; gap:6px;">
+              <button class="icon-btn" onclick="openEditModal('${v.id}')" aria-label="Edit" style="background:none; border:none; cursor:pointer; color:#189b8a;"><i class="fas fa-pen"></i></button>
+              <button class="icon-btn danger" onclick="deleteVehicle('${v.id}')" aria-label="Delete" style="background:none; border:none; cursor:pointer; color:#b00020;"><i class="fas fa-trash"></i></button>
             </div>
           </td>
         </tr>
@@ -519,7 +524,7 @@
     } catch (err) {
       console.error('Failed to load vehicles:', err);
       document.getElementById('vehicleTableBody').innerHTML =
-        `<tr><td colspan="6"><div class="empty-state">Could not load vehicles.</div></td></tr>`;
+        `<tr><td colspan="6"><div class="empty-state" style="text-align:center; padding:30px; color:#888;">Could not load vehicles.</div></td></tr>`;
     }
   }
 
@@ -602,13 +607,11 @@
     renderImageGrid();
   }
 
-  // ---------- Robust Client-Side Image Compression Helper ----------
+  // ---------- Image Compression Helper ----------
 
   function compressImageFile(file, maxWidth = 1200, maxHeight = 1200, quality = 0.8) {
     return new Promise((resolve) => {
-      if (!file || !file.type.startsWith('image/')) {
-        return resolve(file);
-      }
+      if (!file || !file.type.startsWith('image/')) return resolve(file);
 
       const reader = new FileReader();
       reader.onerror = () => resolve(file);
@@ -636,17 +639,13 @@
           canvas.height = height;
 
           const ctx = canvas.getContext('2d');
-          if (!ctx) {
-            return resolve(file);
-          }
+          if (!ctx) return resolve(file);
 
           ctx.drawImage(img, 0, 0, width, height);
 
           canvas.toBlob(
             (blob) => {
-              if (!blob) {
-                return resolve(file);
-              }
+              if (!blob) return resolve(file);
               const compressedFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", {
                 type: 'image/jpeg',
                 lastModified: Date.now()
@@ -676,13 +675,11 @@
         const optimizedFile = await compressImageFile(file);
         newImageFiles.push(optimizedFile);
       } catch (err) {
-        console.warn('Compression failed, using original file:', err);
         newImageFiles.push(file);
       }
     }
 
     uploadZone.innerHTML = originalHTML;
-
     if (!mainImageFilename && newImageFiles.length) mainImageFilename = 'NEW:0';
     renderImageGrid();
     e.target.value = '';
@@ -758,49 +755,101 @@
 
     const selectedFeatures = Array.from(document.querySelectorAll('#featureChecks input:checked')).map(cb => cb.value);
 
-    const fd = new FormData();
-    fd.append('make', document.getElementById('fMake').value);
-    fd.append('model', document.getElementById('fModel').value);
-    fd.append('year', document.getElementById('fYear').value);
-    fd.append('price', document.getElementById('fPrice').value);
-    fd.append('mileage', document.getElementById('fMileage').value);
-
-    // Only send optional fields when they actually have a value.
-    // Sending an empty string against a Select/URL/Number field type
-    // can trigger a 400 even when the field itself isn't marked required.
-    const appendIfPresent = (key, value) => {
-      if (value !== '' && value !== null && value !== undefined) fd.append(key, value);
-    };
-
-    appendIfPresent('colour', document.getElementById('fColour').value);
-    appendIfPresent('transmission', document.getElementById('fTransmission').value);
-    appendIfPresent('fuel_type', document.getElementById('fFuelType').value);
-    appendIfPresent('body_type', document.getElementById('fBodyType').value);
-    appendIfPresent('service_history', document.getElementById('fServiceHistory').value);
-    appendIfPresent('previous_owners', document.getElementById('fPreviousOwners').value);
-    appendIfPresent('youtube_link', document.getElementById('fYoutubeLink').value);
-    appendIfPresent('description', document.getElementById('fDescription').value);
-    selectedFeatures.forEach(f => fd.append('features', f));
-
-    newImageFiles.forEach(file => fd.append('images', file));
-    removedImages.forEach(filename => fd.append('images-', filename));
+    const rawPrice = document.getElementById('fPrice').value.replace(/[^0-9.]/g, '');
+    const rawMileage = document.getElementById('fMileage').value.replace(/[^0-9.]/g, '');
+    const rawYear = document.getElementById('fYear').value.replace(/[^0-9]/g, '');
+    const rawPrevOwners = document.getElementById('fPreviousOwners').value.replace(/[^0-9]/g, '');
 
     try {
       let savedVehicle;
-      if (editingVehicle) {
-        savedVehicle = await pb.collection('vehicles').update(editingVehicle.id, fd);
+
+      if (newImageFiles.length > 0 || removedImages.length > 0) {
+        const fd = new FormData();
+        fd.append('make', document.getElementById('fMake').value);
+        fd.append('model', document.getElementById('fModel').value);
+
+        const appendIfPresent = (key, value) => {
+          if (value !== '' && value !== null && value !== undefined && !isNaN(value)) {
+            fd.append(key, value);
+          }
+        };
+
+        appendIfPresent('year', rawYear);
+        appendIfPresent('price', rawPrice);
+        appendIfPresent('mileage', rawMileage);
+        appendIfPresent('previous_owners', rawPrevOwners);
+
+        fd.append('colour', document.getElementById('fColour').value);
+        fd.append('transmission', document.getElementById('fTransmission').value);
+        fd.append('fuel_type', document.getElementById('fFuelType').value);
+        fd.append('body_type', document.getElementById('fBodyType').value);
+        fd.append('service_history', document.getElementById('fServiceHistory').value);
+        fd.append('youtube_link', document.getElementById('fYoutubeLink').value);
+        fd.append('description', document.getElementById('fDescription').value);
+        
+        selectedFeatures.forEach(f => fd.append('features', f));
+
+        newImageFiles.forEach(file => fd.append('images', file));
+        removedImages.forEach(filename => fd.append('images-', filename));
+
+        if (editingVehicle) {
+          try {
+            savedVehicle = await pb.collection('vehicles').update(editingVehicle.id, fd);
+          } catch (updateErr) {
+            if (updateErr.status === 404) {
+              console.warn('Record not found (404). Creating new record instead.');
+              editingVehicle = null;
+              savedVehicle = await pb.collection('vehicles').create(fd);
+            } else {
+              throw updateErr;
+            }
+          }
+        } else {
+          savedVehicle = await pb.collection('vehicles').create(fd);
+        }
       } else {
-        savedVehicle = await pb.collection('vehicles').create(fd);
+        const payload = {
+          make: document.getElementById('fMake').value,
+          model: document.getElementById('fModel').value,
+          year: rawYear ? Number(rawYear) : null,
+          price: rawPrice ? Number(rawPrice) : null,
+          mileage: rawMileage ? Number(rawMileage) : null,
+          previous_owners: rawPrevOwners ? Number(rawPrevOwners) : null,
+          colour: document.getElementById('fColour').value,
+          transmission: document.getElementById('fTransmission').value,
+          fuel_type: document.getElementById('fFuelType').value,
+          body_type: document.getElementById('fBodyType').value,
+          service_history: document.getElementById('fServiceHistory').value,
+          youtube_link: document.getElementById('fYoutubeLink').value,
+          description: document.getElementById('fDescription').value,
+          features: selectedFeatures
+        };
+
+        if (editingVehicle) {
+          try {
+            savedVehicle = await pb.collection('vehicles').update(editingVehicle.id, payload);
+          } catch (updateErr) {
+            if (updateErr.status === 404) {
+              console.warn('Record not found (404). Creating new record instead.');
+              editingVehicle = null;
+              savedVehicle = await pb.collection('vehicles').create(payload);
+            } else {
+              throw updateErr;
+            }
+          }
+        } else {
+          savedVehicle = await pb.collection('vehicles').create(payload);
+        }
       }
 
       let resolvedMain = '';
       if (mainImageFilename.startsWith('NEW:')) {
         const newIndex = parseInt(mainImageFilename.split(':')[1], 10);
         const uploadedCount = newImageFiles.length;
-        const startOfNew = savedVehicle.images.length - uploadedCount;
+        const startOfNew = (savedVehicle.images || []).length - uploadedCount;
         resolvedMain = savedVehicle.images[startOfNew + newIndex] || savedVehicle.images[0] || '';
       } else {
-        resolvedMain = mainImageFilename || savedVehicle.images[0] || '';
+        resolvedMain = mainImageFilename || (savedVehicle.images ? savedVehicle.images[0] : '') || '';
       }
 
       if (resolvedMain && resolvedMain !== savedVehicle.main_image) {
@@ -810,10 +859,8 @@
       closeModal();
       loadVehicles();
     } catch (err) {
-      // PocketBase puts the actual per-field validation reasons in err.data,
-      // not in err.message — surface that instead of a generic alert.
-      console.error('Failed to save vehicle:', err);
-      console.error('Validation details:', err.data);
+      console.error('Failed to save vehicle. Full error object:', err);
+      console.error('PocketBase validation details:', err.data);
 
       let detail = 'Check the console for details.';
       if (err.data && err.data.data) {
@@ -822,7 +869,6 @@
           .join('\n');
         if (fieldErrors) detail = fieldErrors;
       }
-
       alert(`Something went wrong saving this vehicle:\n\n${detail}`);
     } finally {
       saveBtn.disabled = false;
@@ -901,9 +947,8 @@
         renderImportPreview();
       },
       error: (err) => {
-        console.error('CSV parse error:', err);
         document.getElementById('importPreview').innerHTML =
-          '<p style="color:#b00020; font-size:13px;">Could not read that CSV file. Please check the format and try again.</p>';
+          '<p style="color:#b00020; font-size:13px;">Could not read that CSV file.</p>';
       }
     });
   });
@@ -913,7 +958,7 @@
     const confirmBtn = document.getElementById('importConfirmBtn');
 
     if (parsedRows.length === 0) {
-      preview.innerHTML = '<p style="color:#b00020; font-size:13px;">No valid rows found. Make sure your CSV has at least "make" and "model" columns filled in.</p>';
+      preview.innerHTML = '<p style="color:#b00020; font-size:13px;">No valid rows found.</p>';
       confirmBtn.style.display = 'none';
       return;
     }
@@ -926,7 +971,6 @@
       <div style="background:#f4f6f7; border-radius:8px; padding:14px; margin-bottom:10px;">
         <strong style="font-size:14px; color:#112532;">${parsedRows.length} vehicle${parsedRows.length === 1 ? '' : 's'} found</strong>
         <div style="margin-top:8px;">${rowsHtml}</div>
-        ${parsedRows.length > 5 ? `<div style="font-size:12px; color:#888; padding-top:8px;">+ ${parsedRows.length - 5} more</div>` : ''}
       </div>
     `;
     confirmBtn.style.display = 'flex';
@@ -935,7 +979,6 @@
   document.getElementById('importConfirmBtn').addEventListener('click', async () => {
     const btn = document.getElementById('importConfirmBtn');
     btn.disabled = true;
-
     let successCount = 0;
     let failCount = 0;
 
@@ -964,15 +1007,13 @@
         await pb.collection('vehicles').create(payload);
         successCount++;
       } catch (err) {
-        console.error(`Failed to import row ${i + 1}:`, err);
         failCount++;
       }
     }
 
     btn.disabled = false;
     btn.innerHTML = '<i class="fas fa-check"></i> Import Vehicles';
-
-    alert(`Import complete: ${successCount} added${failCount ? `, ${failCount} failed (check console)` : ''}.`);
+    alert(`Import complete: ${successCount} added${failCount ? `, ${failCount} failed` : ''}.`);
     document.getElementById('importOverlay').classList.remove('open');
     loadVehicles();
   });
@@ -984,5 +1025,6 @@
 
   loadVehicles();
 </script>
+ 
 </body>
 </html>
