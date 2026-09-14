@@ -236,7 +236,7 @@
         }
       
         function renderCard(vehicle) {
-          let imageUrl = 'cars/maincar.jpeg';
+          let imageUrl = 'cars/defaultcarbg.jpg';
           if (vehicle.main_image) {
             imageUrl = pb.files.getUrl(vehicle, vehicle.main_image);
           } else if (vehicle.images && vehicle.images.length > 0) {

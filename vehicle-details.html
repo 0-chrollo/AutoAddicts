@@ -179,7 +179,8 @@
       width: 100%;
       padding-bottom: 56%;
       background: #ececec;
-      border-radius: 6px;
+      border-radius: 3px;
+
       overflow: hidden;
     }
 
@@ -904,7 +905,7 @@
 
   mediaItems = imageFiles.length > 0
     ? imageFiles.map(img => ({ type: 'image', url: pb.files.getUrl(vehicle, img) }))
-    : [{ type: 'image', url: 'cars/maincar.jpeg' }];
+    : [{ type: 'image', url: 'cars/defaultcarbg.jpg' }];
   
     const ytEmbed = getYouTubeEmbedUrl(vehicle.youtube_link);
     if (ytEmbed) {
@@ -913,7 +914,7 @@
   
     const thumbsHtml = mediaItems.map((item, i) => {
       const isVid = item.type === 'video';
-      const thumbSrc = isVid ? (vehicle.images && vehicle.images.length ? pb.files.getUrl(vehicle, vehicle.images[0]) : 'cars/maincar.jpeg') : item.url;
+      const thumbSrc = isVid ? (vehicle.images && vehicle.images.length ? pb.files.getUrl(vehicle, vehicle.images[0]) : 'cars/defaultcarbg.jpg') : item.url;
       return `
         <div class="vd-thumb ${i === 0 ? 'active' : ''}" data-index="${i}">
           <img src="${thumbSrc}" alt="${vehicle.make} ${vehicle.model} media ${i + 1}">

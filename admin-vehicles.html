@@ -502,7 +502,7 @@
     body.innerHTML = vehicles.map(v => {
       const thumbUrl = v.main_image
         ? pb.files.getUrl(v, v.main_image)
-        : (v.images && v.images.length ? pb.files.getUrl(v, v.images[0]) : 'cars/maincar.jpeg');
+        : (v.images && v.images.length ? pb.files.getUrl(v, v.images[0]) : 'cars/defaultcarbg.jpg');
 
       return `
         <tr>
