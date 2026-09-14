@@ -29,13 +29,6 @@ a {
 
 
 
-
-
-
-
-
-
-
 #gold{
     font-size: 15  px;
   color: rgb(255, 183, 0);
@@ -737,6 +730,7 @@ border-radius: 50px;
         position: relative;
         padding: 80px 24px; /* ← section top/bottom & left/right */
         background: url('vims/Carbg.webp') center/cover no-repeat fixed;
+        background-attachment:scroll;
         font-family: 'Barlow', sans-serif;
       }
       .body-types::before {
