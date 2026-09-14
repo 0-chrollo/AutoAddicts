@@ -829,7 +829,7 @@
     const vehicleLabel = `${vehicle.make} ${vehicle.model} ${vehicle.year} (${priceFormatted})`;
     const imageUrl = vehicle.images && vehicle.images.length
       ? pb.files.getUrl(vehicle, vehicle.images[0])
-      : 'cars/maincar.jpeg';
+      : 'cars/defaultcarbg.jpg';
   
     const field = document.getElementById('vdFormVehicleField');
     const summary = document.getElementById('vdFormVehicleSummary');
@@ -1070,7 +1070,7 @@
   function renderSimCard(vehicle) {
     const imageUrl = vehicle.images && vehicle.images.length
       ? pb.files.getUrl(vehicle, vehicle.images[0])
-      : 'cars/defaultcarbg.jp g';
+      : 'cars/defaultcarbg.jpg';
   
     const mileageText = vehicle.mileage ? `${Number(vehicle.mileage).toLocaleString('en-US')} KM` : '';
     const yearText = vehicle.year || '';
