@@ -469,7 +469,7 @@
 
       <label class="image-upload-zone" style="margin-bottom:16px;">
         <i class="fas fa-file-csv"></i> Click to choose a CSV or Excel file
-        <input type="file" id="csvFileInput" accept=".csv, .xlsx, .xls">
+        <input type="file" id="csvFileInput" accept=".csv, .xlsx, .xls"
       </label>
 
       <div id="importPreview"></div>
@@ -482,13 +482,13 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.21.3/dist/pocketbase.umd.js"></script>
+
 <script>
   const pb = new PocketBase('https://zca4uvbsikp5qq2.ba7w.pocketbasecloud.com');
 
   if (!pb.authStore.isValid) {
     window.location.href = 'admin-login.html';
   }
-
 
   const logoutBtn = document.getElementById('logoutBtn');
   if (logoutBtn) {
@@ -499,25 +499,25 @@
   }
 
   const sidebar = document.getElementById('sidebar');
-const sidebarToggle = document.getElementById('sidebarToggle');
-const sidebarOverlay = document.getElementById('sidebarOverlay');
+  const sidebarToggle = document.getElementById('sidebarToggle');
+  const sidebarOverlay = document.getElementById('sidebarOverlay');
 
-function openSidebar() {
-  sidebar.classList.add('open');
-  sidebarOverlay.classList.add('active');
-}
+  function openSidebar() {
+    sidebar.classList.add('open');
+    sidebarOverlay.classList.add('active');
+  }
 
-function closeSidebar() {
-  sidebar.classList.remove('open');
-  sidebarOverlay.classList.remove('active');
-}
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    sidebarOverlay.classList.remove('active');
+  }
 
-sidebarToggle.addEventListener('click', () => {
-  sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
-});
-
-sidebarOverlay.addEventListener('click', closeSidebar);
-
+  if (sidebarToggle) {
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+    });
+  }
+  if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
 
   const FEATURE_OPTIONS = [
     'Bluetooth', 'Navigation', 'Reverse Camera', 'Cruise Control',
@@ -533,6 +533,135 @@ sidebarOverlay.addEventListener('click', closeSidebar);
   let newImageFiles = [];             
   let mainImageFilename = '';         
 
+  // ---------- Multi-Select & Bulk Delete State ----------
+  let selectedVehicleIds = new Set();
+
+  // Auto-inject master select-all checkbox into the table header if present
+  const theadTr = document.querySelector('table thead tr');
+  if (theadTr && !theadTr.querySelector('.select-all-th')) {
+    const th = document.createElement('th');
+    th.className = 'select-all-th';
+    th.style.width = '40px';
+    th.style.textAlign = 'center';
+    th.innerHTML = `<input type="checkbox" id="selectAllMaster" onchange="toggleSelectAll(this)" aria-label="Select all vehicles">`;
+    theadTr.insertBefore(th, theadTr.firstChild);
+  }
+
+  function updateBulkDeleteUI() {
+    let bulkBar = document.getElementById('bulkActionBar');
+    if (!bulkBar) {
+      bulkBar = document.createElement('div');
+      bulkBar.id = 'bulkActionBar';
+      bulkBar.style.cssText = 'display:none; align-items:center; justify-content:space-between; background:#112532; color:#fff; padding:10px 16px; border-radius:8px; margin-bottom:15px; font-size:14px; box-shadow:0 4px 12px rgba(0,0,0,0.15);';
+      bulkBar.innerHTML = `
+        <span id="bulkSelectedCount">0 vehicles selected</span>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <button type="button" onclick="selectAllFiltered()" style="background:rgba(255,255,255,0.15); border:none; color:#fff; padding:6px 12px; border-radius:4px; cursor:pointer; font-size:13px;">Select All</button>
+          <button type="button" onclick="clearSelection()" style="background:rgba(255,255,255,0.15); border:none; color:#fff; padding:6px 12px; border-radius:4px; cursor:pointer; font-size:13px;">Deselect All</button>
+          <button type="button" onclick="bulkDeleteVehicles()" style="background:#b00020; border:none; color:#fff; padding:6px 14px; border-radius:4px; cursor:pointer; font-size:13px; font-weight:600;"><i class="fas fa-trash"></i> Delete Selected</button>
+        </div>
+      `;
+      const tableCard = document.querySelector('.table-card') || document.querySelector('table')?.parentElement;
+      if (tableCard) {
+        tableCard.parentNode.insertBefore(bulkBar, tableCard);
+      }
+    }
+
+    if (selectedVehicleIds.size > 0) {
+      bulkBar.style.display = 'flex';
+      document.getElementById('bulkSelectedCount').textContent = `${selectedVehicleIds.size} vehicle${selectedVehicleIds.size === 1 ? '' : 's'} selected`;
+    } else {
+      bulkBar.style.display = 'none';
+    }
+
+    // Sync master checkbox state
+    const masterCb = document.getElementById('selectAllMaster');
+    if (masterCb && allVehicles.length > 0) {
+      const allSelected = allVehicles.every(v => selectedVehicleIds.has(v.id));
+      masterCb.checked = allSelected;
+      masterCb.indeterminate = selectedVehicleIds.size > 0 && !allSelected;
+    }
+  }
+
+  window.toggleVehicleSelection = function(id, isChecked) {
+    if (isChecked) {
+      selectedVehicleIds.add(id);
+    } else {
+      selectedVehicleIds.delete(id);
+    }
+    updateBulkDeleteUI();
+  };
+
+  window.toggleSelectAll = function(masterCheckbox) {
+    const visibleCheckboxes = document.querySelectorAll('.row-checkbox');
+    visibleCheckboxes.forEach(cb => {
+      cb.checked = masterCheckbox.checked;
+      if (masterCheckbox.checked) {
+        selectedVehicleIds.add(cb.value);
+      } else {
+        selectedVehicleIds.delete(cb.value);
+      }
+    });
+    updateBulkDeleteUI();
+  };
+
+  window.selectAllFiltered = function() {
+    const visibleCheckboxes = document.querySelectorAll('.row-checkbox');
+    visibleCheckboxes.forEach(cb => {
+      cb.checked = true;
+      selectedVehicleIds.add(cb.value);
+    });
+    const masterCb = document.getElementById('selectAllMaster');
+    if (masterCb) masterCb.checked = true;
+    updateBulkDeleteUI();
+  };
+
+  window.clearSelection = function() {
+    selectedVehicleIds.clear();
+    const checkboxes = document.querySelectorAll('.row-checkbox');
+    checkboxes.forEach(cb => cb.checked = false);
+    const masterCb = document.getElementById('selectAllMaster');
+    if (masterCb) {
+      masterCb.checked = false;
+      masterCb.indeterminate = false;
+    }
+    updateBulkDeleteUI();
+  };
+
+  window.bulkDeleteVehicles = async function() {
+    if (selectedVehicleIds.size === 0) return;
+    const count = selectedVehicleIds.size;
+    if (!confirm(`Are you sure you want to delete ${count} selected vehicle${count === 1 ? '' : 's'}? This action cannot be undone.`)) return;
+
+    const idsToDelete = Array.from(selectedVehicleIds);
+    let successCount = 0;
+    let failCount = 0;
+
+    const bulkBtn = document.querySelector('#bulkActionBar button[onclick="bulkDeleteVehicles()"]');
+    if (bulkBtn) {
+      bulkBtn.disabled = true;
+      bulkBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+    }
+
+    for (const id of idsToDelete) {
+      try {
+        await pb.collection('vehicles').delete(id);
+        successCount++;
+        selectedVehicleIds.delete(id);
+      } catch (err) {
+        failCount++;
+        console.error(`Failed to delete vehicle ID ${id}:`, err);
+      }
+    }
+
+    if (bulkBtn) {
+      bulkBtn.disabled = false;
+      bulkBtn.innerHTML = '<i class="fas fa-trash"></i> Delete Selected';
+    }
+
+    loadVehicles();
+  };
+
   // ---------- Numeric Input Sanitization Helper ----------
 
   function cleanNumericInput(value) {
@@ -547,7 +676,8 @@ sidebarOverlay.addEventListener('click', closeSidebar);
     const body = document.getElementById('vehicleTableBody');
 
     if (vehicles.length === 0) {
-      body.innerHTML = `<tr><td colspan="6"><div class="empty-state" style="text-align:center; padding:30px; color:#888;">No vehicles yet. Click "Add Vehicle" to get started.</div></td></tr>`;
+      body.innerHTML = `<tr><td colspan="7"><div class="empty-state" style="text-align:center; padding:30px; color:#888;">No vehicles found. Click "Add Vehicle" to get started.</div></td></tr>`;
+      updateBulkDeleteUI();
       return;
     }
 
@@ -555,9 +685,13 @@ sidebarOverlay.addEventListener('click', closeSidebar);
       const thumbUrl = v.main_image
         ? pb.files.getUrl(v, v.main_image)
         : (v.images && v.images.length ? pb.files.getUrl(v, v.images[0]) : 'cars/defaultcarbg.jpg');
+      const isChecked = selectedVehicleIds.has(v.id);
 
       return `
         <tr>
+          <td style="width: 40px; text-align: center;">
+            <input type="checkbox" class="row-checkbox" value="${v.id}" ${isChecked ? 'checked' : ''} onchange="toggleVehicleSelection('${v.id}', this.checked)" aria-label="Select vehicle">
+          </td>
           <td><div class="table-thumb" style="width:50px; height:40px; background-size:cover; background-position:center; background-image:url('${thumbUrl}'); border-radius:4px;"></div></td>
           <td>
             <div class="table-name" style="font-weight:600; color:#112532;">${v.make} ${v.model}</div>
@@ -575,6 +709,8 @@ sidebarOverlay.addEventListener('click', closeSidebar);
         </tr>
       `;
     }).join('');
+
+    updateBulkDeleteUI();
   }
 
   async function loadVehicles() {
@@ -584,7 +720,7 @@ sidebarOverlay.addEventListener('click', closeSidebar);
     } catch (err) {
       console.error('Failed to load vehicles:', err);
       document.getElementById('vehicleTableBody').innerHTML =
-        `<tr><td colspan="6"><div class="empty-state" style="text-align:center; padding:30px; color:#888;">Could not load vehicles.</div></td></tr>`;
+        `<tr><td colspan="7"><div class="empty-state" style="text-align:center; padding:30px; color:#888;">Could not load vehicles.</div></td></tr>`;
     }
   }
 
@@ -722,31 +858,35 @@ sidebarOverlay.addEventListener('click', closeSidebar);
     });
   }
 
-  document.getElementById('fImages').addEventListener('change', async (e) => {
-    const rawFiles = Array.from(e.target.files);
-    if (rawFiles.length === 0) return;
+  const fImagesInput = document.getElementById('fImages');
+  if (fImagesInput) {
+    fImagesInput.addEventListener('change', async (e) => {
+      const rawFiles = Array.from(e.target.files);
+      if (rawFiles.length === 0) return;
 
-    const uploadZone = document.querySelector('.image-upload-zone');
-    const originalHTML = uploadZone.innerHTML;
-    uploadZone.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Optimizing images...';
+      const uploadZone = document.querySelector('.image-upload-zone');
+      const originalHTML = uploadZone ? uploadZone.innerHTML : '';
+      if (uploadZone) uploadZone.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Optimizing images...';
 
-    for (const file of rawFiles) {
-      try {
-        const optimizedFile = await compressImageFile(file);
-        newImageFiles.push(optimizedFile);
-      } catch (err) {
-        newImageFiles.push(file);
+      for (const file of rawFiles) {
+        try {
+          const optimizedFile = await compressImageFile(file);
+          newImageFiles.push(optimizedFile);
+        } catch (err) {
+          newImageFiles.push(file);
+        }
       }
-    }
 
-    uploadZone.innerHTML = originalHTML;
-    if (!mainImageFilename && newImageFiles.length) mainImageFilename = 'NEW:0';
-    renderImageGrid();
-    e.target.value = '';
-  });
+      if (uploadZone) uploadZone.innerHTML = originalHTML;
+      if (!mainImageFilename && newImageFiles.length) mainImageFilename = 'NEW:0';
+      renderImageGrid();
+      e.target.value = '';
+    });
+  }
 
   function resetForm() {
-    document.getElementById('vehicleForm').reset();
+    const form = document.getElementById('vehicleForm');
+    if (form) form.reset();
     existingImages = [];
     removedImages = [];
     newImageFiles = [];
@@ -799,152 +939,151 @@ sidebarOverlay.addEventListener('click', closeSidebar);
     document.getElementById('modalOverlay').classList.remove('open');
   }
 
-  document.getElementById('addVehicleBtn').addEventListener('click', openAddModal);
-  document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
-  document.getElementById('cancelBtn').addEventListener('click', closeModal);
+  const addVehicleBtn = document.getElementById('addVehicleBtn');
+  if (addVehicleBtn) addVehicleBtn.addEventListener('click', openAddModal);
+  const modalCloseBtn = document.getElementById('modalCloseBtn');
+  if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
+  const cancelBtn = document.getElementById('cancelBtn');
+  if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
 
   // ---------- Save (create or update) ----------
 
-  document.getElementById('saveBtn').addEventListener('click', async () => {
-    const form = document.getElementById('vehicleForm');
-    if (!form.reportValidity()) return;
+  const saveBtn = document.getElementById('saveBtn');
+  if (saveBtn) {
+    saveBtn.addEventListener('click', async () => {
+      const form = document.getElementById('vehicleForm');
+      if (!form.reportValidity()) return;
 
-    const saveBtn = document.getElementById('saveBtn');
-    saveBtn.disabled = true;
-    saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
 
-    const selectedFeatures = Array.from(document.querySelectorAll('#featureChecks input:checked')).map(cb => cb.value);
+      const selectedFeatures = Array.from(document.querySelectorAll('#featureChecks input:checked')).map(cb => cb.value);
 
-    const rawPrice = cleanNumericInput(document.getElementById('fPrice').value);
-    const rawMileage = cleanNumericInput(document.getElementById('fMileage').value);
-    const rawYear = cleanNumericInput(document.getElementById('fYear').value);
-    const rawPrevOwners = cleanNumericInput(document.getElementById('fPreviousOwners').value);
+      const rawPrice = cleanNumericInput(document.getElementById('fPrice').value);
+      const rawMileage = cleanNumericInput(document.getElementById('fMileage').value);
+      const rawYear = cleanNumericInput(document.getElementById('fYear').value);
+      const rawPrevOwners = cleanNumericInput(document.getElementById('fPreviousOwners').value);
 
-    try {
-      let savedVehicle;
+      try {
+        let savedVehicle;
 
-      if (newImageFiles.length > 0 || removedImages.length > 0) {
-        const fd = new FormData();
-        fd.append('make', document.getElementById('fMake').value);
-        fd.append('model', document.getElementById('fModel').value);
+        if (newImageFiles.length > 0 || removedImages.length > 0) {
+          const fd = new FormData();
+          fd.append('make', document.getElementById('fMake').value);
+          fd.append('model', document.getElementById('fModel').value);
 
-        const appendIfPresent = (key, value) => {
-          if (value !== '' && value !== null && value !== undefined && !isNaN(value)) {
-            fd.append(key, value);
-          }
-        };
-
-        appendIfPresent('year', rawYear);
-        appendIfPresent('price', rawPrice);
-        appendIfPresent('mileage', rawMileage);
-        appendIfPresent('previous_owners', rawPrevOwners);
-
-        fd.append('colour', document.getElementById('fColour').value);
-        fd.append('transmission', document.getElementById('fTransmission').value);
-        fd.append('fuel_type', document.getElementById('fFuelType').value);
-        fd.append('body_type', document.getElementById('fBodyType').value);
-        fd.append('service_history', document.getElementById('fServiceHistory').value);
-        fd.append('youtube_link', document.getElementById('fYoutubeLink').value);
-        fd.append('description', document.getElementById('fDescription').value);
-        
-        selectedFeatures.forEach(f => fd.append('features', f));
-
-        newImageFiles.forEach(file => fd.append('images', file));
-        removedImages.forEach(filename => fd.append('images-', filename));
-
-        if (editingVehicle) {
-          try {
-            savedVehicle = await pb.collection('vehicles').update(editingVehicle.id, fd);
-          } catch (updateErr) {
-            if (updateErr.status === 404) {
-              console.warn('Record not found (404). Creating new record instead.');
-              editingVehicle = null;
-              savedVehicle = await pb.collection('vehicles').create(fd);
-            } else {
-              throw updateErr;
+          const appendIfPresent = (key, value) => {
+            if (value !== '' && value !== null && value !== undefined && !isNaN(value)) {
+              fd.append(key, value);
             }
+          };
+
+          appendIfPresent('year', rawYear);
+          appendIfPresent('price', rawPrice);
+          appendIfPresent('mileage', rawMileage);
+          appendIfPresent('previous_owners', rawPrevOwners);
+
+          fd.append('colour', document.getElementById('fColour').value);
+          fd.append('transmission', document.getElementById('fTransmission').value);
+          fd.append('fuel_type', document.getElementById('fFuelType').value);
+          fd.append('body_type', document.getElementById('fBodyType').value);
+          fd.append('service_history', document.getElementById('fServiceHistory').value);
+          fd.append('youtube_link', document.getElementById('fYoutubeLink').value);
+          fd.append('description', document.getElementById('fDescription').value);
+          
+          selectedFeatures.forEach(f => fd.append('features', f));
+
+          newImageFiles.forEach(file => fd.append('images', file));
+          removedImages.forEach(filename => fd.append('images-', filename));
+
+          if (editingVehicle) {
+            try {
+              savedVehicle = await pb.collection('vehicles').update(editingVehicle.id, fd);
+            } catch (updateErr) {
+              if (updateErr.status === 404) {
+                editingVehicle = null;
+                savedVehicle = await pb.collection('vehicles').create(fd);
+              } else {
+                throw updateErr;
+              }
+            }
+          } else {
+            savedVehicle = await pb.collection('vehicles').create(fd);
           }
         } else {
-          savedVehicle = await pb.collection('vehicles').create(fd);
-        }
-      } else {
-        const payload = {
-          make: document.getElementById('fMake').value,
-          model: document.getElementById('fModel').value,
-          year: rawYear ? Number(rawYear) : null,
-          price: rawPrice ? Number(rawPrice) : null,
-          mileage: rawMileage ? Number(rawMileage) : null,
-          previous_owners: rawPrevOwners ? Number(rawPrevOwners) : null,
-          colour: document.getElementById('fColour').value,
-          transmission: document.getElementById('fTransmission').value,
-          fuel_type: document.getElementById('fFuelType').value,
-          body_type: document.getElementById('fBodyType').value,
-          service_history: document.getElementById('fServiceHistory').value,
-          youtube_link: document.getElementById('fYoutubeLink').value,
-          description: document.getElementById('fDescription').value,
-          features: selectedFeatures
-        };
+          const payload = {
+            make: document.getElementById('fMake').value,
+            model: document.getElementById('fModel').value,
+            year: rawYear ? Number(rawYear) : null,
+            price: rawPrice ? Number(rawPrice) : null,
+            mileage: rawMileage ? Number(rawMileage) : null,
+            previous_owners: rawPrevOwners ? Number(rawPrevOwners) : null,
+            colour: document.getElementById('fColour').value,
+            transmission: document.getElementById('fTransmission').value,
+            fuel_type: document.getElementById('fFuelType').value,
+            body_type: document.getElementById('fBodyType').value,
+            service_history: document.getElementById('fServiceHistory').value,
+            youtube_link: document.getElementById('fYoutubeLink').value,
+            description: document.getElementById('fDescription').value,
+            features: selectedFeatures
+          };
 
-        if (editingVehicle) {
-          try {
-            savedVehicle = await pb.collection('vehicles').update(editingVehicle.id, payload);
-          } catch (updateErr) {
-            if (updateErr.status === 404) {
-              console.warn('Record not found (404). Creating new record instead.');
-              editingVehicle = null;
-              savedVehicle = await pb.collection('vehicles').create(payload);
-            } else {
-              throw updateErr;
+          if (editingVehicle) {
+            try {
+              savedVehicle = await pb.collection('vehicles').update(editingVehicle.id, payload);
+            } catch (updateErr) {
+              if (updateErr.status === 404) {
+                editingVehicle = null;
+                savedVehicle = await pb.collection('vehicles').create(payload);
+              } else {
+                throw updateErr;
+              }
             }
+          } else {
+            savedVehicle = await pb.collection('vehicles').create(payload);
           }
-        } else {
-          savedVehicle = await pb.collection('vehicles').create(payload);
         }
-      }
 
-      let resolvedMain = '';
-      if (mainImageFilename.startsWith('NEW:')) {
-        const newIndex = parseInt(mainImageFilename.split(':')[1], 10);
-        const uploadedCount = newImageFiles.length;
-        const startOfNew = (savedVehicle.images || []).length - uploadedCount;
-        resolvedMain = savedVehicle.images[startOfNew + newIndex] || savedVehicle.images[0] || '';
-      } else {
-        resolvedMain = mainImageFilename || (savedVehicle.images ? savedVehicle.images[0] : '') || '';
-      }
+        let resolvedMain = '';
+        if (mainImageFilename.startsWith('NEW:')) {
+          const newIndex = parseInt(mainImageFilename.split(':')[1], 10);
+          const uploadedCount = newImageFiles.length;
+          const startOfNew = (savedVehicle.images || []).length - uploadedCount;
+          resolvedMain = savedVehicle.images[startOfNew + newIndex] || savedVehicle.images[0] || '';
+        } else {
+          resolvedMain = mainImageFilename || (savedVehicle.images ? savedVehicle.images[0] : '') || '';
+        }
 
-      if (resolvedMain && resolvedMain !== savedVehicle.main_image) {
-        await pb.collection('vehicles').update(savedVehicle.id, { main_image: resolvedMain });
-      }
+        if (resolvedMain && resolvedMain !== savedVehicle.main_image) {
+          await pb.collection('vehicles').update(savedVehicle.id, { main_image: resolvedMain });
+        }
 
-      closeModal();
-      loadVehicles();
-    } catch (err) {
-      console.error('Failed to save vehicle. Full error object:', err);
-      console.error('PocketBase validation details:', err.data);
-
-      let detail = 'Check the console for details.';
-      if (err.data && err.data.data) {
-        const fieldErrors = Object.entries(err.data.data)
-          .map(([field, info]) => `${field}: ${info.message || info.code}`)
-          .join('\n');
-        if (fieldErrors) detail = fieldErrors;
+        closeModal();
+        loadVehicles();
+      } catch (err) {
+        console.error('Failed to save vehicle:', err);
+        let detail = 'Check the console for details.';
+        if (err.data && err.data.data) {
+          detail = Object.entries(err.data.data).map(([field, info]) => `${field}: ${info.message || info.code}`).join('\n');
+        }
+        alert(`Something went wrong saving this vehicle:\n\n${detail}`);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<i class="fas fa-check"></i> Save Vehicle';
       }
-      alert(`Something went wrong saving this vehicle:\n\n${detail}`);
-    } finally {
-      saveBtn.disabled = false;
-      saveBtn.innerHTML = '<i class="fas fa-check"></i> Save Vehicle';
-    }
-  });
+    });
+  }
 
   // ---------- Delete ----------
 
   window.deleteVehicle = async function(id) {
     const v = allVehicles.find(v => v.id === id);
     if (!v) return;
-    if (!confirm(`Delete ${v.make} ${v.model} ${v.year}? This cannot be undone.`)) return;
+    if (!confirm(`Delete ${v.make} ${v.model} ${v.year || ''}? This cannot be undone.`)) return;
 
     try {
       await pb.collection('vehicles').delete(id);
+      selectedVehicleIds.delete(id);
       loadVehicles();
     } catch (err) {
       console.error('Failed to delete vehicle:', err);
@@ -952,7 +1091,7 @@ sidebarOverlay.addEventListener('click', closeSidebar);
     }
   };
 
-  // ---------- Bulk CSV Import ----------
+  // ---------- Bulk CSV/Excel Import ----------
 
   const CSV_TEMPLATE_HEADERS = [
     'make', 'model', 'year', 'price', 'mileage', 'colour',
@@ -962,90 +1101,102 @@ sidebarOverlay.addEventListener('click', closeSidebar);
 
   let parsedRows = [];
 
-  document.getElementById('bulkImportBtn').addEventListener('click', () => {
-    parsedRows = [];
-    document.getElementById('csvFileInput').value = '';
-    document.getElementById('importPreview').innerHTML = '';
-    document.getElementById('importConfirmBtn').style.display = 'none';
-    document.getElementById('importOverlay').classList.add('open');
-  });
+  const bulkImportBtn = document.getElementById('bulkImportBtn');
+  if (bulkImportBtn) {
+    bulkImportBtn.addEventListener('click', () => {
+      parsedRows = [];
+      document.getElementById('csvFileInput').value = '';
+      document.getElementById('importPreview').innerHTML = '';
+      document.getElementById('importConfirmBtn').style.display = 'none';
+      document.getElementById('importOverlay').classList.add('open');
+    });
+  }
 
-  document.getElementById('importCloseBtn').addEventListener('click', () => {
-    document.getElementById('importOverlay').classList.remove('open');
-  });
-  document.getElementById('importCancelBtn').addEventListener('click', () => {
-    document.getElementById('importOverlay').classList.remove('open');
-  });
+  const importCloseBtn = document.getElementById('importCloseBtn');
+  if (importCloseBtn) importCloseBtn.addEventListener('click', () => document.getElementById('importOverlay').classList.remove('open'));
+  const importCancelBtn = document.getElementById('importCancelBtn');
+  if (importCancelBtn) importCancelBtn.addEventListener('click', () => document.getElementById('importOverlay').classList.remove('open'));
 
-  document.getElementById('downloadTemplateBtn').addEventListener('click', (e) => {
-    e.preventDefault();
-    const sampleRow = [
-      'Toyota', 'Corolla', '2019', '185000', '62000', 'White',
-      'Automatic', 'Petrol', 'Sedan', 'Full', '1',
-      'Well maintained, single owner.', '',
-      'Bluetooth;Air Conditioning;ABS'
-    ];
-    const csvContent = CSV_TEMPLATE_HEADERS.join(',') + '\n' + sampleRow.join(',');
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'autoaddicts-vehicle-template.csv';
-    a.click();
-    URL.revokeObjectURL(url);
-  });
+  const downloadTemplateBtn = document.getElementById('downloadTemplateBtn');
+  if (downloadTemplateBtn) {
+    downloadTemplateBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const sampleRow = [
+        'Toyota', 'Corolla', '2019', '185000', '62000', 'White',
+        'Automatic', 'Petrol', 'Sedan', 'Full', '1',
+        'Well maintained, single owner.', '',
+        'Bluetooth;Air Conditioning;ABS'
+      ];
+      const csvContent = CSV_TEMPLATE_HEADERS.join(',') + '\n' + sampleRow.join(',');
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'autoaddicts-vehicle-template.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  }
 
-  document.getElementById('csvFileInput').addEventListener('change', (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+  const csvFileInput = document.getElementById('csvFileInput');
+  if (csvFileInput) {
+    csvFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
 
-  const fileName = file.name.toLowerCase();
+      const fileName = file.name.toLowerCase();
 
-  if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
-    // Handle Excel files using SheetJS
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      try {
-        const data = new Uint8Array(event.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-        const firstSheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[firstSheetName];
-        
-        // Convert Excel sheet to JSON objects matching CSV header format
-        const jsonRows = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
-        parsedRows = jsonRows.filter(row => row.make && row.model);
-        renderImportPreview();
-      } catch (err) {
-        console.error('Excel parse error:', err);
-        document.getElementById('importPreview').innerHTML =
-          '<p style="color:#b00020; font-size:13px;">Could not read that Excel file.</p>';
-      }
-    };
-    reader.readAsArrayBuffer(file);
+      if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const data = new Uint8Array(event.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const firstSheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[firstSheetName];
+            
+            const jsonRows = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+            parsedRows = jsonRows.filter(row => {
+              const make = String(row.make || '').trim();
+              const model = String(row.model || '').trim();
+              return make !== '' && model !== '';
+            });
+            renderImportPreview();
+          } catch (err) {
+            console.error('Excel parse error:', err);
+            document.getElementById('importPreview').innerHTML =
+              '<p style="color:#b00020; font-size:13px;">Could not read that Excel file.</p>';
+          }
+        };
+        reader.readAsArrayBuffer(file);
 
-  } else {
-    // Handle standard CSV files using PapaParse
-    Papa.parse(file, {
-      header: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        parsedRows = results.data.filter(row => row.make && row.model);
-        renderImportPreview();
-      },
-      error: (err) => {
-        document.getElementById('importPreview').innerHTML =
-          '<p style="color:#b00020; font-size:13px;">Could not read that CSV file.</p>';
+      } else {
+        Papa.parse(file, {
+          header: true,
+          skipEmptyLines: true,
+          complete: (results) => {
+            parsedRows = (results.data || []).filter(row => {
+              const make = String(row.make || '').trim();
+              const model = String(row.model || '').trim();
+              return make !== '' && model !== '';
+            });
+            renderImportPreview();
+          },
+          error: () => {
+            document.getElementById('importPreview').innerHTML =
+              '<p style="color:#b00020; font-size:13px;">Could not read that CSV file.</p>';
+          }
+        });
       }
     });
   }
-});
 
   function renderImportPreview() {
     const preview = document.getElementById('importPreview');
     const confirmBtn = document.getElementById('importConfirmBtn');
 
     if (parsedRows.length === 0) {
-      preview.innerHTML = '<p style="color:#b00020; font-size:13px;">No valid rows found.</p>';
+      preview.innerHTML = '<p style="color:#b00020; font-size:13px;">No valid rows found. Ensure "make" and "model" columns are filled.</p>';
       confirmBtn.style.display = 'none';
       return;
     }
@@ -1058,52 +1209,57 @@ sidebarOverlay.addEventListener('click', closeSidebar);
       <div style="background:#f4f6f7; border-radius:8px; padding:14px; margin-bottom:10px;">
         <strong style="font-size:14px; color:#112532;">${parsedRows.length} vehicle${parsedRows.length === 1 ? '' : 's'} found</strong>
         <div style="margin-top:8px;">${rowsHtml}</div>
+        ${parsedRows.length > 5 ? `<div style="font-size:12px; color:#666; margin-top:8px;">...and ${parsedRows.length - 5} more</div>` : ''}
       </div>
     `;
     confirmBtn.style.display = 'flex';
   }
 
-  document.getElementById('importConfirmBtn').addEventListener('click', async () => {
-    const btn = document.getElementById('importConfirmBtn');
-    btn.disabled = true;
-    let successCount = 0;
-    let failCount = 0;
+  const importConfirmBtn = document.getElementById('importConfirmBtn');
+  if (importConfirmBtn) {
+    importConfirmBtn.addEventListener('click', async () => {
+      importConfirmBtn.disabled = true;
+      let successCount = 0;
+      let failCount = 0;
 
-    for (let i = 0; i < parsedRows.length; i++) {
-      const row = parsedRows[i];
-      btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Importing ${i + 1} / ${parsedRows.length}...`;
+      for (let i = 0; i < parsedRows.length; i++) {
+        const row = parsedRows[i];
+        importConfirmBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Importing ${i + 1} / ${parsedRows.length}...`;
 
-      const payload = {
-        make: row.make || '',
-        model: row.model || '',
-        year: Number(cleanNumericInput(row.year)) || null,
-        price: Number(cleanNumericInput(row.price)) || null,
-        mileage: Number(cleanNumericInput(row.mileage)) || null,
-        colour: row.colour || '',
-        transmission: row.transmission || '',
-        fuel_type: row.fuel_type || '',
-        body_type: row.body_type || '',
-        service_history: row.service_history || '',
-        previous_owners: Number(cleanNumericInput(row.previous_owners)) || null,
-        description: row.description || '',
-        youtube_link: row.youtube_link || '',
-        features: row.features ? row.features.split(';').map(f => f.trim()).filter(Boolean) : []
-      };
+        const payload = {
+          make: String(row.make || '').trim(),
+          model: String(row.model || '').trim(),
+          year: Number(cleanNumericInput(row.year)) || null,
+          price: Number(cleanNumericInput(row.price)) || null,
+          mileage: Number(cleanNumericInput(row.mileage)) || null,
+          colour: String(row.colour || '').trim(),
+          transmission: String(row.transmission || '').trim(),
+          fuel_type: String(row.fuel_type || '').trim(),
+          body_type: String(row.body_type || '').trim(),
+          service_history: String(row.service_history || '').trim(),
+          previous_owners: Number(cleanNumericInput(row.previous_owners)) || null,
+          description: String(row.description || '').trim(),
+          youtube_link: String(row.youtube_link || '').trim(),
+          features: row.features ? String(row.features).split(';').map(f => f.trim()).filter(Boolean) : []
+        };
 
-      try {
-        await pb.collection('vehicles').create(payload);
-        successCount++;
-      } catch (err) {
-        failCount++;
+        try {
+          await pb.collection('vehicles').create(payload);
+          successCount++;
+        } catch (err) {
+          failCount++;
+          console.error(`Failed to import row ${i + 1}:`, err?.data || err);
+        }
       }
-    }
 
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fas fa-check"></i> Import Vehicles';
-    alert(`Import complete: ${successCount} added${failCount ? `, ${failCount} failed` : ''}.`);
-    document.getElementById('importOverlay').classList.remove('open');
-    loadVehicles();
-  });
+      importConfirmBtn.disabled = false;
+      importConfirmBtn.innerHTML = '<i class="fas fa-check"></i> Import Vehicles';
+
+      alert(`Import complete: ${successCount} added${failCount ? `, ${failCount} failed` : ''}.`);
+      document.getElementById('importOverlay').classList.remove('open');
+      loadVehicles();
+    });
+  }
 
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('action') === 'add') {
