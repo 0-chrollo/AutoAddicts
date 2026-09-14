@@ -484,7 +484,7 @@
   if (!pb.authStore.isValid) {
     window.location.href = 'admin-login.html';
   }
-  
+
 
   const logoutBtn = document.getElementById('logoutBtn');
   if (logoutBtn) {
@@ -992,9 +992,35 @@ sidebarOverlay.addEventListener('click', closeSidebar);
   });
 
   document.getElementById('csvFileInput').addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const file = e.target.files[0];
+  if (!file) return;
 
+  const fileName = file.name.toLowerCase();
+
+  if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
+    // Handle Excel files using SheetJS
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const data = new Uint8Array(event.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const firstSheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[firstSheetName];
+        
+        // Convert Excel sheet to JSON objects matching CSV header format
+        const jsonRows = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+        parsedRows = jsonRows.filter(row => row.make && row.model);
+        renderImportPreview();
+      } catch (err) {
+        console.error('Excel parse error:', err);
+        document.getElementById('importPreview').innerHTML =
+          '<p style="color:#b00020; font-size:13px;">Could not read that Excel file.</p>';
+      }
+    };
+    reader.readAsArrayBuffer(file);
+
+  } else {
+    // Handle standard CSV files using PapaParse
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
@@ -1007,7 +1033,8 @@ sidebarOverlay.addEventListener('click', closeSidebar);
           '<p style="color:#b00020; font-size:13px;">Could not read that CSV file.</p>';
       }
     });
-  });
+  }
+});
 
   function renderImportPreview() {
     const preview = document.getElementById('importPreview');
