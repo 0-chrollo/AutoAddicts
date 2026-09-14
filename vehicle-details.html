@@ -1070,7 +1070,7 @@
   function renderSimCard(vehicle) {
     const imageUrl = vehicle.images && vehicle.images.length
       ? pb.files.getUrl(vehicle, vehicle.images[0])
-      : 'cars/maincar.jpeg';
+      : 'cars/defaultcarbg.jp g';
   
     const mileageText = vehicle.mileage ? `${Number(vehicle.mileage).toLocaleString('en-US')} KM` : '';
     const yearText = vehicle.year || '';
