@@ -479,7 +479,15 @@
   let existingImages = [];            
   let removedImages = [];             
   let newImageFiles = [];             
-  let mainImageFilename = '';       
+  let mainImageFilename = '';         
+
+  // ---------- Numeric Input Sanitization Helper ----------
+
+  function cleanNumericInput(value) {
+    if (value === null || value === undefined || value === '') return '';
+    const cleaned = String(value).replace(/[\s,]/g, '').replace(/[^0-9.]/g, '');
+    return cleaned;
+  }
 
   // ---------- Table rendering ----------
 
@@ -755,10 +763,10 @@
 
     const selectedFeatures = Array.from(document.querySelectorAll('#featureChecks input:checked')).map(cb => cb.value);
 
-    const rawPrice = document.getElementById('fPrice').value.replace(/[^0-9.]/g, '');
-    const rawMileage = document.getElementById('fMileage').value.replace(/[^0-9.]/g, '');
-    const rawYear = document.getElementById('fYear').value.replace(/[^0-9]/g, '');
-    const rawPrevOwners = document.getElementById('fPreviousOwners').value.replace(/[^0-9]/g, '');
+    const rawPrice = cleanNumericInput(document.getElementById('fPrice').value);
+    const rawMileage = cleanNumericInput(document.getElementById('fMileage').value);
+    const rawYear = cleanNumericInput(document.getElementById('fYear').value);
+    const rawPrevOwners = cleanNumericInput(document.getElementById('fPreviousOwners').value);
 
     try {
       let savedVehicle;
@@ -989,15 +997,15 @@
       const payload = {
         make: row.make || '',
         model: row.model || '',
-        year: Number(row.year) || null,
-        price: Number(row.price) || null,
-        mileage: Number(row.mileage) || null,
+        year: Number(cleanNumericInput(row.year)) || null,
+        price: Number(cleanNumericInput(row.price)) || null,
+        mileage: Number(cleanNumericInput(row.mileage)) || null,
         colour: row.colour || '',
         transmission: row.transmission || '',
         fuel_type: row.fuel_type || '',
         body_type: row.body_type || '',
         service_history: row.service_history || '',
-        previous_owners: Number(row.previous_owners) || null,
+        previous_owners: Number(cleanNumericInput(row.previous_owners)) || null,
         description: row.description || '',
         youtube_link: row.youtube_link || '',
         features: row.features ? row.features.split(';').map(f => f.trim()).filter(Boolean) : []
@@ -1025,6 +1033,5 @@
 
   loadVehicles();
 </script>
- 
 </body>
 </html>
