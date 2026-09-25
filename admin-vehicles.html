@@ -536,7 +536,6 @@
   // ---------- Multi-Select & Bulk Delete State ----------
   let selectedVehicleIds = new Set();
 
-  // Auto-inject master select-all checkbox into the table header if present
   const theadTr = document.querySelector('table thead tr');
   if (theadTr && !theadTr.querySelector('.select-all-th')) {
     const th = document.createElement('th');
@@ -574,7 +573,6 @@
       bulkBar.style.display = 'none';
     }
 
-    // Sync master checkbox state
     const masterCb = document.getElementById('selectAllMaster');
     if (masterCb && allVehicles.length > 0) {
       const allSelected = allVehicles.every(v => selectedVehicleIds.has(v.id));
@@ -1091,7 +1089,7 @@
     }
   };
 
-  // ---------- Bulk CSV/Excel Import ----------
+  // ---------- Bulk CSV/Excel Import with Smart Normalization ----------
 
   const CSV_TEMPLATE_HEADERS = [
     'make', 'model', 'year', 'price', 'mileage', 'colour',
@@ -1215,12 +1213,43 @@
     confirmBtn.style.display = 'flex';
   }
 
+  // Smart Helpers to normalize loose inputs and clear out invalid choices
+  // Smart Helpers for CSV/Excel data
+  function normalizeTransmission(val) {
+    if (!val) return '';
+    const s = String(val).trim().toLowerCase();
+    if (s.startsWith('auto') || s === 'a') return 'Automatic';
+    if (s.startsWith('man') || s === 'm') return 'Manual';
+    if (s.includes('semi')) return 'Semi-Automatic';
+    return '';
+  }
+
+  function normalizeFuelType(val) {
+    if (!val) return '';
+    const s = String(val).trim().toLowerCase();
+    if (s.includes('petrol') || s.includes('gas') || s.includes('unleaded')) return 'Petrol';
+    if (s.includes('diesel')) return 'Diesel';
+    if (s.includes('electric') || s.includes('ev')) return 'Electric';
+    if (s.includes('hybrid')) return 'Hybrid';
+    return '';
+  }
+
+  function normalizeServiceHistory(val) {
+    if (!val) return '';
+    const s = String(val).trim().toLowerCase();
+    if (s.includes('full') || s.includes('franchise') || s === 'fsh') return 'Full Service History';
+    if (s.includes('partial') || s === 'psh') return 'Partial Service History';
+    if (s.includes('none') || s.includes('no')) return 'None';
+    return '';
+  }
+
   const importConfirmBtn = document.getElementById('importConfirmBtn');
   if (importConfirmBtn) {
     importConfirmBtn.addEventListener('click', async () => {
       importConfirmBtn.disabled = true;
       let successCount = 0;
       let failCount = 0;
+      let skipCount = 0;
 
       for (let i = 0; i < parsedRows.length; i++) {
         const row = parsedRows[i];
@@ -1233,29 +1262,48 @@
           price: Number(cleanNumericInput(row.price)) || null,
           mileage: Number(cleanNumericInput(row.mileage)) || null,
           colour: String(row.colour || '').trim(),
-          transmission: String(row.transmission || '').trim(),
-          fuel_type: String(row.fuel_type || '').trim(),
+          transmission: normalizeTransmission(row.transmission),
+          fuel_type: normalizeFuelType(row.fuel_type),
           body_type: String(row.body_type || '').trim(),
-          service_history: String(row.service_history || '').trim(),
+          service_history: normalizeServiceHistory(row.service_history),
           previous_owners: Number(cleanNumericInput(row.previous_owners)) || null,
           description: String(row.description || '').trim(),
           youtube_link: String(row.youtube_link || '').trim(),
           features: row.features ? String(row.features).split(';').map(f => f.trim()).filter(Boolean) : []
         };
 
+        if (!payload.transmission) delete payload.transmission;
+        if (!payload.fuel_type) delete payload.fuel_type;
+        if (!payload.body_type) delete payload.body_type;
+        if (!payload.service_history) delete payload.service_history;
+
         try {
-          await pb.collection('vehicles').create(payload);
-          successCount++;
+          // Check if a vehicle with the same make, model, and year already exists
+          const filterStr = `make ~ "${payload.make}" && model ~ "${payload.model}" && year = ${payload.year}`;
+          const existingRecords = await pb.collection('vehicles').getList(1, 1, { filter: filterStr });
+
+          if (existingRecords.totalItems > 0) {
+            console.log(`Skipped duplicate: ${payload.make} ${payload.model} (${payload.year})`);
+            skipCount++;
+          } else {
+            await pb.collection('vehicles').create(payload);
+            successCount++;
+          }
         } catch (err) {
           failCount++;
-          console.error(`Failed to import row ${i + 1}:`, err?.data || err);
+          const errorDetails = err?.data?.data ? JSON.stringify(err.data.data) : (err?.message || err);
+          console.error(`Failed to import row ${i + 1}:`, errorDetails);
         }
       }
 
       importConfirmBtn.disabled = false;
       importConfirmBtn.innerHTML = '<i class="fas fa-check"></i> Import Vehicles';
 
-      alert(`Import complete: ${successCount} added${failCount ? `, ${failCount} failed` : ''}.`);
+      let message = `Import complete: ${successCount} added`;
+      if (skipCount > 0) message += `, ${skipCount} skipped (already exist)`;
+      if (failCount > 0) message += `, ${failCount} failed`;
+      alert(message + '.');
+
       document.getElementById('importOverlay').classList.remove('open');
       loadVehicles();
     });
@@ -1265,7 +1313,6 @@
   if (urlParams.get('action') === 'add') {
     openAddModal();
   }
-
   loadVehicles();
 </script>
 </body>
