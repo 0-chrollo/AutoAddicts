@@ -462,23 +462,37 @@ function renderPaginationControls() {
         </button>
     `;
 
-    // Smart sliding window: show up to 3 page numbers at a time to prevent overflow
-    let startPage = Math.max(1, currentPage - 1);
-    let endPage = Math.min(totalPages, startPage + 2);
+    let startPage, endPage;
+    let showLeadingEllipsis = false;
+    let showTrailingEllipsis = false;
 
-    if (endPage - startPage < 2) {
-        startPage = Math.max(1, endPage - 2);
+    if (totalPages <= 3) {
+        // If 2 or 3 total pages, show all of them with no ellipses
+        startPage = 1;
+        endPage = totalPages;
+    } else if (currentPage <= 2) {
+        // Near the start: show first 3 pages + one trailing ellipsis
+        startPage = 1;
+        endPage = 3;
+        showTrailingEllipsis = true;
+    } else if (currentPage >= totalPages - 1) {
+        // Near the end: show one leading ellipsis + last 3 pages
+        startPage = totalPages - 2;
+        endPage = totalPages;
+        showLeadingEllipsis = true;
+    } else {
+        // In the middle: shift the 3-number window and show a single leading ellipsis
+        startPage = currentPage - 1;
+        endPage = currentPage + 1;
+        showLeadingEllipsis = true;
     }
 
-    // Show first page and ellipsis if far from start
-    if (startPage > 1) {
-        html += `<button class="page-btn" onclick="changePage(1)">1</button>`;
-        if (startPage > 2) {
-            html += `<span style="padding: 0 4px; align-self: center; color: #666;">...</span>`;
-        }
+    // Render single leading ellipsis if needed
+    if (showLeadingEllipsis) {
+        html += `<span style="padding: 0 4px; align-self: center; color: #666;">...</span>`;
     }
 
-    // Render the active window of pages
+    // Render the 3 numbers
     for (let i = startPage; i <= endPage; i++) {
         html += `
             <button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">
@@ -487,12 +501,9 @@ function renderPaginationControls() {
         `;
     }
 
-    // Show last page and ellipsis if far from end
-    if (endPage < totalPages) {
-        if (endPage < totalPages - 1) {
-            html += `<span style="padding: 0 4px; align-self: center; color: #666;">...</span>`;
-        }
-        html += `<button class="page-btn" onclick="changePage(${totalPages})">${totalPages}</button>`;
+    // Render single trailing ellipsis if needed
+    if (showTrailingEllipsis) {
+        html += `<span style="padding: 0 4px; align-self: center; color: #666;">...</span>`;
     }
 
     html += `
