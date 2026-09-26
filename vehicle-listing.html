@@ -466,25 +466,21 @@ function renderPaginationControls() {
     let showLeadingEllipsis = false;
     let showTrailingEllipsis = false;
 
-    if (totalPages <= 3) {
-        // If 2 or 3 total pages, show all of them with no ellipses
+    if (totalPages <= 2) {
+        // If 2 or fewer total pages, show all of them with no ellipses
         startPage = 1;
         endPage = totalPages;
-    } else if (currentPage <= 2) {
-        // Near the start: show first 3 pages + one trailing ellipsis
-        startPage = 1;
-        endPage = 3;
-        showTrailingEllipsis = true;
     } else if (currentPage >= totalPages - 1) {
-        // Near the end: show one leading ellipsis + last 3 pages
-        startPage = totalPages - 2;
+        // Near the end: show the last 2 pages + leading ellipsis
+        startPage = totalPages - 1;
         endPage = totalPages;
         showLeadingEllipsis = true;
     } else {
-        // In the middle: shift the 3-number window and show a single leading ellipsis
-        startPage = currentPage - 1;
+        // Otherwise, show a window of 2 numbers starting from the current page
+        startPage = currentPage;
         endPage = currentPage + 1;
-        showLeadingEllipsis = true;
+        showLeadingEllipsis = (currentPage > 1);
+        showTrailingEllipsis = (endPage < totalPages);
     }
 
     // Render single leading ellipsis if needed
@@ -492,7 +488,7 @@ function renderPaginationControls() {
         html += `<span style="padding: 0 4px; align-self: center; color: #666;">...</span>`;
     }
 
-    // Render the 3 numbers
+    // Render the 2 numbers
     for (let i = startPage; i <= endPage; i++) {
         html += `
             <button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">
